@@ -756,6 +756,7 @@ $('#share-form').onsubmit = async e => {
     refresh();
     note.textContent = t(res.photos === 'disabled' ? 'shareOkNoPhotos' : 'shareOk');
     $('#share-send').classList.add('ok');
+    navigator.vibrate?.(12);
     setTimeout(() => $('#share-send').classList.remove('ok'), 600);
     setTimeout(() => shareDlg.close(), res.photos === 'disabled' ? 3500 : 1200);
   } catch (err) {
@@ -869,7 +870,8 @@ const today = () => new Date().toISOString().slice(0, 10);
 const flashDone = btn => { // download icon blurs into a check for a moment
   const sw = btn.querySelector('.swap');
   sw.classList.add('on');
-  btn.classList.add('ok'); // one pulse to confirm
+  btn.classList.add('ok'); // one pulse to confirm, with a short buzz on phones in the same frame
+  navigator.vibrate?.(12);
   setTimeout(() => { sw.classList.remove('on'); btn.classList.remove('ok'); }, 1600);
 };
 

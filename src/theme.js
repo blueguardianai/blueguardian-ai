@@ -8,10 +8,14 @@ applyTheme();
 
 // Theme switch: the new colours spread out from the pressed button in a growing circle (a masked view transition).
 const revealTheme = (btn, change) => {
-  if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) return change();
+  if (!document.startViewTransition) return change();
+  const root = document.documentElement;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { // no moving circle, just a soft cross-fade
+    root.classList.add('theme-fade');
+    return document.startViewTransition(change).finished.finally(() => root.classList.remove('theme-fade'));
+  }
   const r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
   const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-  const root = document.documentElement;
   root.classList.add('theme-vt');
   const vt = document.startViewTransition(change);
   vt.ready.then(() => root.animate({ clipPath: [`circle(0 at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },

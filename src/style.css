@@ -297,7 +297,8 @@ dialog h2 { padding: var(--p) var(--p) 0; margin-bottom: 4px; font-size: 18px; }
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
   .scroll-fade { animation-duration: auto !important; }
-  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+  ::view-transition-group(main), ::view-transition-old(main), ::view-transition-new(main) { animation: none !important; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .25s !important; } /* the theme still cross-fades, no brightness jump */
 }
 
 /* ---- guide, insights, data page, welcome ---- */
@@ -410,4 +411,16 @@ dialog h2 { padding: var(--p) var(--p) 0; margin-bottom: 4px; font-size: 18px; }
 @keyframes ok { 40% { box-shadow: 0 0 0 5px color-mix(in oklch, var(--good) 30%, transparent); } }
 /* Theme switch: the new colours are revealed through a growing circle (theme.js revealTheme). */
 .theme-vt::view-transition-old(root), .theme-vt::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
-.theme-vt main { view-transition-name: none; }
+.theme-vt main, .theme-fade main { view-transition-name: none; }
+
+/* Accessibility: frosted surfaces go solid, high contrast gets solid fills and defined edges. */
+@media (prefers-reduced-transparency: reduce) {
+  dialog::backdrop, .photo .x { backdrop-filter: none !important; }
+  dialog::backdrop { background: oklch(0.18 0.03 255 / .75); }
+  .photo .x { background: oklch(0.2 0.02 250); }
+}
+@media (prefers-contrast: more) {
+  :root { --line: light-dark(oklch(0.3 0.06 255 / .45), oklch(1 0 0 / .4)); --line-strong: light-dark(oklch(0.3 0.06 255 / .7), oklch(1 0 0 / .6)); }
+}
+/* Taps act at once: no double-tap-zoom wait on touch screens. */
+button, a, .btn { touch-action: manipulation; }
