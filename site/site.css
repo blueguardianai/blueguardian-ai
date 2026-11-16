@@ -13,7 +13,7 @@
   --accent:    light-dark(oklch(0.50 0.16 250), oklch(0.76 0.12 240));
   --on-accent: light-dark(oklch(0.99 0 0),      oklch(0.17 0.03 250));
   --elev: 0 1px 2px var(--shade), 0 8px 24px -12px var(--shade), inset 0 1px 0 var(--highlight);
-  --ease: cubic-bezier(.2, .7, .2, 1);
+  --ease: cubic-bezier(.2, .7, .2, 1); /* ease-out, no overshoot */
   --iw: 2;
   --gutter: clamp(16px, 5vw, 48px);
   font: 450 16.5px/1.55 "Inter Variable", Inter, "Segoe UI Variable Text", "Segoe UI", "Noto Sans", system-ui, sans-serif;
@@ -47,7 +47,7 @@ img { max-width: 100%; height: auto; display: block; }
 /* Blurred icon swap, as in the app. */
 .swap { display: inline-grid; place-items: center; }
 .swap > * { grid-area: 1 / 1; transition: opacity .25s var(--ease), filter .25s var(--ease), scale .25s var(--ease); }
-.swap > :last-child, .swap.on > :first-child { opacity: 0; filter: blur(4px); scale: .4; }
+.swap > :last-child, .swap.on > :first-child { opacity: 0; filter: blur(4px); scale: .4; transition-duration: .2s; } /* exits 20% shorter */
 .swap.on > :last-child { opacity: 1; filter: none; scale: 1; }
 
 .nav { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 8px; padding: 10px var(--gutter); background: color-mix(in oklch, var(--bg) 80%, transparent); backdrop-filter: blur(14px) saturate(1.4); border-bottom: 1px solid var(--line); }
@@ -110,9 +110,20 @@ footer b { color: var(--text); }
   .nav .btn.primary { display: none; }
   .cta .btn { flex: 1 1 100%; }
 }
+/* Entrances: the hero settles line by line, 30ms apart; the screenshot is unmasked from the top down. */
+.hero > * { animation: rise .4s var(--ease) both; animation-delay: calc((sibling-index() - 1) * 30ms); }
+.hero-shot { animation: rise .4s var(--ease) both, unmask .7s var(--ease) .15s both; }
+@keyframes rise { from { opacity: 0; translate: 0 8px; } }
+@keyframes unmask { from { clip-path: inset(0 0 100% 0); } }
+/* Cards rise into place as they scroll into view. */
+@supports (animation-timeline: view()) {
+  .steps li, .options .card { animation: rise linear both; animation-timeline: view(); animation-range: entry 10% entry 70%; }
+}
+/* Theme switch: the new colours are revealed through a growing circle (theme.js revealTheme). */
+.theme-vt::view-transition-old(root), .theme-vt::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
 @media (prefers-reduced-motion: reduce) {
   :root { scroll-behavior: auto; }
-  *, ::before, ::after { transition-duration: .01ms !important; }
+  *, ::before, ::after { transition-duration: .01ms !important; animation: none !important; }
 }
 .link { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
 .prose { max-width: 760px; }

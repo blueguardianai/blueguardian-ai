@@ -21,7 +21,8 @@
   --bad:  light-dark(oklch(0.52 0.19 22),  oklch(0.74 0.15 22));
   --warm: light-dark(oklch(0.64 0.16 55),  oklch(0.78 0.13 65));
   --elev: 0 1px 2px var(--shade), 0 8px 24px -12px var(--shade), inset 0 1px 0 var(--highlight);
-  --ease: cubic-bezier(.2, .7, .2, 1);
+  --ease: cubic-bezier(.2, .7, .2, 1); /* ease-out, no overshoot: entrances and exits */
+  --ease-move: cubic-bezier(.65, 0, .35, 1); /* ease-in-out: things moving from one place to another */
   --iw: 2; /* icon stroke for regular text; heavier text raises it */
   font: 450 14.5px/1.45 "Inter Variable", Inter, "Segoe UI Variable Text", "Segoe UI", "Noto Sans", system-ui, sans-serif;
   color: var(--text);
@@ -49,7 +50,7 @@ b { font-weight: 650; }
 /* Blurred icon swap: two icons share one cell, the hidden one is blurred and shrunk. */
 .swap { display: inline-grid; place-items: center; }
 .swap > * { grid-area: 1 / 1; transition: opacity .25s var(--ease), filter .25s var(--ease), scale .25s var(--ease); }
-.swap > :last-child, .swap.on > :first-child { opacity: 0; filter: blur(4px); scale: .4; }
+.swap > :last-child, .swap.on > :first-child { opacity: 0; filter: blur(4px); scale: .4; transition-duration: .2s; } /* exits 20% shorter */
 .swap.on > :last-child { opacity: 1; filter: none; scale: 1; }
 @keyframes swap-in { from { opacity: 0; filter: blur(4px); scale: .4; } }
 
@@ -107,8 +108,9 @@ textarea { resize: vertical; }
 .tab {
   display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; text-align: left;
   color: var(--muted); font-weight: 500; border: 1px solid transparent;
-  transition: background .15s, color .15s;
+  transition: background .15s, color .15s, scale .15s var(--ease);
 }
+.tab:active, .seg button:active { scale: .97; }
 .tab:hover { background: color-mix(in oklch, var(--text) 6%, transparent); color: var(--text); }
 .tab.active { background: var(--raised); color: var(--text); font-weight: 650; --iw: 2.4; border-color: var(--line); box-shadow: var(--elev); }
 .tab.active .i { color: var(--accent); }
@@ -118,8 +120,16 @@ textarea { resize: vertical; }
 /* pages */
 main { flex: 1; min-width: 0; padding: 26px 32px 44px; }
 .page { display: none; }
-.page.active { display: block; animation: page-in .28s var(--ease); }
+.page.active { display: block; }
+/* Tab switch: a view transition overlaps the old page fading out with the new one settling in. */
+main { view-transition-name: main; }
+::view-transition-old(main) { animation: .16s var(--ease) both fade-out; }
+::view-transition-new(main) { animation: .2s var(--ease) both page-in; }
 @keyframes page-in { from { opacity: 0; translate: 0 6px; } }
+@keyframes fade-out { to { opacity: 0; } }
+/* Rows settle one after another, 30ms apart, when a page opens. */
+.page.entering :is(.tile, .obs, .photo, .step, .insights li), #com-list > .obs { animation: row-in .3s var(--ease) both; animation-delay: calc(min(sibling-index() - 1, 12) * 30ms); }
+@keyframes row-in { from { opacity: 0; translate: 0 6px; } }
 .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; margin-bottom: 20px; }
 .head h1 + .hint { margin-top: 4px; }
 
@@ -159,12 +169,15 @@ main { flex: 1; min-width: 0; padding: 26px 32px 44px; }
 .leaflet-bar a { border-bottom-color: var(--line); }
 .leaflet-bar a:hover { background: color-mix(in oklch, var(--overlay) 90%, var(--text)); color: var(--text); }
 .leaflet-popup-content-wrapper { border-radius: 14px; box-shadow: var(--elev); }
+/* Popups grow out of the pin they belong to. */
+.leaflet-popup { transform-origin: bottom center; animation: pop-in .2s var(--ease); }
+@keyframes pop-in { from { opacity: 0; scale: .95; } }
 .leaflet-popup-content { margin: 10px 14px; font: inherit; font-size: 13px; }
 .leaflet-container .leaflet-control-attribution { font-size: 11px; background: color-mix(in oklch, var(--surface) 80%, transparent); color: var(--muted); }
 .leaflet-container a { color: var(--accent); }
 
 /* observations */
-.obs { display: flex; gap: 16px; margin-bottom: 10px; cursor: pointer; transition: border-color .15s, translate .2s var(--ease); }
+.obs { display: flex; gap: 16px; margin-bottom: 10px; cursor: pointer; transition: border-color .15s, translate .2s var(--ease-move); }
 .obs:hover { border-color: var(--line-strong); translate: 0 -1px; }
 .obs h3 { margin-bottom: 2px; }
 .obs p { color: var(--muted); margin-top: 2px; }
@@ -222,11 +235,14 @@ dialog .photo { background: var(--raised); }
 .err { color: var(--bad); padding: 10px 8px; grid-column: 1 / -1; }
 @keyframes pulse { 50% { opacity: .45; } }
 
-/* segmented filter */
-.seg { --r: 12px; --p: 3px; display: inline-flex; gap: 2px; padding: var(--p); margin-bottom: 14px; border-radius: var(--r); background: color-mix(in oklch, var(--text) 7%, transparent); border: 1px solid var(--line); }
-.seg button { padding: 6px 14px; border-radius: calc(var(--r) - var(--p)); color: var(--muted); font-weight: 550; border: 1px solid transparent; transition: color .15s, background .15s; }
+/* segmented filter: a knob slides behind the active button and stretches 12% while it travels (app.js placeKnob) */
+.seg { position: relative; --r: 12px; --p: 3px; display: inline-flex; gap: 2px; padding: var(--p); margin-bottom: 14px; border-radius: var(--r); background: color-mix(in oklch, var(--text) 7%, transparent); border: 1px solid var(--line); }
+.seg button { position: relative; padding: 6px 14px; border-radius: calc(var(--r) - var(--p)); color: var(--muted); font-weight: 550; border: 1px solid transparent; transition: color .15s, background .15s; }
 .seg button:hover { color: var(--text); }
-.seg button.active { background: var(--raised); color: var(--text); border-color: var(--line); box-shadow: 0 1px 2px var(--shade), inset 0 1px 0 var(--highlight); }
+.seg button.active, .seg::before { background: var(--raised); color: var(--text); border-color: var(--line); box-shadow: 0 1px 2px var(--shade), inset 0 1px 0 var(--highlight); }
+.seg::before { content: ""; position: absolute; top: var(--p); left: 0; height: calc(100% - 2 * var(--p)); width: var(--w); translate: var(--x) 0; border: 1px solid var(--line); border-radius: calc(var(--r) - var(--p)); transition: translate .25s var(--ease-move), width .25s var(--ease-move); }
+.seg:not(.ready)::before { display: none; }
+.seg.ready button.active { background: none; border-color: transparent; box-shadow: none; }
 
 /* before / after */
 .cmp { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 16px; }
@@ -248,10 +264,14 @@ dialog {
   padding: 0; border-radius: var(--r); width: min(980px, 100dvw - 32px); max-height: calc(100dvh - 32px); overflow: hidden;
   color: var(--text); background: var(--overlay); border: 1px solid var(--line-strong);
   box-shadow: 0 24px 64px -16px oklch(0 0 0 / .45), inset 0 1px 0 var(--highlight);
-  transition: opacity .2s var(--ease), scale .2s var(--ease);
+  /* Closing (160ms) is 20% shorter than opening (200ms). transform-origin is set to the pressed button by app.js. */
+  transition: opacity .16s var(--ease), scale .16s var(--ease), display .16s allow-discrete, overlay .16s allow-discrete;
 }
-dialog[open] { @starting-style { opacity: 0; scale: .97; } }
-dialog::backdrop { background: oklch(0.18 0.03 255 / .5); backdrop-filter: blur(6px); }
+dialog:not([open]) { opacity: 0; scale: .95; }
+dialog[open] { transition-duration: .2s; @starting-style { opacity: 0; scale: .95; } }
+dialog::backdrop { background: oklch(0.18 0.03 255 / .5); backdrop-filter: blur(6px); transition: opacity .16s, display .16s allow-discrete, overlay .16s allow-discrete; }
+dialog:not([open])::backdrop { opacity: 0; }
+dialog[open]::backdrop { transition-duration: .2s; @starting-style { opacity: 0; } }
 dialog form { display: flex; flex-direction: column; max-height: calc(100dvh - 34px); }
 dialog h2 { padding: var(--p) var(--p) 0; margin-bottom: 4px; font-size: 18px; }
 .dlg-body { flex: 1; min-height: 0; padding: 12px var(--p) 24px; }
@@ -277,6 +297,7 @@ dialog h2 { padding: var(--p) var(--p) 0; margin-bottom: 4px; font-size: 18px; }
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
   .scroll-fade { animation-duration: auto !important; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
 
 /* ---- guide, insights, data page, welcome ---- */
@@ -383,3 +404,10 @@ dialog h2 { padding: var(--p) var(--p) 0; margin-bottom: 4px; font-size: 18px; }
 
 /* The map's satellite/street switch sits over the tiles, so it needs its own shadow to stay readable. */
 .map-switch { box-shadow: 0 1px 4px oklch(0 0 0 / .3); }
+
+/* Success: a soft ring pulses once around the button that just finished its job. */
+.btn.ok { animation: ok .5s var(--ease); }
+@keyframes ok { 40% { box-shadow: 0 0 0 5px color-mix(in oklch, var(--good) 30%, transparent); } }
+/* Theme switch: the new colours are revealed through a growing circle (theme.js revealTheme). */
+.theme-vt::view-transition-old(root), .theme-vt::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+.theme-vt main { view-transition-name: none; }

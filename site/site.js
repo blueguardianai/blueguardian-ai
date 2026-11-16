@@ -23,11 +23,11 @@ addEventListener('DOMContentLoaded', () => {
   };
   const swap = document.querySelector('#theme .swap');
   const syncTheme = () => swap.classList.toggle('on', document.documentElement.dataset.theme === 'dark');
-  document.querySelector('#theme').onclick = () => {
+  document.querySelector('#theme').onclick = e => revealTheme(e.currentTarget, () => {
     localStorage.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     applyTheme();
     syncTheme();
-  };
+  });
   syncTheme();
 
   const buttons = [...document.querySelectorAll('[data-dl]')];

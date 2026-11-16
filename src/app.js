@@ -156,11 +156,15 @@ async function storePhoto(blob) {
 const pages = { dashboard: renderDashboard, observations: renderObservations, ai: renderAi, compare: renderCompare, community: renderCommunity, data: renderData };
 let current = 'dashboard';
 function show(tab) {
-  document.querySelectorAll('.tab, .page').forEach(x => x.classList.remove('active'));
-  $(`.tab[data-tab="${tab}"]`).classList.add('active');
-  $('#' + tab).classList.add('active');
-  current = tab;
-  render();
+  const swap = () => {
+    document.querySelectorAll('.tab, .page').forEach(x => x.classList.remove('active', 'entering'));
+    $(`.tab[data-tab="${tab}"]`).classList.add('active');
+    $('#' + tab).classList.add('active', 'entering'); // rows stagger in only while the page is opening, not on every re-render
+    setTimeout(() => $('#' + tab).classList.remove('entering'), 700);
+    current = tab;
+    render();
+  };
+  document.startViewTransition ? document.startViewTransition(swap) : swap();
 }
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => show(b.dataset.tab));
 function render() {
@@ -170,6 +174,25 @@ function render() {
   pages[current]();
 }
 const refresh = () => { save(); render(); };
+
+// Dialogs grow out of, and shrink back into, whatever was pressed to open them. A modal dialog is centred,
+// so the origin is the press point measured from the middle of the screen; no layout is needed yet.
+let press;
+addEventListener('pointerdown', e => press = e, true);
+addEventListener('beforetoggle', e => {
+  if (e.target instanceof HTMLDialogElement && e.newState === 'open' && press)
+    e.target.style.transformOrigin = `calc(50% + ${press.clientX - innerWidth / 2}px) calc(50% + ${press.clientY - innerHeight / 2}px)`;
+}, true);
+
+// Segmented control: the knob slides to the active button and stretches 12% on the way.
+function placeKnob(seg, move) {
+  const a = seg.querySelector('.active');
+  if (!a?.offsetWidth) return;
+  seg.style.setProperty('--x', a.offsetLeft + 'px');
+  seg.style.setProperty('--w', a.offsetWidth + 'px');
+  seg.classList.add('ready');
+  if (move) seg.animate({ scale: [1, '1.12 1', 1] }, { duration: 250, easing: 'ease-in-out', pseudoElement: '::before' });
+}
 
 // ---------- shared ----------
 
@@ -296,6 +319,9 @@ function baseMap(m) {
   let mode = 'sat';
   try { if (localStorage.mapMode === 'street') mode = 'street'; } catch {}
   layers[mode].addTo(m);
+  // Rubber band: the map can be dragged a little past the edge of the world, then springs back.
+  m.setMaxBounds([[-85, -180], [85, 180]]);
+  m.options.maxBoundsViscosity = 0.7;
   const Switch = L.Control.extend({
     onAdd() {
       const b = L.DomUtil.create('button', 'btn map-switch');
@@ -517,7 +543,7 @@ function setLoc(lat, lon) {
   draft.lon = Math.round(lon * 1e6) / 1e6;
   obsMarker ??= L.circleMarker([lat, lon], PIN).addTo(obsMap);
   obsMarker.setLatLng([lat, lon]);
-  obsMap.setView([lat, lon], Math.max(obsMap.getZoom(), 14));
+  obsMap.flyTo([lat, lon], Math.max(obsMap.getZoom(), 14), { duration: .6 }); // flies in an arc, not a straight jump
   $('#obs-loc').innerHTML = `${icon('pin')}${draft.lat}, ${draft.lon}`;
 }
 
@@ -597,6 +623,7 @@ let filter = 'todo';
 document.querySelectorAll('#ai-filter button').forEach(b => b.onclick = () => {
   document.querySelectorAll('#ai-filter button').forEach(x => x.classList.remove('active'));
   b.classList.add('active');
+  placeKnob(b.parentElement, true);
   filter = b.dataset.filter;
   renderAi();
 });
@@ -613,6 +640,7 @@ function renderAi() {
   $('#ai-legend').innerHTML = t('examples') + CLASSES.map(c =>
     `<span style="--c:${c.color}"><i class="dot"></i>${cname(c)} <b>${verified.filter(p => p.label === c.id).length}</b></span>`).join('');
   $('#ai-legend').hidden = $('#ai-filter').hidden = !photos.length;
+  placeKnob($('#ai-filter'));
 
   let shown = photos;
   if (filter === 'todo') shown = photos.filter(p => !p.label)
@@ -727,6 +755,8 @@ $('#share-form').onsubmit = async e => {
     o.shared = { id: res.id, key };
     refresh();
     note.textContent = t(res.photos === 'disabled' ? 'shareOkNoPhotos' : 'shareOk');
+    $('#share-send').classList.add('ok');
+    setTimeout(() => $('#share-send').classList.remove('ok'), 600);
     setTimeout(() => shareDlg.close(), res.photos === 'disabled' ? 3500 : 1200);
   } catch (err) {
     const key = 'err_' + err.message;
@@ -839,7 +869,8 @@ const today = () => new Date().toISOString().slice(0, 10);
 const flashDone = btn => { // download icon blurs into a check for a moment
   const sw = btn.querySelector('.swap');
   sw.classList.add('on');
-  setTimeout(() => sw.classList.remove('on'), 1600);
+  btn.classList.add('ok'); // one pulse to confirm
+  setTimeout(() => { sw.classList.remove('on'); btn.classList.remove('ok'); }, 1600);
 };
 
 $('#export').onclick = async () => {
@@ -912,11 +943,11 @@ const syncTheme = () => {
   themeCharts();
   render();
 };
-$('#theme').onclick = () => {
+$('#theme').onclick = e => revealTheme(e.currentTarget, () => {
   localStorage.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
   applyTheme();
   syncTheme();
-};
+});
 systemDark.addEventListener('change', syncTheme);
 $('#theme .swap').classList.toggle('on', document.documentElement.dataset.theme === 'dark');
 
