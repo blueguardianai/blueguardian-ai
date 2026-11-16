@@ -31,5 +31,20 @@ addEventListener('DOMContentLoaded', () => {
   };
   syncTheme();
 
-  for (const a of document.querySelectorAll('[data-dl]')) a.href = DOWNLOADS[a.dataset.dl];
+  const buttons = [...document.querySelectorAll('[data-dl]')];
+  for (const a of buttons) a.href = DOWNLOADS[a.dataset.dl];
+  // Ask GitHub which installers the latest release really has, and mark the missing ones instead of
+  // leaving a dead link. If the request fails (offline, rate limit) the links stay as they are.
+  fetch('https://api.github.com/repos/blueguardianai/blueguardian-ai/releases/latest')
+    .then(r => (r.ok ? r.json() : Promise.reject()))
+    .then(release => {
+      const have = new Set(release.assets.map(a => a.name));
+      for (const a of buttons.filter(a => !have.has(a.href.split('/').pop()))) {
+        a.removeAttribute('href');
+        a.classList.add('soon');
+        a.setAttribute('aria-disabled', 'true');
+        a.title = document.documentElement.lang === 'el' ? 'Σύντομα διαθέσιμο' : 'Coming soon';
+      }
+    })
+    .catch(() => {});
 });
