@@ -118,6 +118,8 @@ const T = {
   noData: ['Δεν υπάρχουν δεδομένα ακόμα.', 'No data yet.'],
 
   // visits
+  dashHint: ['Όλες οι παραλίες σας με μια ματιά: χάρτης, μετρήσεις και τι βρήκε η AI. Ξεκινήστε με «Νέα καταγραφή».', 'All your beaches at a glance: map, readings and what the AI found. Start with "New visit".'],
+  newVisitTip: ['Καταγράψτε μια επίσκεψη σε παραλία: σημείο, μετρήσεις και φωτογραφίες', 'Record a beach visit: spot, readings and photos'],
   visitsHint: ['Κάθε επίσκεψη στην παραλία: πού, πότε, μετρήσεις από το Smart Monitoring Kit και φωτογραφίες.', 'Each beach visit: where, when, readings from the Smart Monitoring Kit, and photos.'],
   visitsEmpty: ['Δεν υπάρχουν καταγραφές ακόμα.', 'No visits recorded yet.'],
   nPhotos: ['{n} φωτογραφίες', '{n} photos'],
@@ -140,6 +142,9 @@ const T = {
   fTemp: ['Θερμοκρασία νερού (°C)', 'Water temperature (°C)'],
   fPh: ['pH', 'pH'],
   fLitter: ['Απορρίμματα (τεμάχια)', 'Litter (items)'],
+  tempHelp: ['Με το θερμόμετρο του kit, λίγο κάτω από την επιφάνεια. Συνήθως 15–27 °C.', "With the kit's thermometer, just below the surface. Usually 15–27 °C."],
+  phHelp: ['Πόσο όξινο ή αλκαλικό είναι το νερό. Η θάλασσα έχει συνήθως 7,9–8,3.', 'How acidic or alkaline the water is. Seawater is usually 7.9–8.3.'],
+  litterHelp: ['Μετρήστε τα κομμάτια στο ίδιο τμήμα της παραλίας κάθε φορά, για να συγκρίνονται οι επισκέψεις.', 'Count the pieces on the same stretch of beach each time, so visits can be compared.'],
   fNotes: ['Σημειώσεις', 'Notes'],
   optional: ['προαιρετικό', 'optional'],
   location: ['Τοποθεσία', 'Location'],

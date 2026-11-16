@@ -58,8 +58,7 @@ img { max-width: 100%; height: auto; display: block; }
 @keyframes nav-edge { to { border-bottom-color: var(--line); } }
 @supports not (animation-timeline: scroll()) { .nav { border-bottom-color: var(--line); } }
 .brand { display: flex; align-items: center; gap: 8px; margin-right: auto; font-size: 16px; letter-spacing: -.01em; }
-.brand img { width: 34px; height: 34px; mix-blend-mode: multiply; }
-[data-theme="dark"] .brand img { filter: invert(1) hue-rotate(180deg); mix-blend-mode: screen; }
+.brand img { width: 34px; height: 34px; }
 .nav nav { display: flex; gap: 4px; margin-right: 8px; }
 .nav nav a { padding: 6px 10px; border-radius: 8px; color: var(--muted); font-size: 15px; font-weight: 500; }
 .nav nav a:hover { color: var(--text); background: color-mix(in oklch, var(--text) 6%, transparent); }

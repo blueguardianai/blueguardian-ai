@@ -313,7 +313,8 @@ const OSM = () => L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.pn
 const ESRI = () => L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
   maxZoom: 19, attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics',
 });
-// Satellite photo by default; one button on the map switches to the street map and back. The choice is remembered.
+// Satellite photo by default. A two-part switch on the map shows which view is on (highlighted) and which one
+// a click picks. The choice is remembered.
 function baseMap(m) {
   const layers = { sat: ESRI(), street: OSM() };
   let mode = 'sat';
@@ -324,16 +325,23 @@ function baseMap(m) {
   m.options.maxBoundsViscosity = 0.7;
   const Switch = L.Control.extend({
     onAdd() {
-      const b = L.DomUtil.create('button', 'btn map-switch');
-      const label = () => b.textContent = t(mode === 'sat' ? 'mapStreet' : 'mapSat'); // names what a click shows
-      label();
+      const b = L.DomUtil.create('div', 'seg map-switch');
+      b.innerHTML = `<button data-mode="sat">${icon('image')}${t('mapSat')}</button><button data-mode="street">${icon('pin')}${t('mapStreet')}</button>`;
+      const mark = () => b.querySelectorAll('button').forEach(x => {
+        x.classList.toggle('active', x.dataset.mode === mode);
+        x.setAttribute('aria-pressed', x.dataset.mode === mode);
+      });
+      mark();
       L.DomEvent.disableClickPropagation(b);
-      b.onclick = () => {
+      b.onclick = e => {
+        const next = e.target.closest('button')?.dataset.mode;
+        if (!next || next === mode) return;
         m.removeLayer(layers[mode]);
-        mode = mode === 'sat' ? 'street' : 'sat';
+        mode = next;
         layers[mode].addTo(m);
         try { localStorage.mapMode = mode; } catch {}
-        label();
+        mark();
+        placeKnob(b, true);
       };
       return b;
     },

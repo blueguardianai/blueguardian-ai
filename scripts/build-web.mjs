@@ -13,6 +13,7 @@ fs.rmSync(out, { recursive: true, force: true });
 cp('site', '.');
 cp('src', 'app');
 cp('build/icon.png', 'build/icon.png');
+cp('build/favicon.png', 'build/favicon.png'); // transparent, cropped tab icon
 for (const f of ['leaflet.js', 'leaflet.css', 'images']) cp(`node_modules/leaflet/dist/${f}`, `app/vendor/leaflet/${f}`);
 cp('node_modules/chart.js/dist/chart.umd.min.js', 'app/vendor/chart.umd.min.js');
 for (const f of ['ort.wasm.min.js', 'ort-wasm-simd-threaded.mjs', 'ort-wasm-simd-threaded.wasm'])

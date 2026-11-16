@@ -6,7 +6,7 @@
         content="default-src 'self'; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://server.arcgisonline.com https://anrguxneshfmtueyhqgb.supabase.co; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:; connect-src 'self' data: blob: https://anrguxneshfmtueyhqgb.supabase.co">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b5cad">
-  <link rel="icon" href="../build/icon.png">
+  <link rel="icon" href="../build/favicon.png">
   <link rel="manifest" href="manifest.webmanifest">
   <title>BlueGuardian AI</title>
   <script src="theme.js"></script>
@@ -45,16 +45,16 @@
 
   <nav class="side">
     <div class="brand">
-      <img src="../build/icon.png" alt="">
+      <img src="../build/favicon.png" alt="">
       <div><b>BlueGuardian AI</b><small data-t="tagline"></small></div>
     </div>
-    <button class="btn primary" id="new-obs" data-t-title="newVisit"><svg class="i"><use href="#i-plus"/></svg><span data-t="newVisit"></span></button>
-    <button class="tab active" data-tab="dashboard" data-t-title="tabDashboard"><svg class="i"><use href="#i-grid"/></svg><span data-t="tabDashboard"></span></button>
-    <button class="tab" data-tab="observations" data-t-title="tabVisits"><svg class="i"><use href="#i-list"/></svg><span data-t="tabVisits"></span></button>
-    <button class="tab" data-tab="ai" data-t-title="tabAi"><svg class="i"><use href="#i-scan"/></svg><span data-t="tabAi"></span><b class="count" id="todo-count" hidden></b></button>
-    <button class="tab" data-tab="compare" data-t-title="tabCompare"><svg class="i"><use href="#i-compare"/></svg><span data-t="tabCompare"></span></button>
-    <button class="tab" data-tab="community" data-t-title="tabCommunity"><svg class="i"><use href="#i-users"/></svg><span data-t="tabCommunity"></span></button>
-    <button class="tab" data-tab="data" data-t-title="tabData"><svg class="i"><use href="#i-database"/></svg><span data-t="tabData"></span></button>
+    <button class="btn primary" id="new-obs" data-t-title="newVisitTip"><svg class="i"><use href="#i-plus"/></svg><span data-t="newVisit"></span></button>
+    <button class="tab active" data-tab="dashboard" data-t-title="dashHint"><svg class="i"><use href="#i-grid"/></svg><span data-t="tabDashboard"></span></button>
+    <button class="tab" data-tab="observations" data-t-title="visitsHint"><svg class="i"><use href="#i-list"/></svg><span data-t="tabVisits"></span></button>
+    <button class="tab" data-tab="ai" data-t-title="aiHint"><svg class="i"><use href="#i-scan"/></svg><span data-t="tabAi"></span><b class="count" id="todo-count" hidden></b></button>
+    <button class="tab" data-tab="compare" data-t-title="compareHint"><svg class="i"><use href="#i-compare"/></svg><span data-t="tabCompare"></span></button>
+    <button class="tab" data-tab="community" data-t-title="communityHint"><svg class="i"><use href="#i-users"/></svg><span data-t="tabCommunity"></span></button>
+    <button class="tab" data-tab="data" data-t-title="dataHint"><svg class="i"><use href="#i-database"/></svg><span data-t="tabData"></span></button>
     <div class="grow"></div>
     <div class="side-foot">
       <button class="btn" id="guide-open" data-t-title="guide"><svg class="i"><use href="#i-help"/></svg><span data-t="guide"></span></button>
@@ -67,7 +67,7 @@
 
   <main class="scroll-fade">
     <section id="dashboard" class="page active">
-      <header class="head"><h1 data-t="tabDashboard"></h1></header>
+      <header class="head"><div><h1 data-t="tabDashboard"></h1><p class="hint" data-t="dashHint"></p></div></header>
       <div id="demo-banner" class="banner" hidden>
         <span data-t="demoBanner"></span>
         <button class="btn" id="demo-remove" data-t="demoRemove"></button>
@@ -166,9 +166,9 @@
             </select>
             <small id="stage-help"></small>
           </label>
-          <label><span><span data-t="fTemp"></span> <em data-t="optional"></em></span><input name="temp" type="number" step="0.1" min="-5" max="45" inputmode="decimal"></label>
-          <label><span><span data-t="fPh"></span> <em data-t="optional"></em></span><input name="ph" type="number" step="0.01" min="0" max="14" inputmode="decimal"></label>
-          <label><span><span data-t="fLitter"></span> <em data-t="optional"></em></span><input name="litter" type="number" step="1" min="0" inputmode="numeric"></label>
+          <label><span><span data-t="fTemp"></span> <em data-t="optional"></em></span><input name="temp" type="number" step="0.1" min="-5" max="45" inputmode="decimal"><small data-t="tempHelp"></small></label>
+          <label><span><span data-t="fPh"></span> <em data-t="optional"></em></span><input name="ph" type="number" step="0.01" min="0" max="14" inputmode="decimal"><small data-t="phHelp"></small></label>
+          <label><span><span data-t="fLitter"></span> <em data-t="optional"></em></span><input name="litter" type="number" step="1" min="0" inputmode="numeric"><small data-t="litterHelp"></small></label>
           <label class="wide"><span><span data-t="fNotes"></span> <em data-t="optional"></em></span><textarea name="notes" rows="2"></textarea></label>
         </div>
         <h3><span data-t="location"></span> <span id="obs-loc" class="loc"></span>
@@ -219,7 +219,7 @@
 
   <dialog id="welcome">
     <div class="welcome">
-      <img src="../build/icon.png" alt="">
+      <img src="../build/favicon.png" alt="">
       <h2 data-t="welcomeTitle"></h2>
       <p data-t="welcomeText"></p>
       <div class="row">

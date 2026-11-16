@@ -1,7 +1,7 @@
 {
   "name": "blueguardian-ai",
   "productName": "BlueGuardian AI",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "BlueGuardian AI: καταγραφή παραλιών, BlueVision AI και Πριν/Μετά. 3ο Γυμνάσιο Αργυρούπολης - Sea Symphony",
   "author": {
     "name": "Sea Symphony - 3ο Γυμνάσιο Αργυρούπολης",
@@ -39,6 +39,7 @@
       "!src/sw.js",
       "!src/ai/text-embeds-web.json",
       "build/icon.png",
+      "build/favicon.png",
       "!{models,test,scripts,dist,site}/**",
       "!node_modules/onnxruntime-node/bin/napi-v*/linux/x64/libonnxruntime_providers_{cuda,tensorrt}.so"
     ],

@@ -101,8 +101,7 @@ textarea { resize: vertical; }
 .side { width: 248px; flex: none; display: flex; flex-direction: column; gap: 2px; padding: 16px 12px; border-right: 1px solid var(--line); }
 .brand { display: flex; gap: 10px; align-items: center; padding: 4px 6px 18px; }
 /* Multiply blending: the logo's white box melts into the surface. Dark mode flips it and screens it instead. */
-.brand img { width: 40px; height: 40px; flex: none; mix-blend-mode: multiply; }
-[data-theme="dark"] .brand img { filter: invert(1) hue-rotate(180deg); mix-blend-mode: screen; }
+.brand img { width: 40px; height: 40px; flex: none; } /* transparent logo: no blend tricks needed */
 .brand b { display: block; font-size: 15px; letter-spacing: -.01em; }
 .brand small { display: block; font-size: 11.5px; white-space: nowrap; color: var(--muted); }
 .tab {
@@ -359,8 +358,7 @@ dialog h2 { padding: var(--p) var(--p) 0; margin-bottom: 4px; font-size: 18px; }
 
 #welcome { width: min(520px, 100dvw - 32px); }
 .welcome { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 32px 28px 24px; text-wrap: balance; }
-.welcome img { width: 72px; height: 72px; mix-blend-mode: multiply; }
-[data-theme="dark"] .welcome img { filter: invert(1) hue-rotate(180deg); mix-blend-mode: screen; }
+.welcome img { width: 88px; height: auto; }
 .welcome h2 { padding: 0; margin: 0; font-size: 21px; }
 .welcome p { color: var(--muted); }
 .welcome .row { justify-content: center; margin-top: 6px; }
@@ -403,8 +401,10 @@ dialog h2 { padding: var(--p) var(--p) 0; margin-bottom: 4px; font-size: 18px; }
 .rules { margin: 0; padding: 12px 14px 12px 30px; display: grid; gap: 4px; border-radius: var(--inner); color: var(--muted); font-size: 13.5px; background: color-mix(in oklch, var(--text) 4%, transparent); border: 1px solid var(--line); }
 .note a { color: var(--accent); }
 
-/* The map's satellite/street switch sits over the tiles, so it needs its own shadow to stay readable. */
-.map-switch { box-shadow: 0 1px 4px oklch(0 0 0 / .3); }
+/* The map's satellite/street switch sits over the tiles: solid background and its own shadow keep it readable. */
+.map-switch { margin: 0; background: var(--overlay); box-shadow: 0 1px 4px oklch(0 0 0 / .3); }
+.map-switch button { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; font-size: 13px; }
+.map-switch button.active { color: var(--accent); --iw: 2.4; }
 
 /* Success: a soft ring pulses once around the button that just finished its job. */
 .btn.ok { animation: ok .5s var(--ease); }
