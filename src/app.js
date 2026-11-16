@@ -1,6 +1,6 @@
 import { predict } from './ai/predict.js';
 import { t, lang, translate } from './i18n.js';
-import { listShared, shareVisit, unshareVisit, reportVisit, sharedPhotoUrl } from './cloud.js';
+import { listShared, shareVisit, unshareVisit, reportVisit, moderate, sharedPhotoUrl } from './cloud.js';
 
 await api.ready; // website: wait for the service worker that serves the photos
 translate();
@@ -291,6 +291,14 @@ const SENTINEL = () => L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloud
   maxZoom: 17,
   attribution: '<a href="https://s2maps.eu">Sentinel-2 cloudless by EOX</a> (Contains modified Copernicus Sentinel data 2020)',
 });
+const ESRI = () => L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 19, attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics',
+});
+// Street map, with a switch to a sharp satellite photo or to Copernicus Sentinel-2.
+function baseMap(m) {
+  const osm = OSM().addTo(m);
+  L.control.layers({ [t('mapStreet')]: osm, [t('mapSatHi')]: ESRI(), [t('mapSat')]: SENTINEL() }).addTo(m);
+}
 const DEFAULT_VIEW = [[37.9, 23.73], 10];
 const PIN = { radius: 8, className: 'pin' }; // colors come from CSS
 
@@ -339,8 +347,7 @@ function renderDashboard() {
 
   if (!map) {
     map = L.map('map').setView(...DEFAULT_VIEW);
-    const osm = OSM().addTo(map);
-    L.control.layers({ [t('mapStreet')]: osm, [t('mapSat')]: SENTINEL() }).addTo(map);
+    baseMap(map);
     markers = L.layerGroup().addTo(map);
   }
   markers.clearLayers();
@@ -471,7 +478,7 @@ function openObs(obs, preset = {}) {
 
   if (!obsMap) {
     obsMap = L.map('obs-map').setView(...DEFAULT_VIEW);
-    OSM().addTo(obsMap);
+    baseMap(obsMap);
     obsMap.on('click', e => setLoc(e.latlng.lat, e.latlng.lng));
   }
   obsMarker?.remove();
@@ -724,20 +731,47 @@ async function unshare(o) {
   refresh();
 }
 
+// Moderator mode lasts for this browser session only. The server checks the key on every request.
+let modKey = sessionStorage.getItem('modKey');
+$('#mod-enter').onclick = () => {
+  const key = prompt(t('modPrompt'))?.trim();
+  if (!key) return;
+  sessionStorage.setItem('modKey', modKey = key);
+  show('community');
+};
+$('#mod-exit').onclick = () => {
+  sessionStorage.removeItem('modKey');
+  modKey = null;
+  renderCommunity();
+};
+const modButtons = v => `<div class="row">
+  ${v.status === 'hidden' ? `<span class="example">${t('modHidden')}</span>` : ''}
+  ${v.reports ? `<span class="example">${t('modReports', { n: v.reports })}</span>` : ''}
+  <button class="btn quiet" data-mod="${v.status === 'hidden' ? 'show' : 'hide'}" data-id="${v.id}">${t(v.status === 'hidden' ? 'modShow' : 'modHide')}</button>
+  <button class="btn quiet" data-mod="delete" data-id="${v.id}">${t('modDelete')}</button>
+</div>`;
+
 let comMap, comMarkers;
 async function renderCommunity() {
   const list = $('#com-list');
   if (!comMap) {
     comMap = L.map('com-map').setView(...DEFAULT_VIEW);
-    OSM().addTo(comMap);
+    baseMap(comMap);
     comMarkers = L.layerGroup().addTo(comMap);
   }
   setTimeout(() => comMap.invalidateSize());
   if (!list.children.length) list.innerHTML = emptyState(t('comLoading'));
   let visits;
-  try { visits = await listShared(); }
-  catch { list.innerHTML = emptyState(t('comError')); return; }
+  try { visits = modKey ? await moderate(modKey, 'list') : await listShared(); }
+  catch (err) {
+    if (err.message !== 'not_moderator') { list.innerHTML = emptyState(t('comError')); return; }
+    sessionStorage.removeItem('modKey');
+    modKey = null;
+    alert(t('modBad'));
+    return renderCommunity();
+  }
   if (current !== 'community') return;
+  $('#mod-bar').hidden = !modKey;
 
   $('#com-tiles').innerHTML =
     tile(new Set(visits.map(v => v.school)).size, t('schools')) +
@@ -763,13 +797,19 @@ async function renderCommunity() {
         </p>
         ${v.notes ? `<p class="notes">${esc(v.notes)}</p>` : ''}
       </div>
-      ${mine.has(v.id) ? `<span class="example">${t('shared')}</span>`
+      ${modKey ? modButtons(v) : mine.has(v.id) ? `<span class="example">${t('shared')}</span>`
         : `<button class="btn quiet" data-report="${v.id}" title="${t('report')}" aria-label="${t('report')}">${icon('flag')}</button>`}
     </div>`).join('') : emptyState(t('comEmpty'));
   document.querySelectorAll('[data-report]').forEach(b => b.onclick = async () => {
     if (!confirm(t('confirmReport'))) return;
     await reportVisit(b.dataset.report).catch(() => {});
     b.outerHTML = `<span class="example">${t('reported')}</span>`;
+  });
+  document.querySelectorAll('[data-mod]').forEach(b => b.onclick = async () => {
+    if (b.dataset.mod === 'delete' && !confirm(t('confirmModDelete'))) return;
+    try { await moderate(modKey, b.dataset.mod, b.dataset.id); }
+    catch { return alert(t('err_other')); }
+    renderCommunity();
   });
 }
 

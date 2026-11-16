@@ -2,10 +2,12 @@
 //   share   publish a visit (numbers, and photos if the safety check is configured)
 //   delete  remove your own shared visit, proven by the edit key kept on your device
 //   report  flag a visit; three different reporters hide it until a moderator looks
+//   moderate  list every visit (hidden ones too), or hide / show / delete one; needs MODERATOR_KEY
 //
 // Secrets (Supabase dashboard > Edge Functions > Secrets), all optional:
 //   OPENAI_API_KEY     turns on the safety check. Without it photos are refused and only numbers are shared.
 //   TURNSTILE_SECRET   turns on the Cloudflare Turnstile bot check.
+//   MODERATOR_KEY      the teacher's key for the app's moderator mode. Without it moderation is off.
 // This endpoint is public (verify_jwt is off): every request is validated and rate limited below.
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 
@@ -132,6 +134,28 @@ async function report(body: any, ipHash: string) {
   return { ok: true };
 }
 
+async function moderate(body: any) {
+  const key = Deno.env.get('MODERATOR_KEY');
+  // Hashing both sides makes the comparison take the same time whatever the guess.
+  // No rate limit here, so a short key could be guessed: moderation stays off until the key is 16+ characters.
+  if (!key || key.length < 16 || typeof body.key !== 'string' || await sha256(body.key) !== await sha256(key)) throw new Refuse(403, 'not_moderator');
+  if (body.do === 'list') {
+    const { data, error } = await db.from('shared_visits')
+      .select('id,school,site,lat,lon,visited_at,stage,temp,ph,litter,notes,counts,status,reports,shared_photos(path,class)')
+      .order('reports', { ascending: false }).order('visited_at', { ascending: false }).limit(500);
+    if (error) throw error;
+    return data;
+  }
+  const id = text(body.id, 36, 36, 'bad_id');
+  if (body.do === 'delete') await removeVisit(id);
+  else if (body.do === 'hide') await db.from('shared_visits').update({ status: 'hidden' }).eq('id', id);
+  else if (body.do === 'show') { // a fresh start: old reports no longer count towards hiding it again
+    await db.from('shared_reports').delete().eq('visit_id', id);
+    await db.from('shared_visits').update({ status: 'public', reports: 0 }).eq('id', id);
+  } else throw new Refuse(400, 'bad_action');
+  return { ok: true };
+}
+
 Deno.serve(async req => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: cors });
   if (req.method !== 'POST') return reply(405, { error: 'post_only' });
@@ -143,6 +167,7 @@ Deno.serve(async req => {
     if (body.action === 'share') return reply(200, await share(body, ipHash, ip));
     if (body.action === 'delete') return reply(200, await del(body));
     if (body.action === 'report') return reply(200, await report(body, ipHash));
+    if (body.action === 'moderate') return reply(200, await moderate(body));
     throw new Refuse(400, 'bad_action');
   } catch (e) {
     if (e instanceof Refuse) return reply(e.status, { error: e.code });

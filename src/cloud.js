@@ -28,3 +28,5 @@ async function call(body) {
 export const shareVisit = (school, visit, photos, editKey) => call({ action: 'share', school, visit, photos, editKey });
 export const unshareVisit = (id, editKey) => call({ action: 'delete', id, editKey });
 export const reportVisit = id => call({ action: 'report', id });
+// what: 'list' (every visit, hidden ones too), or 'hide' / 'show' / 'delete' one visit.
+export const moderate = (key, what, id) => call({ action: 'moderate', key, do: what, id });

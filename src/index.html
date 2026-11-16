@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://tiles.maps.eox.at https://anrguxneshfmtueyhqgb.supabase.co; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:; connect-src 'self' data: blob: https://anrguxneshfmtueyhqgb.supabase.co">
+        content="default-src 'self'; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://tiles.maps.eox.at https://server.arcgisonline.com https://anrguxneshfmtueyhqgb.supabase.co; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:; connect-src 'self' data: blob: https://anrguxneshfmtueyhqgb.supabase.co">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b5cad">
   <link rel="icon" href="../build/icon.png">
@@ -118,6 +118,7 @@
 
     <section id="community" class="page">
       <header class="head"><div><h1 data-t="tabCommunity"></h1><p class="hint" data-t="communityHint"></p></div></header>
+      <div class="card row" id="mod-bar" hidden><p class="grow" data-t="modOn"></p><button class="btn" id="mod-exit" data-t="modExit"></button></div>
       <div class="tiles" id="com-tiles"></div>
       <div class="card com-map"><div id="com-map" class="map"></div></div>
       <div id="com-list"></div>
@@ -139,6 +140,9 @@
         </div>
         <div class="card"><h2 data-t="demoTitle"></h2><p data-t="demoText"></p>
           <div class="row"><button class="btn" id="demo-toggle"></button></div>
+        </div>
+        <div class="card"><h2 data-t="modTitle"></h2><p data-t="modText"></p>
+          <div class="row"><button class="btn" id="mod-enter"><svg class="i"><use href="#i-flag"/></svg><span data-t="modBtn"></span></button></div>
         </div>
         <div class="card wide"><h2 data-t="aboutTitle"></h2><p data-t="aboutText"></p></div>
       </div>
