@@ -1,8 +1,8 @@
 // The shared community database (Supabase). Reading is open to everyone; every write goes through the
 // "share" edge function (supabase/functions/share), which validates, rate limits and safety-checks it.
 // The key below is a publishable key: it is meant to be public. Row level security protects the data.
-const URL_ = 'https://izfxszljvmaeynhiuadi.supabase.co';
-const KEY = 'sb_publishable_zItZmYepZoJUlJ7QMIUWiw_Bl02TYT2';
+const URL_ = 'https://anrguxneshfmtueyhqgb.supabase.co';
+const KEY = 'sb_publishable_FbjzC1UmCZttwFs2uW6yxQ_sCQb4nRE';
 
 export const sharedPhotoUrl = path => `${URL_}/storage/v1/object/public/shared/${path}`;
 
