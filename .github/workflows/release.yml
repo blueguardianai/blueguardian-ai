@@ -12,6 +12,10 @@ on:
     tags: ['v*']       # builds the installers
   workflow_dispatch:
 
+# The app never uses the GPU build; its download during npm ci is large and sometimes fails.
+env:
+  ONNXRUNTIME_NODE_INSTALL_CUDA: skip
+
 permissions:
   contents: write
   pages: write
