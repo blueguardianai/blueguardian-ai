@@ -26,7 +26,7 @@ and see in numbers whether your action made a difference.
 | **BlueVision AI** | Sorts every photo into Clean Beach, Plastic Waste, Other Waste or Natural Materials, and always shows how confident it is. |
 | **People decide** | Students check the predictions. Every correction becomes an example, and similar photos update straight away. |
 | **Before / After** | Puts the state before, the day of the action and the state after side by side, and works out the difference. |
-| **Dashboard** | A map with Copernicus Sentinel-2 satellite imagery, charts per beach, and findings in plain language. |
+| **Dashboard** | A high-resolution satellite map, charts per beach, and findings in plain language. |
 | **Community** | If you want, you share a visit under your school's name. Every shared visit appears on one common map. |
 | **Open data** | Export every visit to CSV, and back everything up to one file. |
 
@@ -113,5 +113,5 @@ git tag v1.0.1 && git push origin v1.0.1
 BlueGuardian AI is a project by **Sea Symphony**, the student team of the **3rd Junior High School of Argyroupoli**, Greece.
 
 Maps: [OpenStreetMap](https://www.openstreetmap.org/copyright).
-Satellite imagery: [Sentinel-2 cloudless](https://s2maps.eu) by EOX (contains modified Copernicus Sentinel data 2020).
+Satellite imagery: Esri, Maxar, Earthstar Geographics.
 Model: OpenAI's [CLIP](https://github.com/openai/CLIP), in ONNX form from [Transformers.js](https://github.com/huggingface/transformers.js).

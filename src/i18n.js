@@ -99,8 +99,7 @@ const T = {
   wastePhotos: ['Φωτογραφίες με απορρίμματα', 'Photos showing litter'],
   map: ['Χάρτης παραλιών', 'Beach map'],
   mapStreet: ['Χάρτης', 'Map'],
-  mapSatHi: ['Δορυφόρος (Esri, υψηλή ανάλυση)', 'Satellite (Esri, high resolution)'],
-  mapSat: ['Δορυφόρος (Copernicus Sentinel-2)', 'Satellite (Copernicus Sentinel-2)'],
+  mapSat: ['Δορυφόρος', 'Satellite'],
   monitoring: ['Παρακολούθηση παραλίας', 'Beach monitoring'],
   chartSensors: ['Μετρήσεις αισθητήρων', 'Sensor readings'],
   chartLitter: ['Απορρίμματα ανά επίσκεψη', 'Litter per visit'],
@@ -204,8 +203,8 @@ const T = {
   demoText: ['Μια φανταστική παραλία με τρεις καταγραφές, για να δείτε πώς λειτουργεί η εφαρμογή.', 'A fictional beach with three visits, to see how the app works.'],
   langTitle: ['Γλώσσα', 'Language'],
   aboutTitle: ['Σχετικά', 'About'],
-  aboutText: ['Το BlueGuardian AI είναι έργο της μαθητικής ομάδας Sea Symphony του 3ου Γυμνασίου Αργυρούπολης. Χάρτες: OpenStreetMap. Δορυφορικές εικόνες: Sentinel-2 cloudless από EOX (περιέχει τροποποιημένα δεδομένα Copernicus Sentinel 2020).',
-    'BlueGuardian AI is a project by Sea Symphony, the student team of the 3rd Junior High School of Argyroupoli. Maps: OpenStreetMap. Satellite imagery: Sentinel-2 cloudless by EOX (contains modified Copernicus Sentinel data 2020).'],
+  aboutText: ['Το BlueGuardian AI είναι έργο της μαθητικής ομάδας Sea Symphony του 3ου Γυμνασίου Αργυρούπολης. Χάρτες: OpenStreetMap. Δορυφορικές εικόνες: Esri, Maxar, Earthstar Geographics.',
+    'BlueGuardian AI is a project by Sea Symphony, the student team of the 3rd Junior High School of Argyroupoli. Maps: OpenStreetMap. Satellite imagery: Esri, Maxar, Earthstar Geographics.'],
 };
 
 export const t = (key, vars = {}) =>

@@ -287,17 +287,32 @@ let map, markers, charts = {};
 const OSM = () => L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19, className: 'osm', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 });
-const SENTINEL = () => L.tileLayer('https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg', {
-  maxZoom: 17,
-  attribution: '<a href="https://s2maps.eu">Sentinel-2 cloudless by EOX</a> (Contains modified Copernicus Sentinel data 2020)',
-});
 const ESRI = () => L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
   maxZoom: 19, attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics',
 });
-// Street map, with a switch to a sharp satellite photo or to Copernicus Sentinel-2.
+// Satellite photo by default; one button on the map switches to the street map and back. The choice is remembered.
 function baseMap(m) {
-  const osm = OSM().addTo(m);
-  L.control.layers({ [t('mapStreet')]: osm, [t('mapSatHi')]: ESRI(), [t('mapSat')]: SENTINEL() }).addTo(m);
+  const layers = { sat: ESRI(), street: OSM() };
+  let mode = 'sat';
+  try { if (localStorage.mapMode === 'street') mode = 'street'; } catch {}
+  layers[mode].addTo(m);
+  const Switch = L.Control.extend({
+    onAdd() {
+      const b = L.DomUtil.create('button', 'btn map-switch');
+      const label = () => b.textContent = t(mode === 'sat' ? 'mapStreet' : 'mapSat'); // names what a click shows
+      label();
+      L.DomEvent.disableClickPropagation(b);
+      b.onclick = () => {
+        m.removeLayer(layers[mode]);
+        mode = mode === 'sat' ? 'street' : 'sat';
+        layers[mode].addTo(m);
+        try { localStorage.mapMode = mode; } catch {}
+        label();
+      };
+      return b;
+    },
+  });
+  new Switch({ position: 'topright' }).addTo(m);
 }
 const DEFAULT_VIEW = [[37.9, 23.73], 10];
 const PIN = { radius: 8, className: 'pin' }; // colors come from CSS

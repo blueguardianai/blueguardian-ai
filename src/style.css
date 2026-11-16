@@ -380,3 +380,6 @@ dialog h2 { padding: var(--p) var(--p) 0; margin-bottom: 4px; font-size: 18px; }
 .check input { width: 18px; height: 18px; accent-color: var(--accent); }
 .rules { margin: 0; padding: 12px 14px 12px 30px; display: grid; gap: 4px; border-radius: var(--inner); color: var(--muted); font-size: 13.5px; background: color-mix(in oklch, var(--text) 4%, transparent); border: 1px solid var(--line); }
 .note a { color: var(--accent); }
+
+/* The map's satellite/street switch sits over the tiles, so it needs its own shadow to stay readable. */
+.map-switch { box-shadow: 0 1px 4px oklch(0 0 0 / .3); }
