@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'">
+  <title>BlueGuardian AI</title>
+  <meta name="description" content="BlueGuardian AI: καταγράψτε μια παραλία με φωτογραφίες και μετρήσεις, αφήστε την AI να αναγνωρίσει τα απορρίμματα και μετρήστε το αποτέλεσμα της δράσης σας. Record a beach, let the AI recognise litter, measure the result of your action.">
+  <meta name="theme-color" content="#0b5cad">
+  <link rel="icon" href="build/icon.png">
+  <script src="app/theme.js"></script>
+  <script src="site.js"></script>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <svg style="display:none" aria-hidden="true">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+  </svg>
+
+  <header class="nav">
+    <a class="brand" href="./"><img src="build/icon.png" alt=""><b>BlueGuardian AI</b></a>
+    <nav>
+      <a href="#how"><span lang="el">Πώς λειτουργεί</span><span lang="en">How it works</span></a>
+      <a href="#ai">BlueVision AI</a>
+      <a href="#download"><span lang="el">Λήψη</span><span lang="en">Download</span></a>
+      <a href="https://github.com/blueguardianai">GitHub</a>
+    </nav>
+    <button class="btn icon" id="lang" aria-label="English / Ελληνικά" title="English / Ελληνικά"><svg class="i"><use href="#i-globe"/></svg><span lang="el">EN</span><span lang="en">ΕΛ</span></button>
+    <button class="btn icon" id="theme" aria-label="Light / dark" title="Light / dark">
+      <span class="swap"><svg class="i"><use href="#i-moon"/></svg><svg class="i"><use href="#i-sun"/></svg></span>
+    </button>
+    <a class="btn primary" href="app/"><span lang="el">Άνοιγμα εφαρμογής</span><span lang="en">Open the app</span></a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span lang="el">Sea Symphony · 3ο Γυμνάσιο Αργυρούπολης</span><span lang="en">Sea Symphony · 3rd Junior High School of Argyroupoli</span></p>
+      <h1><span lang="el">Από τη γνώση στη δράση, για πιο καθαρές θάλασσες</span><span lang="en">From knowledge to action, for cleaner seas</span></h1>
+      <p class="lead">
+        <span lang="el">Καταγράψτε μια παραλία με φωτογραφίες και μετρήσεις. Η BlueVision AI αναγνωρίζει τα απορρίμματα, οι μαθητές την ελέγχουν, και στο τέλος βλέπετε με αριθμούς αν η δράση σας είχε αποτέλεσμα.</span>
+        <span lang="en">Record a beach with photos and measurements. BlueVision AI recognises the litter, students check it, and at the end you see in numbers whether your action made a difference.</span>
+      </p>
+      <div class="cta">
+        <a class="btn primary big" href="app/"><span lang="el">Άνοιγμα στον browser</span><span lang="en">Open in the browser</span><svg class="i"><use href="#i-arrow"/></svg></a>
+        <a class="btn big" href="#download"><svg class="i"><use href="#i-download"/></svg><span lang="el">Λήψη για υπολογιστή</span><span lang="en">Download for desktop</span></a>
+      </div>
+      <p class="fine"><span lang="el">Για Windows, macOS, Linux και κάθε browser. Δωρεάν, χωρίς λογαριασμό. Τα δεδομένα σας μένουν στη συσκευή σας.</span><span lang="en">For Windows, macOS, Linux and any browser. Free, no account. Your data stays on your device.</span></p>
+      <figure class="shot hero-shot">
+        <img lang="el" src="img/dash-el.jpg" width="1280" height="800" alt="Ο πίνακας ελέγχου του BlueGuardian AI με χάρτη, μετρήσεις και ευρήματα">
+        <img lang="en" src="img/dash-en.jpg" width="1280" height="800" alt="The BlueGuardian AI dashboard with a map, readings and findings">
+      </figure>
+    </section>
+
+    <section id="how">
+      <h2><span lang="el">Πώς λειτουργεί</span><span lang="en">How it works</span></h2>
+      <ol class="steps">
+        <li><b><span lang="el">Παρατηρούμε</span><span lang="en">Observe</span></b>
+          <p><span lang="el">Πηγαίνετε στην παραλία και φωτογραφίζετε ό,τι βρίσκετε στην ακτή.</span><span lang="en">Go to the beach and photograph what you find on the shore.</span></p></li>
+        <li><b><span lang="el">Μετράμε</span><span lang="en">Measure</span></b>
+          <p><span lang="el">Σημειώνετε θερμοκρασία νερού, pH και πόσα απορρίμματα μετρήσατε, μαζί με το σημείο στον χάρτη.</span><span lang="en">Note the water temperature, pH and how much litter you counted, with the spot on the map.</span></p></li>
+        <li><b><span lang="el">Κατανοούμε</span><span lang="en">Understand</span></b>
+          <p><span lang="el">Η AI κατατάσσει κάθε φωτογραφία και ο πίνακας ελέγχου δείχνει τι αλλάζει με τον χρόνο.</span><span lang="en">The AI sorts every photo and the dashboard shows what changes over time.</span></p></li>
+        <li><b><span lang="el">Δρούμε και ξαναμετράμε</span><span lang="en">Act and measure again</span></b>
+          <p><span lang="el">Μετά τη δράση σας καταγράφετε ξανά. Η σύγκριση Πριν / Μετά δείχνει το αποτέλεσμα.</span><span lang="en">After your action you record again. The Before / After comparison shows the result.</span></p></li>
+      </ol>
+    </section>
+
+    <section id="ai" class="feature">
+      <div>
+        <h2>BlueVision AI</h2>
+        <p><span lang="el">Κάθε φωτογραφία κατατάσσεται σε μία από τέσσερις κατηγορίες, με το ποσοστό βεβαιότητας να φαίνεται πάντα.</span><span lang="en">Every photo is sorted into one of four categories, and the confidence is always shown.</span></p>
+        <ul class="classes">
+          <li style="--c:oklch(0.68 0.16 150)"><span lang="el">Καθαρή Ακτή</span><span lang="en">Clean Beach</span></li>
+          <li style="--c:oklch(0.64 0.2 20)"><span lang="el">Πλαστικά Απορρίμματα</span><span lang="en">Plastic Waste</span></li>
+          <li style="--c:oklch(0.74 0.15 65)"><span lang="el">Άλλα Απορρίμματα</span><span lang="en">Other Waste</span></li>
+          <li style="--c:oklch(0.62 0.17 295)"><span lang="el">Φυσικά Υλικά</span><span lang="en">Natural Materials</span></li>
+        </ul>
+        <h3><span lang="el">Ο άνθρωπος έχει τον τελευταίο λόγο</span><span lang="en">People have the final say</span></h3>
+        <p><span lang="el">Η AI κάνει και λάθη. Όταν ένας μαθητής πατήσει τη σωστή κατηγορία, η διόρθωση γίνεται παράδειγμα και οι παρόμοιες φωτογραφίες ενημερώνονται αμέσως.</span><span lang="en">The AI makes mistakes. When a student clicks the right category, the correction becomes an example and similar photos update straight away.</span></p>
+        <h3><span lang="el">Τρέχει στη συσκευή σας</span><span lang="en">It runs on your device</span></h3>
+        <p><span lang="el">Οι φωτογραφίες δεν ανεβαίνουν πουθενά για να αναλυθούν. Μετά την πρώτη φόρτωση, η εφαρμογή δουλεύει και χωρίς σύνδεση.</span><span lang="en">Photos are not uploaded anywhere to be analysed. After the first load, the app also works offline.</span></p>
+      </div>
+      <figure class="shot">
+        <img lang="el" src="img/ai-el.jpg" width="1280" height="800" loading="lazy" alt="Η σελίδα BlueVision AI με φωτογραφίες και ποσοστά ανά κατηγορία">
+        <img lang="en" src="img/ai-en.jpg" width="1280" height="800" loading="lazy" alt="The BlueVision AI page with photos and a confidence per category">
+      </figure>
+    </section>
+
+    <section class="feature flip">
+      <div>
+        <h2><span lang="el">Πριν και Μετά</span><span lang="en">Before and After</span></h2>
+        <p><span lang="el">Η δράση μας είχε πραγματικό και μετρήσιμο αποτέλεσμα; Η εφαρμογή βάζει δίπλα δίπλα την κατάσταση πριν, την ημέρα της δράσης και την κατάσταση μετά, και υπολογίζει τη διαφορά.</span><span lang="en">Did our action have a real, measurable result? The app puts the state before, the day of the action and the state after side by side, and works out the difference.</span></p>
+        <h3><span lang="el">Ανοιχτά δεδομένα</span><span lang="en">Open data</span></h3>
+        <p><span lang="el">Όλες οι καταγραφές εξάγονται σε CSV, για το Excel, για μια εργασία ή για να τις μοιραστείτε με τον δήμο σας.</span><span lang="en">Every visit exports to CSV, for Excel, for a school project or to share with your municipality.</span></p>
+        <h3><span lang="el">Χάρτης και δορυφόρος</span><span lang="en">Map and satellite</span></h3>
+        <p><span lang="el">Οι παραλίες σας εμφανίζονται σε χάρτη, με δορυφορική εικόνα Sentinel-2 του προγράμματος Copernicus.</span><span lang="en">Your beaches appear on a map, with Sentinel-2 satellite imagery from the Copernicus programme.</span></p>
+      </div>
+      <figure class="shot">
+        <img lang="el" src="img/compare-el.jpg" width="1280" height="800" loading="lazy" alt="Σύγκριση Πριν, Δράση, Μετά για μια παραλία">
+        <img lang="en" src="img/compare-en.jpg" width="1280" height="800" loading="lazy" alt="Before, Action, After comparison for one beach">
+      </figure>
+    </section>
+
+    <section id="download">
+      <h2><span lang="el">Χρησιμοποιήστε το</span><span lang="en">Use it</span></h2>
+      <div class="options">
+        <div class="card">
+          <h3><span lang="el">Στον browser</span><span lang="en">In the browser</span></h3>
+          <p><span lang="el">Σε υπολογιστή, tablet ή κινητό, χωρίς εγκατάσταση. Την πρώτη φορά κατεβαίνει το μοντέλο AI (περίπου 90 MB).</span><span lang="en">On a computer, tablet or phone, with nothing to install. The first time, the AI model downloads (about 90 MB).</span></p>
+          <a class="btn primary" href="app/"><span lang="el">Άνοιγμα εφαρμογής</span><span lang="en">Open the app</span></a>
+        </div>
+        <div class="card">
+          <h3>Windows</h3>
+          <p><span lang="el">Πρόγραμμα εγκατάστασης για Windows 10 και 11. Μεγαλύτερο και ακριβέστερο μοντέλο AI, δουλεύει πλήρως χωρίς σύνδεση (περίπου 700 MB).</span><span lang="en">Installer for Windows 10 and 11. A larger, more accurate AI model that works fully offline (about 700 MB).</span></p>
+          <div class="dl"><a class="btn" data-dl="windows"><svg class="i"><use href="#i-download"/></svg><span lang="el">Λήψη (.exe)</span><span lang="en">Download (.exe)</span></a></div>
+        </div>
+        <div class="card">
+          <h3>macOS</h3>
+          <p><span lang="el">Για Mac με Apple Silicon ή Intel. Την πρώτη φορά κάντε δεξί κλικ στην εφαρμογή και «Άνοιγμα», επειδή δεν είναι υπογεγραμμένη από την Apple.</span><span lang="en">For Macs with Apple Silicon or Intel. The first time, right-click the app and choose "Open", because it is not signed by Apple.</span></p>
+          <div class="dl">
+            <a class="btn" data-dl="macArm"><svg class="i"><use href="#i-download"/></svg>Apple Silicon</a>
+            <a class="btn" data-dl="macIntel"><svg class="i"><use href="#i-download"/></svg>Intel</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Linux</h3>
+          <p><span lang="el">Πακέτο .deb για Debian, Ubuntu και Mint, ή AppImage που τρέχει σε κάθε διανομή χωρίς εγκατάσταση.</span><span lang="en">A .deb package for Debian, Ubuntu and Mint, or an AppImage that runs on any distribution without installing.</span></p>
+          <div class="dl">
+            <a class="btn" data-dl="linuxDeb"><svg class="i"><use href="#i-download"/></svg>.deb</a>
+            <a class="btn" data-dl="linux"><svg class="i"><use href="#i-download"/></svg>AppImage</a>
+          </div>
+        </div>
+      </div>
+      <p class="fine"><span lang="el">Μεταφέρετε τα δεδομένα σας ανάμεσα στον browser και την εφαρμογή από τη σελίδα «Δεδομένα», με αντίγραφο ασφαλείας.</span><span lang="en">Move your data between the browser and the desktop app from the "Data" page, using a backup file.</span></p>
+    </section>
+  </main>
+
+  <footer>
+    <p><b>BlueGuardian AI</b> · <span lang="el">Έργο της μαθητικής ομάδας Sea Symphony, 3ο Γυμνάσιο Αργυρούπολης.</span><span lang="en">A project by the student team Sea Symphony, 3rd Junior High School of Argyroupoli.</span></p>
+    <p><span lang="el">Χάρτες: OpenStreetMap. Δορυφορικές εικόνες: Sentinel-2 cloudless από EOX (περιέχει τροποποιημένα δεδομένα Copernicus Sentinel 2020).</span><span lang="en">Maps: OpenStreetMap. Satellite imagery: Sentinel-2 cloudless by EOX (contains modified Copernicus Sentinel data 2020).</span></p>
+  </footer>
+</body>
+</html>

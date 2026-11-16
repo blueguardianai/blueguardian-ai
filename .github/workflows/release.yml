@@ -1,0 +1,57 @@
+# Builds the installers for Windows, macOS and Linux and attaches them to a GitHub Release,
+# and publishes the website to GitHub Pages.
+#
+# To release: push a tag, e.g.  git tag v1.0.0 && git push origin v1.0.0
+# The AI models are not stored in git (too large); each job downloads them from Hugging Face.
+# No secrets are needed: GITHUB_TOKEN is provided by GitHub automatically.
+name: release
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  installers:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, script: 'dist:linux', files: 'dist/*.AppImage dist/*.deb' }
+          - { os: windows-latest, script: 'dist:win', files: 'dist/*.exe' }
+          - { os: macos-latest, script: 'dist:mac', files: 'dist/*.dmg' }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run prepare-model
+      - run: npm test
+      - run: npm run ${{ matrix.script }}
+      - name: Upload to the release
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --title "BlueGuardian AI $GITHUB_REF_NAME" --generate-notes || true
+          gh release upload "$GITHUB_REF_NAME" ${{ matrix.files }} --clobber
+
+  website:
+    runs-on: ubuntu-latest
+    environment: { name: github-pages, url: '${{ steps.deploy.outputs.page_url }}' }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run prepare-model
+      - run: npm run build:web
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: dist/web }
+      - id: deploy
+        uses: actions/deploy-pages@v4

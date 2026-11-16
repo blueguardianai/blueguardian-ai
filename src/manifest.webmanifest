@@ -1,0 +1,10 @@
+{
+  "name": "BlueGuardian AI",
+  "short_name": "BlueGuardian",
+  "description": "Record beach visits, let the AI recognise litter, and measure the result of your action.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#0b5cad",
+  "icons": [{ "src": "../build/icon.png", "sizes": "512x512", "type": "image/png" }]
+}

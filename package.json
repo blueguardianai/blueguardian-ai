@@ -1,0 +1,109 @@
+{
+  "name": "blueguardian-ai",
+  "productName": "BlueGuardian AI",
+  "version": "1.0.0",
+  "description": "BlueGuardian AI: καταγραφή παραλιών, BlueVision AI και Πριν/Μετά. 3ο Γυμνάσιο Αργυρούπολης - Sea Symphony",
+  "author": {
+    "name": "Sea Symphony - 3ο Γυμνάσιο Αργυρούπολης",
+    "email": "blueguardianai@users.noreply.github.com"
+  },
+  "license": "UNLICENSED",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node test/predict.test.mjs",
+    "prepare-model": "node scripts/prepare-model.mjs",
+    "build:web": "node scripts/build-web.mjs",
+    "web": "node scripts/build-web.mjs && python3 -m http.server 8080 -d dist/web",
+    "dist:linux": "electron-builder --linux --publish never",
+    "dist:win": "electron-builder --win --publish never",
+    "dist:mac": "electron-builder --mac --publish never"
+  },
+  "dependencies": {
+    "chart.js": "^4.6.1",
+    "leaflet": "^1.9.4",
+    "onnxruntime-node": "^1.31.1"
+  },
+  "devDependencies": {
+    "@huggingface/transformers": "^4.3.2",
+    "electron": "^45.3.3",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "gr.seasymphony.blueguardian",
+    "productName": "BlueGuardian AI",
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**",
+      "!src/sw.js",
+      "!src/ai/text-embeds-web.json",
+      "build/icon.png",
+      "!{models,test,scripts,dist,site}/**",
+      "!node_modules/onnxruntime-node/bin/napi-v*/linux/x64/libonnxruntime_providers_{cuda,tensorrt}.so"
+    ],
+    "asarUnpack": [
+      "node_modules/onnxruntime-node/**"
+    ],
+    "extraResources": [
+      {
+        "from": "models",
+        "to": "models",
+        "filter": [
+          "vision.onnx"
+        ]
+      }
+    ],
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Education",
+      "icon": "build/icon.png",
+      "files": [
+        "!{models,test,scripts,dist,site}/**",
+        "!node_modules/onnxruntime-node/bin/napi-v*/{win32,darwin}/**",
+        "!node_modules/onnxruntime-node/bin/napi-v*/linux/arm64/**"
+      ],
+      "artifactName": "BlueGuardian-AI.${ext}",
+      "executableName": "blueguardian-ai",
+      "synopsis": "Beach monitoring with BlueVision AI"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.png",
+      "files": [
+        "!{models,test,scripts,dist,site}/**",
+        "!node_modules/onnxruntime-node/bin/napi-v*/{linux,darwin}/**",
+        "!node_modules/onnxruntime-node/bin/napi-v*/win32/arm64/**"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "BlueGuardian-AI-Setup.${ext}"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "category": "public.app-category.education",
+      "icon": "build/icon.png",
+      "files": [
+        "!{models,test,scripts,dist,site}/**",
+        "!node_modules/onnxruntime-node/bin/napi-v*/{linux,win32}/**"
+      ],
+      "artifactName": "BlueGuardian-AI-mac-${arch}.${ext}",
+      "identity": "-"
+    }
+  },
+  "homepage": "https://github.com/blueguardianai/blueguardian-ai"
+}

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://tiles.maps.eox.at; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:; connect-src 'self' data: blob:">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b5cad">
+  <link rel="icon" href="../build/icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>BlueGuardian AI</title>
+  <script src="theme.js"></script>
+  <script src="platform-web.js"></script>
+  <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Icon sprite: 24px grid, stroke only. Stroke width comes from CSS (--iw) so it tracks the text weight. -->
+  <svg style="display:none" aria-hidden="true">
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/></symbol>
+    <symbol id="i-scan" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-compare" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4M4 7h16M16 21l4-4-4-4M20 17H4"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-thermometer" viewBox="0 0 24 24"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/></symbol>
+    <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></symbol>
+    <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0"/></symbol>
+    <symbol id="i-locate" viewBox="0 0 24 24"><path d="M2 12h3M19 12h3M12 2v3M12 19v3"/><circle cx="12" cy="12" r="7"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+  </svg>
+
+  <nav class="side">
+    <div class="brand">
+      <img src="../build/icon.png" alt="">
+      <div><b>BlueGuardian AI</b><small data-t="tagline"></small></div>
+    </div>
+    <button class="btn primary" id="new-obs" data-t-title="newVisit"><svg class="i"><use href="#i-plus"/></svg><span data-t="newVisit"></span></button>
+    <button class="tab active" data-tab="dashboard" data-t-title="tabDashboard"><svg class="i"><use href="#i-grid"/></svg><span data-t="tabDashboard"></span></button>
+    <button class="tab" data-tab="observations" data-t-title="tabVisits"><svg class="i"><use href="#i-list"/></svg><span data-t="tabVisits"></span></button>
+    <button class="tab" data-tab="ai" data-t-title="tabAi"><svg class="i"><use href="#i-scan"/></svg><span data-t="tabAi"></span><b class="count" id="todo-count" hidden></b></button>
+    <button class="tab" data-tab="compare" data-t-title="tabCompare"><svg class="i"><use href="#i-compare"/></svg><span data-t="tabCompare"></span></button>
+    <button class="tab" data-tab="data" data-t-title="tabData"><svg class="i"><use href="#i-database"/></svg><span data-t="tabData"></span></button>
+    <div class="grow"></div>
+    <div class="side-foot">
+      <button class="btn" id="guide-open" data-t-title="guide"><svg class="i"><use href="#i-help"/></svg><span data-t="guide"></span></button>
+      <button class="btn icon" id="lang" data-t-title="otherLang" data-t-aria-label="otherLang"><svg class="i"><use href="#i-globe"/></svg></button>
+      <button class="btn icon" id="theme" data-t-title="theme" data-t-aria-label="theme">
+        <span class="swap"><svg class="i"><use href="#i-moon"/></svg><svg class="i"><use href="#i-sun"/></svg></span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="scroll-fade">
+    <section id="dashboard" class="page active">
+      <header class="head"><h1 data-t="tabDashboard"></h1></header>
+      <div id="demo-banner" class="banner" hidden>
+        <span data-t="demoBanner"></span>
+        <button class="btn" id="demo-remove" data-t="demoRemove"></button>
+      </div>
+      <div id="guide" class="card guide" hidden></div>
+      <div class="tiles" id="tiles"></div>
+      <div id="insights" class="card insights" hidden></div>
+      <div class="grid2">
+        <div class="card"><h2 data-t="map"></h2><div id="map" class="map"></div></div>
+        <div class="card">
+          <h2><span data-t="monitoring"></span> <select id="dash-site"></select></h2>
+          <div id="charts">
+            <figure class="chart"><figcaption data-t="chartSensors"></figcaption><div><canvas id="chart-sensors"></canvas></div></figure>
+            <div class="grid2 tight">
+              <figure class="chart"><figcaption data-t="chartLitter"></figcaption><div><canvas id="chart-litter"></canvas></div></figure>
+              <figure class="chart"><figcaption><span data-t="chartClasses"></span> <span id="classes-count"></span></figcaption><div><canvas id="chart-classes"></canvas></div></figure>
+            </div>
+          </div>
+          <p class="empty" id="charts-empty" data-t="noData" hidden></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="observations" class="page">
+      <header class="head"><div><h1 data-t="tabVisits"></h1><p class="hint" data-t="visitsHint"></p></div></header>
+      <div id="obs-list"></div>
+    </section>
+
+    <section id="ai" class="page">
+      <header class="head"><div><h1>BlueVision AI</h1><p class="hint" data-t="aiHint"></p></div></header>
+      <div class="tiles" id="ai-tiles"></div>
+      <div class="legend" id="ai-legend"></div>
+      <div class="seg" id="ai-filter">
+        <button class="active" data-filter="todo" data-t="fTodo"></button>
+        <button data-filter="verified" data-t="fVerified"></button>
+        <button data-filter="all" data-t="fAll"></button>
+      </div>
+      <div id="ai-grid" class="photos"></div>
+    </section>
+
+    <section id="compare" class="page">
+      <header class="head">
+        <div><h1 data-t="tabCompare"></h1><p class="hint" data-t="compareHint"></p></div>
+        <select id="cmp-site"></select>
+      </header>
+      <div id="cmp"></div>
+    </section>
+
+    <section id="data" class="page">
+      <header class="head"><div><h1 data-t="tabData"></h1><p class="hint" data-t="dataHint"></p></div></header>
+      <div class="settings">
+        <div class="card"><h2 data-t="storageTitle"></h2><p id="storage-text"></p></div>
+        <div class="card"><h2 data-t="backupTitle"></h2><p data-t="backupText"></p>
+          <div class="row">
+            <button class="btn" id="backup"><span class="swap"><svg class="i"><use href="#i-download"/></svg><svg class="i"><use href="#i-check"/></svg></span><span data-t="backupBtn"></span></button>
+            <button class="btn" id="restore"><svg class="i"><use href="#i-upload"/></svg><span data-t="restoreBtn"></span></button>
+          </div>
+          <p class="note" id="restore-note" role="status"></p>
+        </div>
+        <div class="card"><h2 data-t="csvTitle"></h2><p data-t="csvText"></p>
+          <div class="row"><button class="btn" id="export"><span class="swap"><svg class="i"><use href="#i-download"/></svg><svg class="i"><use href="#i-check"/></svg></span><span data-t="csvBtn"></span></button></div>
+        </div>
+        <div class="card"><h2 data-t="demoTitle"></h2><p data-t="demoText"></p>
+          <div class="row"><button class="btn" id="demo-toggle"></button></div>
+        </div>
+        <div class="card wide"><h2 data-t="aboutTitle"></h2><p data-t="aboutText"></p></div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="obs-dialog">
+    <form id="obs-form" method="dialog">
+      <h2 id="obs-title"></h2>
+      <div class="dlg-body scroll-fade">
+        <div class="form">
+          <label><span data-t="fBeach"></span><input name="site" list="sites" required data-t-placeholder="fBeachPh"></label>
+          <datalist id="sites"></datalist>
+          <label><span data-t="fDate"></span><input name="date" type="datetime-local" required></label>
+          <label class="wide"><span data-t="fStage"></span>
+            <select name="stage">
+              <option value="monitor" data-t="stage_monitor"></option>
+              <option value="before" data-t="stage_before"></option>
+              <option value="action" data-t="stage_action"></option>
+              <option value="after" data-t="stage_after"></option>
+            </select>
+            <small id="stage-help"></small>
+          </label>
+          <label><span><span data-t="fTemp"></span> <em data-t="optional"></em></span><input name="temp" type="number" step="0.1" min="-5" max="45" inputmode="decimal"></label>
+          <label><span><span data-t="fPh"></span> <em data-t="optional"></em></span><input name="ph" type="number" step="0.01" min="0" max="14" inputmode="decimal"></label>
+          <label><span><span data-t="fLitter"></span> <em data-t="optional"></em></span><input name="litter" type="number" step="1" min="0" inputmode="numeric"></label>
+          <label class="wide"><span><span data-t="fNotes"></span> <em data-t="optional"></em></span><textarea name="notes" rows="2"></textarea></label>
+        </div>
+        <h3><span data-t="location"></span> <span id="obs-loc" class="loc"></span>
+          <button type="button" id="obs-locate" class="btn" hidden><svg class="i"><use href="#i-locate"/></svg><span data-t="locateMe"></span></button></h3>
+        <p class="hint" data-t="locationHint"></p>
+        <div id="obs-map" class="map small"></div>
+        <h3><span data-t="photos"></span> <button type="button" id="obs-add-photos" class="btn"><svg class="i"><use href="#i-plus"/></svg><span data-t="addPhotos"></span></button></h3>
+        <p class="note" id="photo-note" role="status"></p>
+        <div id="obs-photos" class="photos small"></div>
+        <button type="button" id="obs-drop" class="drop"><svg class="i"><use href="#i-image"/></svg><span data-t="dropHint"></span></button>
+        <input type="file" id="file-photos" accept="image/*" multiple hidden>
+      </div>
+      <div class="actions">
+        <button type="button" id="obs-delete" class="btn danger"><svg class="i"><use href="#i-trash"/></svg><span data-t="delete"></span></button>
+        <div class="grow"></div>
+        <button type="button" id="obs-cancel" class="btn" data-t="cancel"></button>
+        <button type="submit" class="btn primary" data-t="save"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="welcome">
+    <div class="welcome">
+      <img src="../build/icon.png" alt="">
+      <h2 data-t="welcomeTitle"></h2>
+      <p data-t="welcomeText"></p>
+      <div class="row">
+        <button class="btn primary" id="welcome-demo" data-t="welcomeDemo"></button>
+        <button class="btn" id="welcome-empty" data-t="welcomeEmpty"></button>
+      </div>
+      <small data-t="welcomePrivacy"></small>
+    </div>
+  </dialog>
+  <input type="file" id="file-restore" accept=".json,application/json" hidden>
+
+  <script src="../node_modules/leaflet/dist/leaflet.js"></script>
+  <script src="../node_modules/chart.js/dist/chart.umd.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

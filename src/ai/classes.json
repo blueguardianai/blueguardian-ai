@@ -1,0 +1,10 @@
+[
+  { "id": "clean", "el": "Καθαρή Ακτή", "en": "Clean Beach", "color": "oklch(0.68 0.16 150)",
+    "prompts": ["a photo of a clean beach", "a clean sandy beach with clear blue water", "a pristine shoreline with no trash", "an empty clean coast"] },
+  { "id": "plastic", "el": "Πλαστικά Απορρίμματα", "en": "Plastic Waste", "color": "oklch(0.64 0.2 20)",
+    "prompts": ["a photo of plastic waste on a beach", "a plastic bottle lying on the sand", "plastic bags and plastic litter on the shore", "a beach polluted with plastic"] },
+  { "id": "other", "el": "Άλλα Απορρίμματα", "en": "Other Waste", "color": "oklch(0.74 0.15 65)",
+    "prompts": ["a photo of metal, glass or paper trash on a beach", "a rusty metal can on the sand", "a glass bottle or broken glass on the beach", "cigarette butts and paper litter on the shore"] },
+  { "id": "natural", "el": "Φυσικά Υλικά", "en": "Natural Materials", "color": "oklch(0.62 0.17 295)",
+    "prompts": ["a photo of natural materials on a beach", "a piece of driftwood on the sand", "seaweed and seagrass washed up on the beach", "shells, pebbles and dry branches on the shore"] }
+]
