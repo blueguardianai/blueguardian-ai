@@ -1,13 +1,15 @@
 # Builds the installers for Windows, macOS and Linux and attaches them to a GitHub Release,
 # and publishes the website to GitHub Pages.
 #
-# To release: push a tag, e.g.  git tag v1.0.0 && git push origin v1.0.0
+# Website: every push to main (GitHub Pages only accepts deployments from the main branch, not from tags).
+# Installers: push a tag, e.g.  git tag v1.0.0 && git push origin v1.0.0
 # The AI models are not stored in git (too large); each job downloads them from Hugging Face.
 # No secrets are needed: GITHUB_TOKEN is provided by GitHub automatically.
 name: release
 on:
   push:
-    tags: ['v*']
+    branches: [main]   # publishes the website
+    tags: ['v*']       # builds the installers
   workflow_dispatch:
 
 permissions:
@@ -17,6 +19,7 @@ permissions:
 
 jobs:
   installers:
+    if: github.ref != 'refs/heads/main'
     strategy:
       fail-fast: false
       matrix:
@@ -42,6 +45,7 @@ jobs:
           gh release upload "$GITHUB_REF_NAME" ${{ matrix.files }} --clobber
 
   website:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: { name: github-pages, url: '${{ steps.deploy.outputs.page_url }}' }
     steps:

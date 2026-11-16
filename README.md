@@ -1,48 +1,114 @@
+<div align="center">
+
+<img src="build/icon.png" width="96" alt="">
+
 # BlueGuardian AI
 
-Record beach visits (photos, location, water temperature, pH, litter count), let BlueVision AI sort the photos
-into four categories, let students correct it, and compare Before / After an action.
-A project by Sea Symphony, 3rd Junior High School of Argyroupoli. Greek and English.
+**Από τη γνώση στη δράση, για πιο καθαρές θάλασσες.**
 
-One codebase, two targets:
+Καταγράψτε μια παραλία με φωτογραφίες και μετρήσεις, αφήστε την AI να αναγνωρίσει τα απορρίμματα,
+και δείτε με αριθμούς αν η δράση σας είχε αποτέλεσμα.
 
-| Target | AI model | Data |
+[**Άνοιγμα στον browser**](https://blueguardianai.github.io/blueguardian-ai/app/) ·
+[Ιστότοπος](https://blueguardianai.github.io/blueguardian-ai/) ·
+[Λήψη](#λήψη) ·
+[English](README.en.md)
+
+<img src="site/img/dash-el.jpg" width="820" alt="Ο πίνακας ελέγχου: σύνοψη, ευρήματα, χάρτης και μετρήσεις">
+
+</div>
+
+## Τι κάνει
+
+| | |
+|---|---|
+| **Καταγραφές** | Κάθε επίσκεψη στην παραλία: σημείο στον χάρτη, ημερομηνία, θερμοκρασία νερού, pH, αριθμός απορριμμάτων και φωτογραφίες. |
+| **BlueVision AI** | Κατατάσσει κάθε φωτογραφία σε Καθαρή Ακτή, Πλαστικά Απορρίμματα, Άλλα Απορρίμματα ή Φυσικά Υλικά, και δείχνει πάντα πόσο σίγουρη είναι. |
+| **Ο άνθρωπος αποφασίζει** | Οι μαθητές ελέγχουν τις προβλέψεις. Κάθε διόρθωση γίνεται παράδειγμα και οι παρόμοιες φωτογραφίες ενημερώνονται αμέσως. |
+| **Πριν / Μετά** | Βάζει δίπλα δίπλα την κατάσταση πριν, την ημέρα της δράσης και την κατάσταση μετά, και υπολογίζει τη διαφορά. |
+| **Πίνακας ελέγχου** | Χάρτης με δορυφορική εικόνα Copernicus Sentinel-2, γραφήματα ανά παραλία και ευρήματα σε απλά λόγια. |
+| **Ανοιχτά δεδομένα** | Εξαγωγή όλων των καταγραφών σε CSV και αντίγραφο ασφαλείας σε ένα αρχείο. |
+
+<p align="center">
+  <img src="site/img/ai-el.jpg" width="49%" alt="BlueVision AI: φωτογραφίες με ποσοστό ανά κατηγορία">
+  <img src="site/img/compare-el.jpg" width="49%" alt="Σύγκριση Πριν, Δράση, Μετά">
+</p>
+
+## Λήψη
+
+| Σύστημα | Αρχείο | Σημείωση |
 |---|---|---|
-| Desktop app (Electron) | CLIP ViT-L/14, 608 MB, bundled | `userData` folder on the computer |
-| Website (static, installable) | CLIP ViT-B/32 quantized, 89 MB, downloaded on first use | the browser (IndexedDB + Cache Storage) |
+| **Browser** | [Άνοιγμα εφαρμογής](https://blueguardianai.github.io/blueguardian-ai/app/) | Υπολογιστής, tablet ή κινητό. Χωρίς εγκατάσταση. |
+| **Windows** 10 / 11 | [BlueGuardian-AI-Setup.exe](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-Setup.exe) | Στην προειδοποίηση SmartScreen: «Περισσότερες πληροφορίες» → «Εκτέλεση». |
+| **macOS** Apple Silicon | [BlueGuardian-AI-mac-arm64.dmg](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-mac-arm64.dmg) | Την πρώτη φορά: δεξί κλικ στην εφαρμογή → «Άνοιγμα». |
+| **macOS** Intel | [BlueGuardian-AI-mac-x64.dmg](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-mac-x64.dmg) | Όπως παραπάνω. |
+| **Linux** Debian / Ubuntu / Mint | [BlueGuardian-AI.deb](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.deb) | `sudo apt install ./BlueGuardian-AI.deb` |
+| **Linux** κάθε διανομή | [BlueGuardian-AI.AppImage](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.AppImage) | `chmod +x BlueGuardian-AI.AppImage` και εκτέλεση. |
 
-Nothing is uploaded anywhere and there are no API keys or secrets in this project.
+Οι εφαρμογές για υπολογιστή είναι περίπου 700 MB, επειδή περιέχουν το μεγάλο μοντέλο AI και δουλεύουν πλήρως χωρίς σύνδεση.
+Δεν είναι ψηφιακά υπογεγραμμένες, γι' αυτό τα Windows και το macOS ρωτούν μία φορά πριν τις ανοίξουν.
 
-## Develop
+## Πώς λειτουργεί
 
-    npm install
-    node node_modules/electron/install.js   # only if npm blocked install scripts
-    npm run prepare-model                   # downloads both models once, writes models/ and src/ai/text-embeds*.json
-    npm start                               # desktop app
-    npm run web                             # builds dist/web and serves it at http://localhost:8080
-    npm test
+1. **Παρατηρούμε.** Πηγαίνετε στην παραλία και φωτογραφίζετε ό,τι βρίσκετε στην ακτή.
+2. **Μετράμε.** Σημειώνετε θερμοκρασία νερού, pH και πόσα απορρίμματα μετρήσατε.
+3. **Κατανοούμε.** Η AI κατατάσσει τις φωτογραφίες και ο πίνακας ελέγχου δείχνει τι αλλάζει με τον χρόνο.
+4. **Δρούμε και ξαναμετράμε.** Μετά τη δράση καταγράφετε ξανά και συγκρίνετε.
 
-## Release
+Στην πρώτη εκκίνηση η εφαρμογή προτείνει μια παραλία-παράδειγμα και έναν οδηγό τεσσάρων βημάτων.
 
-Local builds (Linux machine):
+## Τα δεδομένα σας
 
-    npm run dist:linux    # dist/BlueGuardian-AI.AppImage and .deb
-    npm run dist:win      # dist/BlueGuardian-AI-Setup.exe (unsigned)
-    npm run build:web     # dist/web
+- Όλα μένουν στη συσκευή σας: στον υπολογιστή για την εφαρμογή, στον browser για τον ιστότοπο.
+- Δεν υπάρχουν λογαριασμοί και τίποτα δεν ανεβαίνει σε διακομιστή. Η AI τρέχει τοπικά.
+- Μόνο οι χάρτες φορτώνουν από το διαδίκτυο (OpenStreetMap και EOX).
+- Από τη σελίδα «Δεδομένα» κρατάτε αντίγραφο ασφαλείας και μεταφέρετε τα δεδομένα σε άλλη συσκευή.
 
-macOS installers can only be built on a Mac, so releases are built by GitHub Actions
-(`.github/workflows/release.yml`), which needs no secrets:
+## Η τεχνητή νοημοσύνη
 
-    git tag v1.0.0 && git push origin v1.0.0
+Το BlueVision AI βασίζεται στο CLIP, ένα προεκπαιδευμένο μοντέλο που συγκρίνει εικόνες με περιγραφές σε κείμενο.
+Δεν χρειάστηκε εκπαίδευση από την αρχή: κάθε κατηγορία ορίζεται με λίγες περιγραφές στο [`src/ai/classes.json`](src/ai/classes.json).
 
-That builds Windows, macOS (Apple Silicon + Intel) and Linux installers, attaches them to the GitHub Release,
-and publishes the website to GitHub Pages (enable it once: repo Settings > Pages > Source: GitHub Actions).
-The website's download buttons point at `releases/latest/download/` of `blueguardianai/blueguardian-ai`;
-change `RELEASE` at the top of `site/site.js` if the repository has another name.
+Όταν ένας μαθητής διορθώσει μια φωτογραφία, αυτή αποθηκεύεται ως παράδειγμα.
+Στις επόμενες προβλέψεις, οι φωτογραφίες που μοιάζουν με το παράδειγμα γέρνουν προς την κατηγορία του ([`src/ai/predict.js`](src/ai/predict.js)).
 
-## Layout
+| | Μοντέλο | Μέγεθος |
+|---|---|---|
+| Εφαρμογή για υπολογιστή | CLIP ViT-L/14 | 608 MB, μέσα στην εφαρμογή |
+| Ιστότοπος | CLIP ViT-B/32 (quantized) | 89 MB, κατεβαίνει την πρώτη φορά |
 
-- `src/` the app (shared by desktop and web). `app.js` UI, `i18n.js` texts, `ai/predict.js` zero-shot + corrections.
-- `preload.js` / `src/platform-web.js` the two implementations of the storage + AI `api`. A cloud backend would be a third.
-- `main.js` Electron main process. `src/sw.js` service worker (photos + offline) for the website.
-- `site/` the landing page. `scripts/` model preparation and the web build.
+Η AI κάνει λάθη, ιδιαίτερα σε φωτογραφίες με πολλά αντικείμενα. Γι' αυτό ο έλεγχος από άνθρωπο είναι μέρος της εφαρμογής και όχι προαιρετικός.
+
+## Για προγραμματιστές
+
+Ένας κώδικας, δύο στόχοι: εφαρμογή Electron και στατικός ιστότοπος. Χωρίς κλειδιά API και χωρίς διακομιστή.
+
+```sh
+npm install
+npm run prepare-model   # κατεβάζει τα δύο μοντέλα μία φορά (models/ και src/ai/text-embeds*.json)
+npm start               # εφαρμογή για υπολογιστή
+npm run web             # χτίζει το dist/web και το σερβίρει στο http://localhost:8080
+npm test
+```
+
+| Φάκελος | Περιεχόμενο |
+|---|---|
+| `src/` | Η εφαρμογή, κοινή για υπολογιστή και ιστότοπο. `app.js` διεπαφή, `i18n.js` κείμενα, `ai/` πρόβλεψη. |
+| `preload.js`, `src/platform-web.js` | Οι δύο υλοποιήσεις αποθήκευσης και AI. Ένα cloud backend θα ήταν η τρίτη. |
+| `main.js`, `src/sw.js` | Κύρια διεργασία Electron, και service worker του ιστότοπου (φωτογραφίες, λειτουργία χωρίς σύνδεση). |
+| `site/` | Η αρχική σελίδα του ιστότοπου. |
+| `scripts/` | Προετοιμασία μοντέλων και χτίσιμο του ιστότοπου. |
+
+**Έκδοση:** κάθε push στο `main` δημοσιεύει τον ιστότοπο. Ένα tag χτίζει τα προγράμματα εγκατάστασης για Windows, macOS και Linux και τα ανεβάζει στο Release:
+
+```sh
+git tag v1.0.1 && git push origin v1.0.1
+```
+
+## Η ομάδα
+
+Το BlueGuardian AI είναι έργο της μαθητικής ομάδας **Sea Symphony** του **3ου Γυμνασίου Αργυρούπολης**.
+
+Χάρτες: [OpenStreetMap](https://www.openstreetmap.org/copyright).
+Δορυφορικές εικόνες: [Sentinel-2 cloudless](https://s2maps.eu) από EOX (περιέχει τροποποιημένα δεδομένα Copernicus Sentinel 2020).
+Μοντέλο: [CLIP](https://github.com/openai/CLIP) της OpenAI, σε μορφή ONNX από το [Transformers.js](https://github.com/huggingface/transformers.js).
