@@ -6,7 +6,6 @@ const RELEASE = 'https://github.com/blueguardianai/blueguardian-ai/releases/late
 const DOWNLOADS = {
   windows: RELEASE + 'BlueGuardian-AI-Setup.exe',
   macArm: RELEASE + 'BlueGuardian-AI-mac-arm64.dmg',
-  macIntel: RELEASE + 'BlueGuardian-AI-mac-x64.dmg',
   linux: RELEASE + 'BlueGuardian-AI.AppImage',
   linuxDeb: RELEASE + 'BlueGuardian-AI.deb',
 };

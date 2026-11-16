@@ -42,7 +42,7 @@ and see in numbers whether your action made a difference.
 | **Browser** | [Open the app](https://blueguardianai.github.io/blueguardian-ai/app/) | Computer, tablet or phone. Nothing to install. |
 | **Windows** 10 / 11 | [BlueGuardian-AI-Setup.exe](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-Setup.exe) | At the SmartScreen warning: "More info" → "Run anyway". |
 | **macOS** Apple Silicon | [BlueGuardian-AI-mac-arm64.dmg](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-mac-arm64.dmg) | The first time: right-click the app → "Open". |
-| **macOS** Intel | [BlueGuardian-AI-mac-x64.dmg](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-mac-x64.dmg) | As above. |
+| **macOS** Intel | [Browser app](https://blueguardianai.github.io/blueguardian-ai/app/) | The desktop AI engine has no Intel Mac build. |
 | **Linux** Debian / Ubuntu / Mint | [BlueGuardian-AI.deb](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.deb) | `sudo apt install ./BlueGuardian-AI.deb` |
 | **Linux** any distribution | [BlueGuardian-AI.AppImage](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.AppImage) | `chmod +x BlueGuardian-AI.AppImage`, then run it. |
 

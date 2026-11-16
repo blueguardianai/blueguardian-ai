@@ -42,7 +42,7 @@
 | **Browser** | [Άνοιγμα εφαρμογής](https://blueguardianai.github.io/blueguardian-ai/app/) | Υπολογιστής, tablet ή κινητό. Χωρίς εγκατάσταση. |
 | **Windows** 10 / 11 | [BlueGuardian-AI-Setup.exe](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-Setup.exe) | Στην προειδοποίηση SmartScreen: «Περισσότερες πληροφορίες» → «Εκτέλεση». |
 | **macOS** Apple Silicon | [BlueGuardian-AI-mac-arm64.dmg](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-mac-arm64.dmg) | Την πρώτη φορά: δεξί κλικ στην εφαρμογή → «Άνοιγμα». |
-| **macOS** Intel | [BlueGuardian-AI-mac-x64.dmg](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-mac-x64.dmg) | Όπως παραπάνω. |
+| **macOS** Intel | [Εφαρμογή στον browser](https://blueguardianai.github.io/blueguardian-ai/app/) | Το AI της εφαρμογής υπολογιστή δεν υπάρχει για Intel Mac. |
 | **Linux** Debian / Ubuntu / Mint | [BlueGuardian-AI.deb](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.deb) | `sudo apt install ./BlueGuardian-AI.deb` |
 | **Linux** κάθε διανομή | [BlueGuardian-AI.AppImage](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.AppImage) | `chmod +x BlueGuardian-AI.AppImage` και εκτέλεση. |
 

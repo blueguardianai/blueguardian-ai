@@ -26,7 +26,8 @@ jobs:
         include:
           - { os: ubuntu-latest, script: 'dist:linux', files: 'dist/*.AppImage dist/*.deb' }
           - { os: windows-latest, script: 'dist:win', files: 'dist/*.exe' }
-          # Intel runner: the arm64 pool often has no free machine. It builds both the arm64 and x64 .dmg.
+          # Intel runner: the arm64 pool often has no free machine. It builds the Apple Silicon .dmg only:
+          # onnxruntime-node has no Intel Mac binary, so it cannot run the AI (or the tests) there.
           - { os: macos-15-intel, script: 'dist:mac', files: 'dist/*.dmg' }
     runs-on: ${{ matrix.os }}
     steps:
@@ -35,7 +36,12 @@ jobs:
         with: { node-version: 22, cache: npm }
       - run: npm ci
       - run: npm run prepare-model
+        if: runner.os != 'macOS'
       - run: npm test
+        if: runner.os != 'macOS'
+      # Same file prepare-model copies; the text embeddings are already in git.
+      - run: mkdir -p models && curl -fL -o models/vision.onnx https://huggingface.co/Xenova/clip-vit-large-patch14/resolve/main/onnx/vision_model_fp16.onnx
+        if: runner.os == 'macOS'
       - run: npm run ${{ matrix.script }}
       # A tag uploads to its own release. A manual run (Actions > release > Run workflow) rebuilds into the latest one.
       - name: Upload to the release
