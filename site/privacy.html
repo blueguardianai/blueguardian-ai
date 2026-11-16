@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.github.com">
+  <title>Απόρρητο · BlueGuardian AI</title>
+  <meta name="description" content="BlueGuardian AI: καταγράψτε μια παραλία με φωτογραφίες και μετρήσεις, αφήστε την AI να αναγνωρίσει τα απορρίμματα και μετρήστε το αποτέλεσμα της δράσης σας. Record a beach, let the AI recognise litter, measure the result of your action.">
+  <meta name="theme-color" content="#0b5cad">
+  <link rel="icon" href="build/icon.png">
+  <script src="app/theme.js"></script>
+  <script src="site.js"></script>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <svg style="display:none" aria-hidden="true">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+  </svg>
+
+  <header class="nav">
+    <a class="brand" href="./"><img src="build/icon.png" alt=""><b>BlueGuardian AI</b></a>
+    <nav>
+      <a href="./#how"><span lang="el">Πώς λειτουργεί</span><span lang="en">How it works</span></a>
+      <a href="./#ai">BlueVision AI</a>
+      <a href="app/#community"><span lang="el">Κοινότητα</span><span lang="en">Community</span></a>
+      <a href="./#download"><span lang="el">Λήψη</span><span lang="en">Download</span></a>
+      <a href="https://github.com/blueguardianai">GitHub</a>
+    </nav>
+    <button class="btn icon" id="lang" aria-label="English / Ελληνικά" title="English / Ελληνικά"><svg class="i"><use href="#i-globe"/></svg><span lang="el">EN</span><span lang="en">ΕΛ</span></button>
+    <button class="btn icon" id="theme" aria-label="Light / dark" title="Light / dark">
+      <span class="swap"><svg class="i"><use href="#i-moon"/></svg><svg class="i"><use href="#i-sun"/></svg></span>
+    </button>
+    <a class="btn primary" href="app/"><span lang="el">Άνοιγμα εφαρμογής</span><span lang="en">Open the app</span></a>
+  </header>
+
+  <main class="prose">
+    <section>
+      <h1><span lang="el">Απόρρητο και κοινοποίηση</span><span lang="en">Privacy and sharing</span></h1>
+      <p><span lang="el">Σύντομα και με απλά λόγια, τι αποθηκεύει το BlueGuardian AI και πού.</span><span lang="en">Briefly and in plain words, what BlueGuardian AI stores and where.</span></p>
+
+      <h2><span lang="el">Όσα δεν μοιράζεστε</span><span lang="en">What you do not share</span></h2>
+      <ul>
+        <li><span lang="el">Οι καταγραφές, οι φωτογραφίες και οι διορθώσεις σας μένουν στη συσκευή σας. Δεν υπάρχουν λογαριασμοί.</span><span lang="en">Your visits, photos and corrections stay on your device. There are no accounts.</span></li>
+        <li><span lang="el">Η ανάλυση των φωτογραφιών από την AI γίνεται στη συσκευή σας.</span><span lang="en">The AI analyses photos on your device.</span></li>
+        <li><span lang="el">Οι χάρτες φορτώνουν από το OpenStreetMap και την EOX, που βλέπουν τη διεύθυνση IP σας όπως κάθε ιστότοπος.</span><span lang="en">Maps load from OpenStreetMap and EOX, which see your IP address as any website does.</span></li>
+      </ul>
+
+      <h2><span lang="el">Όσα επιλέγετε να μοιραστείτε</span><span lang="en">What you choose to share</span></h2>
+      <ul>
+        <li><span lang="el">Όταν πατήσετε «Κοινοποίηση» σε μια καταγραφή, γίνονται δημόσια: το όνομα σχολείου ή ομάδας που γράψατε, η παραλία, το σημείο στον χάρτη, η ημερομηνία, η φάση, οι μετρήσεις, οι σημειώσεις και, αν το επιλέξετε, οι φωτογραφίες.</span><span lang="en">When you press "Share" on a visit, these become public: the school or team name you typed, the beach, the spot on the map, the date, the stage, the measurements, the notes and, if you choose, the photos.</span></li>
+        <li><span lang="el">Μην γράφετε ονόματα μαθητών και μην μοιράζεστε φωτογραφίες στις οποίες φαίνονται άνθρωποι.</span><span lang="en">Do not write the names of students, and do not share photos that show people.</span></li>
+        <li><span lang="el">Πριν δημοσιευτούν, το κείμενο και οι φωτογραφίες στέλνονται στην υπηρεσία ελέγχου περιεχομένου της OpenAI για αυτόματο έλεγχο ασφαλείας.</span><span lang="en">Before publication, the text and photos are sent to OpenAI's content moderation service for an automatic safety check.</span></li>
+        <li><span lang="el">Για να περιορίζεται η κατάχρηση, αποθηκεύεται ένα μη αναστρέψιμο αποτύπωμα της διεύθυνσης IP σας μαζί με την καταγραφή. Η ίδια η διεύθυνση δεν αποθηκεύεται.</span><span lang="en">To limit abuse, a non-reversible fingerprint of your IP address is stored with the visit. The address itself is not stored.</span></li>
+        <li><span lang="el">Τα κοινόχρηστα δεδομένα φιλοξενούνται στη Supabase, σε διακομιστές στην Ευρωπαϊκή Ένωση.</span><span lang="en">Shared data is hosted by Supabase, on servers in the European Union.</span></li>
+      </ul>
+
+      <h2><span lang="el">Αφαίρεση</span><span lang="en">Removal</span></h2>
+      <ul>
+        <li><span lang="el">Από τη συσκευή που έκανε την κοινοποίηση: «Καταγραφές» → «Κοινόχρηστη» → αναίρεση. Η καταγραφή και οι φωτογραφίες της διαγράφονται από τον διακομιστή.</span><span lang="en">From the device that shared it: "Visits" → "Shared" → stop sharing. The visit and its photos are deleted from the server.</span></li>
+        <li><span lang="el">Οποιοσδήποτε μπορεί να αναφέρει μια καταγραφή ως ακατάλληλη από τη σελίδα «Κοινότητα». Μετά από τρεις αναφορές κρύβεται μέχρι να την ελέγξει διαχειριστής.</span><span lang="en">Anyone can report a visit as inappropriate from the "Community" page. After three reports it is hidden until a moderator reviews it.</span></li>
+        <li><span lang="el">Για οτιδήποτε άλλο, ανοίξτε ένα θέμα στο <a class="link" href="https://github.com/blueguardianai/blueguardian-ai/issues">GitHub</a>.</span><span lang="en">For anything else, open an issue on <a class="link" href="https://github.com/blueguardianai/blueguardian-ai/issues">GitHub</a>.</span></li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

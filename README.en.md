@@ -27,6 +27,7 @@ and see in numbers whether your action made a difference.
 | **People decide** | Students check the predictions. Every correction becomes an example, and similar photos update straight away. |
 | **Before / After** | Puts the state before, the day of the action and the state after side by side, and works out the difference. |
 | **Dashboard** | A map with Copernicus Sentinel-2 satellite imagery, charts per beach, and findings in plain language. |
+| **Community** | If you want, you share a visit under your school's name. Every shared visit appears on one common map. |
 | **Open data** | Export every visit to CSV, and back everything up to one file. |
 
 <p align="center">
@@ -60,7 +61,8 @@ On first launch the app offers an example beach and a four-step guide.
 ## Your data
 
 - Everything stays on your device: on the computer for the desktop app, in the browser for the website.
-- There are no accounts and nothing is uploaded to a server. The AI runs locally.
+- There are no accounts. The AI runs locally.
+- Only what you choose is shared, with the "Share" button. See [exactly what, and how to remove it](https://blueguardianai.github.io/blueguardian-ai/privacy.html).
 - Only the maps load from the internet (OpenStreetMap and EOX).
 - The "Data" page makes a backup file and moves your data to another device.
 
@@ -81,7 +83,7 @@ The AI makes mistakes, especially on photos with many objects. That is why human
 
 ## For developers
 
-One codebase, two targets: an Electron app and a static website. No API keys and no server.
+One codebase, two targets: an Electron app and a static website. Secret keys live in Supabase, never in the repository.
 
 ```sh
 npm install
@@ -96,6 +98,7 @@ npm test
 | `src/` | The app, shared by desktop and website. `app.js` UI, `i18n.js` texts, `ai/` prediction. |
 | `preload.js`, `src/platform-web.js` | The two implementations of storage and AI. A cloud backend would be a third. |
 | `main.js`, `src/sw.js` | Electron main process, and the website's service worker (photos, offline use). |
+| `src/cloud.js`, `supabase/` | The community: client, database schema, and the function that checks every share. |
 | `site/` | The website's landing page. |
 | `scripts/` | Model preparation and the website build. |
 

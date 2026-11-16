@@ -1,5 +1,6 @@
 import { predict } from './ai/predict.js';
 import { t, lang, translate } from './i18n.js';
+import { listShared, shareVisit, unshareVisit, reportVisit, sharedPhotoUrl } from './cloud.js';
 
 await api.ready; // website: wait for the service worker that serves the photos
 translate();
@@ -152,7 +153,7 @@ async function storePhoto(blob) {
 
 // ---------- tabs ----------
 
-const pages = { dashboard: renderDashboard, observations: renderObservations, ai: renderAi, compare: renderCompare, data: renderData };
+const pages = { dashboard: renderDashboard, observations: renderObservations, ai: renderAi, compare: renderCompare, community: renderCommunity, data: renderData };
 let current = 'dashboard';
 function show(tab) {
   document.querySelectorAll('.tab, .page').forEach(x => x.classList.remove('active'));
@@ -204,6 +205,7 @@ const wastePct = obsList => {
 const tile = (value, label) => `<div class="tile"><span>${label}</span><b>${value}</b></div>`;
 const thumbs = (o, cls = '') =>
   `<div class="thumbs ${cls}">${o.photos.slice(0, 4).map(p => `<img src="${api.photoUrl(p.file)}" loading="lazy" alt="">`).join('')}</div>`;
+// `o` is a local visit or a shared one; both carry temp, ph and litter.
 const metrics = o => [
   o.temp != null && `<span>${icon('thermometer')}${o.temp} °C</span>`,
   o.ph != null && `<span>${icon('droplet')}pH ${o.ph}</span>`,
@@ -431,13 +433,20 @@ function renderObservations() {
           </p>
           ${o.notes ? `<p class="notes">${esc(o.notes)}</p>` : ''}
         </div>
+        ${o.demo ? '' : o.shared
+          ? `<button class="btn shared" data-unshare="${o.id}" title="${t('unshare')}">${icon('check')}${t('shared')}</button>`
+          : `<button class="btn" data-share="${o.id}">${icon('share')}${t('share')}</button>`}
       </div>`;
   }).join('') : emptyState(t('visitsEmpty'), icon('plus') + t('newVisit'), 'empty-new');
   $('#empty-new')?.addEventListener('click', () => openObs(null));
+  const byId = id => db.observations.find(o => o.id === id);
   document.querySelectorAll('.obs').forEach(el => {
-    el.onclick = () => openObs(db.observations.find(o => o.id === el.dataset.id));
-    el.onkeydown = e => e.key === 'Enter' && el.click();
+    el.onclick = () => openObs(byId(el.dataset.id));
+    el.onkeydown = e => e.key === 'Enter' && e.target === el && el.click();
   });
+  // The buttons sit inside the clickable card: stop the click from also opening the editor.
+  document.querySelectorAll('[data-share]').forEach(b => b.onclick = e => { e.stopPropagation(); openShare(byId(b.dataset.share)); });
+  document.querySelectorAll('[data-unshare]').forEach(b => b.onclick = e => { e.stopPropagation(); unshare(byId(b.dataset.unshare)); });
 }
 
 let obsMap, obsMarker, draft, original, addedFiles;
@@ -552,6 +561,8 @@ $('#obs-form').onsubmit = () => {
 $('#obs-delete').onclick = () => {
   if (!confirm(t('confirmDelete', { site: draft.site }))) return;
   api.removePhotos([...original.photos.map(p => p.file), ...addedFiles]);
+  // The edit key lives in this visit: remove the shared copy now, or nobody could later.
+  if (original.shared) unshareVisit(original.shared.id, original.shared.key).catch(() => {});
   db.observations = db.observations.filter(o => o !== original);
   draft = null;
   dlg.close();
@@ -650,6 +661,118 @@ function renderCompare() {
   document.querySelectorAll('#cmp [data-add]').forEach(b => b.onclick = () => openObs(null, { site, stage: b.dataset.add }));
 }
 
+// ---------- community: share, browse, report ----------
+
+const shareDlg = $('#share-dialog');
+const shareForm = $('#share-form').elements;
+let sharing; // the visit in the share dialog
+
+function openShare(o) {
+  sharing = o;
+  $('#share-what').textContent = t('shareWhat', { site: o.site, date: fmtDate(o.date) });
+  shareForm.school.value = localStorage.school ?? '';
+  shareForm.photos.checked = true;
+  shareForm.photos.closest('label').hidden = !o.photos.length;
+  $('#share-photos-label').textContent = t('sharePhotos', { n: o.photos.length });
+  $('#share-note').textContent = '';
+  $('#share-send').disabled = false;
+  shareDlg.showModal();
+}
+$('#share-cancel').onclick = () => shareDlg.close();
+
+// Shared photos are smaller than the stored ones: 1024px is plenty for a public map.
+async function photoForSharing(p) {
+  const bmp = await createImageBitmap(await (await fetch(api.photoUrl(p.file))).blob());
+  const s = Math.min(1, 1024 / Math.max(bmp.width, bmp.height));
+  const canvas = new OffscreenCanvas(Math.round(bmp.width * s), Math.round(bmp.height * s));
+  canvas.getContext('2d').drawImage(bmp, 0, 0, canvas.width, canvas.height);
+  const url = await dataUrl(await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.8 }));
+  return { data: url.slice(url.indexOf(',') + 1), class: classify(p)?.final ?? null };
+}
+
+$('#share-form').onsubmit = async e => {
+  e.preventDefault(); // keep the dialog open until the server answers
+  const o = sharing, note = $('#share-note');
+  const school = shareForm.school.value.trim();
+  localStorage.school = school;
+  $('#share-send').disabled = true;
+  note.textContent = t('sharing');
+  try {
+    const photos = shareForm.photos.checked ? await Promise.all(o.photos.slice(0, 8).map(photoForSharing)) : [];
+    const key = crypto.randomUUID() + crypto.randomUUID(); // proves later that this device shared it
+    const visit = { site: o.site, lat: o.lat, lon: o.lon, date: new Date(o.date).toISOString(), stage: o.stage, temp: o.temp, ph: o.ph, litter: o.litter, notes: o.notes };
+    const res = await shareVisit(school, visit, photos, key);
+    o.shared = { id: res.id, key };
+    refresh();
+    note.textContent = t(res.photos === 'disabled' ? 'shareOkNoPhotos' : 'shareOk');
+    setTimeout(() => shareDlg.close(), res.photos === 'disabled' ? 3500 : 1200);
+  } catch (err) {
+    const key = 'err_' + err.message;
+    note.textContent = t(key) === key ? t('err_other') : t(key);
+    $('#share-send').disabled = false;
+  }
+};
+
+async function unshare(o) {
+  if (!confirm(t('confirmUnshare', { site: o.site }))) return;
+  try {
+    await unshareVisit(o.shared.id, o.shared.key);
+  } catch (err) {
+    if (err.message !== 'not_yours') return alert(t('err_other')); // not_yours: already gone (hidden or deleted)
+  }
+  delete o.shared;
+  refresh();
+}
+
+let comMap, comMarkers;
+async function renderCommunity() {
+  const list = $('#com-list');
+  if (!comMap) {
+    comMap = L.map('com-map').setView(...DEFAULT_VIEW);
+    OSM().addTo(comMap);
+    comMarkers = L.layerGroup().addTo(comMap);
+  }
+  setTimeout(() => comMap.invalidateSize());
+  if (!list.children.length) list.innerHTML = emptyState(t('comLoading'));
+  let visits;
+  try { visits = await listShared(); }
+  catch { list.innerHTML = emptyState(t('comError')); return; }
+  if (current !== 'community') return;
+
+  $('#com-tiles').innerHTML =
+    tile(new Set(visits.map(v => v.school)).size, t('schools')) +
+    tile(visits.length, t('sharedVisits')) +
+    tile(visits.reduce((n, v) => n + (v.litter ?? 0), 0), t('litterCounted'));
+  comMarkers.clearLayers();
+  const pts = visits.filter(v => v.lat != null).map(v => {
+    L.circleMarker([v.lat, v.lon], PIN).addTo(comMarkers).bindPopup(`<b>${esc(v.site)}</b><br>${esc(v.school)}<br>${fmtDate(v.visited_at)}`);
+    return [v.lat, v.lon];
+  });
+  if (pts.length) comMap.fitBounds(pts, { maxZoom: 13, padding: [30, 30] });
+
+  const mine = new Set(db.observations.map(o => o.shared?.id));
+  list.innerHTML = visits.length ? visits.map(v => `
+    <div class="obs card static">
+      <div class="thumbs">${v.shared_photos.slice(0, 4).map(p => `<img src="${sharedPhotoUrl(p.path)}" loading="lazy" alt="">`).join('')}</div>
+      <div class="grow">
+        <h3>${esc(v.site)} <span class="stage ${v.stage}">${stage(v.stage)}</span></h3>
+        <p>${esc(v.school)} · ${fmtDate(v.visited_at)}</p>
+        <p class="metrics">
+          ${metrics(v)}
+          ${CLASSES.filter(c => v.counts?.[c.id]).map(c => `<span style="--c:${c.color}"><i class="dot"></i>${cname(c)}: ${Number(v.counts[c.id])}</span>`).join('')}
+        </p>
+        ${v.notes ? `<p class="notes">${esc(v.notes)}</p>` : ''}
+      </div>
+      ${mine.has(v.id) ? `<span class="example">${t('shared')}</span>`
+        : `<button class="btn quiet" data-report="${v.id}" title="${t('report')}" aria-label="${t('report')}">${icon('flag')}</button>`}
+    </div>`).join('') : emptyState(t('comEmpty'));
+  document.querySelectorAll('[data-report]').forEach(b => b.onclick = async () => {
+    if (!confirm(t('confirmReport'))) return;
+    await reportVisit(b.dataset.report).catch(() => {});
+    b.outerHTML = `<span class="example">${t('reported')}</span>`;
+  });
+}
+
 // ---------- data: export, backup, restore ----------
 
 function renderData() {
@@ -713,6 +836,7 @@ fileRestore.onchange = async () => {
         id: String(o.id), site: String(o.site ?? ''), date: String(o.date ?? ''), lat: num(o.lat), lon: num(o.lon),
         stage: ['monitor', 'before', 'action', 'after'].includes(o.stage) ? o.stage : 'monitor',
         temp: num(o.temp), ph: num(o.ph), litter: num(o.litter), notes: String(o.notes ?? ''), photos, ...(o.demo && { demo: true }),
+        ...(typeof o.shared?.id === 'string' && typeof o.shared?.key === 'string' && { shared: { id: o.shared.id, key: o.shared.key } }),
       });
       n++;
     }
@@ -749,7 +873,8 @@ $('#lang').onclick = () => {
 
 // ---------- start ----------
 
-render();
+if (location.hash.slice(1) in pages) show(location.hash.slice(1)); // e.g. app/#community from the website
+else render();
 // Photos whose analysis never finished (app closed, model error) get analysed now.
 analyzeAll(allPhotos().map(p => p.ref), render);
 
