@@ -2,7 +2,7 @@
 # and publishes the website to GitHub Pages.
 #
 # Website: every push to main (GitHub Pages only accepts deployments from the main branch, not from tags).
-# Installers: push a tag, e.g.  git tag v1.0.0 && git push origin v1.0.0
+# Installers: push a tag, e.g.  git tag v1.0.0 && git push origin v1.0.0  (or run this workflow by hand)
 # The AI models are not stored in git (too large); each job downloads them from Hugging Face.
 # No secrets are needed: GITHUB_TOKEN is provided by GitHub automatically.
 name: release
@@ -19,14 +19,15 @@ permissions:
 
 jobs:
   installers:
-    if: github.ref != 'refs/heads/main'
+    if: github.ref != 'refs/heads/main' || github.event_name == 'workflow_dispatch'
     strategy:
       fail-fast: false
       matrix:
         include:
           - { os: ubuntu-latest, script: 'dist:linux', files: 'dist/*.AppImage dist/*.deb' }
           - { os: windows-latest, script: 'dist:win', files: 'dist/*.exe' }
-          - { os: macos-latest, script: 'dist:mac', files: 'dist/*.dmg' }
+          # Intel runner: the arm64 pool often has no free machine. It builds both the arm64 and x64 .dmg.
+          - { os: macos-15-intel, script: 'dist:mac', files: 'dist/*.dmg' }
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -36,16 +37,17 @@ jobs:
       - run: npm run prepare-model
       - run: npm test
       - run: npm run ${{ matrix.script }}
+      # A tag uploads to its own release. A manual run (Actions > release > Run workflow) rebuilds into the latest one.
       - name: Upload to the release
-        if: startsWith(github.ref, 'refs/tags/')
         shell: bash
         env: { GH_TOKEN: '${{ github.token }}' }
         run: |
-          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --title "BlueGuardian AI $GITHUB_REF_NAME" --generate-notes || true
-          gh release upload "$GITHUB_REF_NAME" ${{ matrix.files }} --clobber
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then TAG="$GITHUB_REF_NAME"; else TAG="$(gh release view --json tagName --jq .tagName)"; fi
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "BlueGuardian AI $TAG" --generate-notes || true
+          gh release upload "$TAG" ${{ matrix.files }} --clobber
 
   website:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: { name: github-pages, url: '${{ steps.deploy.outputs.page_url }}' }
     steps:
