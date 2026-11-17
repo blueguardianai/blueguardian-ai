@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://gc.zgo.at; img-src 'self' data: https://blueguardianai.goatcounter.com; connect-src 'self' https://api.github.com https://blueguardianai.goatcounter.com">
+  <title>Υπογραφή κώδικα · BlueGuardian AI</title>
+  <meta name="description" content="BlueGuardian AI: καταγράψτε μια παραλία με φωτογραφίες και μετρήσεις, αφήστε την AI να αναγνωρίσει τα απορρίμματα και μετρήστε το αποτέλεσμα της δράσης σας. Record a beach, let the AI recognise litter, measure the result of your action.">
+  <meta name="theme-color" content="#0b5cad">
+  <link rel="icon" href="build/favicon.png">
+  <link rel="apple-touch-icon" href="build/icon.png">
+  <script src="app/theme.js"></script>
+  <script src="site.js"></script>
+  <link rel="stylesheet" href="site.css">
+  <!-- Visitor counts, no cookies (see privacy.html). Landing pages only, never inside the app. -->
+  <script data-goatcounter="https://blueguardianai.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</head>
+<body>
+  <svg style="display:none" aria-hidden="true">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+  </svg>
+
+  <header class="nav">
+    <a class="brand" href="./"><img src="build/favicon.png" alt=""><b>BlueGuardian AI</b></a>
+    <nav id="menu" popover>
+      <a href="./#how"><span lang="el">Πώς λειτουργεί</span><span lang="en">How it works</span></a>
+      <a href="./#ai">BlueVision AI</a>
+      <a href="app/#community"><span lang="el">Κοινότητα</span><span lang="en">Community</span></a>
+      <a href="./#download"><span lang="el">Λήψη</span><span lang="en">Download</span></a>
+      <a href="https://github.com/blueguardianai/blueguardian-ai">GitHub</a>
+      <a class="btn primary menu-app" href="app/"><span lang="el">Άνοιγμα εφαρμογής</span><span lang="en">Open the app</span></a>
+    </nav>
+    <button class="btn icon" id="lang" aria-label="English / Ελληνικά" title="English / Ελληνικά"><svg class="i"><use href="#i-globe"/></svg><span lang="el">EN</span><span lang="en">ΕΛ</span></button>
+    <button class="btn icon" id="theme" aria-label="Light / dark" title="Light / dark">
+      <span class="swap"><svg class="i"><use href="#i-moon"/></svg><svg class="i"><use href="#i-sun"/></svg></span>
+    </button>
+    <a class="btn primary nav-app" href="app/"><span lang="el">Άνοιγμα εφαρμογής</span><span lang="en">Open the app</span></a>
+    <button class="btn icon menu-btn" popovertarget="menu" aria-label="Menu"><svg class="i"><use href="#i-menu"/></svg></button>
+  </header>
+
+  <main class="prose">
+    <section>
+      <h1><span lang="el">Πολιτική υπογραφής κώδικα</span><span lang="en">Code signing policy</span></h1>
+      <p><span lang="el">Δωρεάν υπογραφή κώδικα από το <a class="link" href="https://signpath.io/">SignPath.io</a>, με πιστοποιητικό από το <a class="link" href="https://signpath.org/">SignPath Foundation</a> (η αίτηση εξετάζεται).</span><span lang="en">Free code signing provided by <a class="link" href="https://signpath.io/">SignPath.io</a>, certificate by <a class="link" href="https://signpath.org/">SignPath Foundation</a> (application under review).</span></p>
+
+      <h2><span lang="el">Τι υπογράφεται</span><span lang="en">What is signed</span></h2>
+      <ul>
+        <li><span lang="el">Μόνο το πρόγραμμα εγκατάστασης για Windows (BlueGuardian-AI-Setup.exe) από τις <a class="link" href="https://github.com/blueguardianai/blueguardian-ai/releases">επίσημες εκδόσεις</a>.</span><span lang="en">Only the Windows installer (BlueGuardian-AI-Setup.exe) from the <a class="link" href="https://github.com/blueguardianai/blueguardian-ai/releases">official releases</a>.</span></li>
+        <li><span lang="el">Χτίζεται αυτόματα από τον δημόσιο κώδικα με GitHub Actions. Κανένα αρχείο δεν υπογράφεται χειροκίνητα.</span><span lang="en">It is built automatically from the public source code with GitHub Actions. No file is signed by hand.</span></li>
+      </ul>
+
+      <h2><span lang="el">Ρόλοι ομάδας</span><span lang="en">Team roles</span></h2>
+      <ul>
+        <li><span lang="el">Συγγραφείς και ελεγκτές κώδικα: η μαθητική ομάδα Sea Symphony, μέσω του λογαριασμού GitHub <a class="link" href="https://github.com/blueguardianai">blueguardianai</a>.</span><span lang="en">Committers and reviewers: the Sea Symphony student team, through the GitHub account <a class="link" href="https://github.com/blueguardianai">blueguardianai</a>.</span></li>
+        <li><span lang="el">Εγκρίνοντες: τα ίδια μέλη. Κάθε υπογραφή εγκρίνεται χειροκίνητα πριν δημοσιευτεί μια έκδοση.</span><span lang="en">Approvers: the same members. Every signing request is approved by hand before a release is published.</span></li>
+        <li><span lang="el">Όλοι οι λογαριασμοί χρησιμοποιούν έλεγχο ταυτότητας δύο παραγόντων.</span><span lang="en">All accounts use two-factor authentication.</span></li>
+      </ul>
+
+      <h2><span lang="el">Απόρρητο</span><span lang="en">Privacy</span></h2>
+      <p><span lang="el">Το πρόγραμμα δεν στέλνει πληροφορίες σε άλλα συστήματα, εκτός αν το ζητήσει ο χρήστης. Οι εξαιρέσεις: οι χάρτες φορτώνουν από το OpenStreetMap και την Esri, και μια καταγραφή δημοσιεύεται μόνο όταν πατήσετε «Κοινοποίηση». Λεπτομέρειες στη σελίδα <a class="link" href="privacy.html">Απόρρητο</a>.</span><span lang="en">This program will not transfer any information to other networked systems unless specifically requested by the user. The exceptions: maps load from OpenStreetMap and Esri, and a visit is only published when you press "Share". Details on the <a class="link" href="privacy.html">Privacy</a> page.</span></p>
+    </section>
+  </main>
+</body>
+</html>

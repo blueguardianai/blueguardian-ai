@@ -43,7 +43,7 @@ fs.writeFileSync(path.join(out, '404.html'), privacy
 
 // Browsers keep site files for up to 10 minutes; a build stamp in the URL makes every deploy load fresh.
 const version = Date.now().toString(36);
-for (const f of ['index.html', 'privacy.html', '404.html']) {
+for (const f of ['index.html', 'privacy.html', 'code-signing.html', '404.html']) {
   const file = path.join(out, f);
   fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace(/(site\.css|site\.js|app\/theme\.js)"/g, `$1?v=${version}"`));
 }
