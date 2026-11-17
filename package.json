@@ -7,7 +7,7 @@
     "name": "Sea Symphony - 3ο Γυμνάσιο Αργυρούπολης",
     "email": "blueguardianai@users.noreply.github.com"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "main": "main.js",
   "scripts": {
     "start": "electron .",

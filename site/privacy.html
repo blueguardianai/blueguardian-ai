@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.github.com">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://gc.zgo.at; img-src 'self' data: https://blueguardianai.goatcounter.com; connect-src 'self' https://api.github.com https://blueguardianai.goatcounter.com">
   <title>Απόρρητο · BlueGuardian AI</title>
   <meta name="description" content="BlueGuardian AI: καταγράψτε μια παραλία με φωτογραφίες και μετρήσεις, αφήστε την AI να αναγνωρίσει τα απορρίμματα και μετρήστε το αποτέλεσμα της δράσης σας. Record a beach, let the AI recognise litter, measure the result of your action.">
   <meta name="theme-color" content="#0b5cad">
@@ -12,6 +12,8 @@
   <script src="app/theme.js"></script>
   <script src="site.js"></script>
   <link rel="stylesheet" href="site.css">
+  <!-- Visitor counts, no cookies (see privacy.html). Landing pages only, never inside the app. -->
+  <script data-goatcounter="https://blueguardianai.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
   <svg style="display:none" aria-hidden="true">
@@ -50,7 +52,7 @@
       <ul>
         <li><span lang="el">Οι καταγραφές, οι φωτογραφίες και οι διορθώσεις σας μένουν στη συσκευή σας. Δεν υπάρχουν λογαριασμοί.</span><span lang="en">Your visits, photos and corrections stay on your device. There are no accounts.</span></li>
         <li><span lang="el">Η ανάλυση των φωτογραφιών από την AI γίνεται στη συσκευή σας.</span><span lang="en">The AI analyses photos on your device.</span></li>
-        <li><span lang="el">Οι χάρτες φορτώνουν από το OpenStreetMap και την EOX, που βλέπουν τη διεύθυνση IP σας όπως κάθε ιστότοπος.</span><span lang="en">Maps load from OpenStreetMap and EOX, which see your IP address as any website does.</span></li>
+        <li><span lang="el">Οι χάρτες φορτώνουν από το OpenStreetMap και την Esri, που βλέπουν τη διεύθυνση IP σας όπως κάθε ιστότοπος.</span><span lang="en">Maps load from OpenStreetMap and Esri, which see your IP address as any website does.</span></li>
       </ul>
 
       <h2><span lang="el">Όσα επιλέγετε να μοιραστείτε</span><span lang="en">What you choose to share</span></h2>
@@ -66,7 +68,14 @@
       <ul>
         <li><span lang="el">Από τη συσκευή που έκανε την κοινοποίηση: «Καταγραφές» → «Κοινόχρηστη» → αναίρεση. Η καταγραφή και οι φωτογραφίες της διαγράφονται από τον διακομιστή.</span><span lang="en">From the device that shared it: "Visits" → "Shared" → stop sharing. The visit and its photos are deleted from the server.</span></li>
         <li><span lang="el">Οποιοσδήποτε μπορεί να αναφέρει μια καταγραφή ως ακατάλληλη από τη σελίδα «Κοινότητα». Μετά από τρεις αναφορές κρύβεται μέχρι να την ελέγξει διαχειριστής.</span><span lang="en">Anyone can report a visit as inappropriate from the "Community" page. After three reports it is hidden until a moderator reviews it.</span></li>
-        <li><span lang="el">Για οτιδήποτε άλλο, ανοίξτε ένα θέμα στο <a class="link" href="https://github.com/blueguardianai/blueguardian-ai/issues">GitHub</a>.</span><span lang="en">For anything else, open an issue on <a class="link" href="https://github.com/blueguardianai/blueguardian-ai/issues">GitHub</a>.</span></li>
+        <li><span lang="el">Για οτιδήποτε άλλο, γράψτε μας στο <a class="link" href="mailto:info@blueguardianai.gr">info@blueguardianai.gr</a> ή ανοίξτε ένα θέμα στο <a class="link" href="https://github.com/blueguardianai/blueguardian-ai/issues">GitHub</a>.</span><span lang="en">For anything else, email <a class="link" href="mailto:info@blueguardianai.gr">info@blueguardianai.gr</a> or open an issue on <a class="link" href="https://github.com/blueguardianai/blueguardian-ai/issues">GitHub</a>.</span></li>
+      </ul>
+
+      <h2><span lang="el">Μέτρηση επισκεπτών</span><span lang="en">Visitor counts</span></h2>
+      <ul>
+        <li><span lang="el">Οι σελίδες του ιστότοπου (όχι η εφαρμογή) μετρούν τις επισκέψεις με το <a class="link" href="https://www.goatcounter.com/">GoatCounter</a>: ποια σελίδα, από ποιον ιστότοπο ήρθατε, χώρα, γλώσσα, μέγεθος οθόνης και browser.</span><span lang="en">The website's pages (not the app) count visits with <a class="link" href="https://www.goatcounter.com/">GoatCounter</a>: which page, which site you came from, country, language, screen size and browser.</span></li>
+        <li><span lang="el">Δεν χρησιμοποιούνται cookies και δεν αποθηκεύεται η διεύθυνση IP σας. Δεν μπορούμε να ξεχωρίσουμε ποιος είστε.</span><span lang="en">No cookies are used and your IP address is not stored. We cannot tell who you are.</span></li>
+        <li><span lang="el">Η εφαρμογή, οι καταγραφές και οι φωτογραφίες σας δεν μετριούνται ποτέ.</span><span lang="en">The app, your visits and your photos are never counted.</span></li>
       </ul>
     </section>
   </main>

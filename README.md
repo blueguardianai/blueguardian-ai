@@ -6,6 +6,7 @@
 [![Downloads](https://img.shields.io/github/downloads/blueguardianai/blueguardian-ai/total?style=flat-square&color=0b5cad&label=λήψεις)](https://github.com/blueguardianai/blueguardian-ai/releases)
 [![Build](https://img.shields.io/github/actions/workflow/status/blueguardianai/blueguardian-ai/release.yml?style=flat-square&label=build)](https://github.com/blueguardianai/blueguardian-ai/actions/workflows/release.yml)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fblueguardianai.gr&style=flat-square&label=blueguardianai.gr)](https://blueguardianai.gr/)
+[![MIT](https://img.shields.io/github/license/blueguardianai/blueguardian-ai?style=flat-square&color=0b5cad&label=άδεια)](LICENSE)
 
 ### [Άνοιγμα στον browser →](https://blueguardianai.gr/app/)
 
@@ -133,3 +134,7 @@ git tag v1.0.1 && git push origin v1.0.1
 Χάρτες: [OpenStreetMap](https://www.openstreetmap.org/copyright).
 Δορυφορικές εικόνες: Esri, Maxar, Earthstar Geographics.
 Μοντέλο: [CLIP](https://github.com/openai/CLIP) της OpenAI, σε μορφή ONNX από το [Transformers.js](https://github.com/huggingface/transformers.js).
+
+## Άδεια
+
+Ανοιχτός κώδικας με άδεια [MIT](LICENSE). Επικοινωνία: info@blueguardianai.gr

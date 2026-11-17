@@ -6,6 +6,7 @@
 [![Downloads](https://img.shields.io/github/downloads/blueguardianai/blueguardian-ai/total?style=flat-square&color=0b5cad&label=downloads)](https://github.com/blueguardianai/blueguardian-ai/releases)
 [![Build](https://img.shields.io/github/actions/workflow/status/blueguardianai/blueguardian-ai/release.yml?style=flat-square&label=build)](https://github.com/blueguardianai/blueguardian-ai/actions/workflows/release.yml)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fblueguardianai.gr&style=flat-square&label=blueguardianai.gr)](https://blueguardianai.gr/)
+[![MIT](https://img.shields.io/github/license/blueguardianai/blueguardian-ai?style=flat-square&color=0b5cad&label=license)](LICENSE)
 
 ### [Open in the browser →](https://blueguardianai.gr/app/)
 
@@ -133,3 +134,7 @@ BlueGuardian AI is a project by **Sea Symphony**, the student team of the **3rd 
 Maps: [OpenStreetMap](https://www.openstreetmap.org/copyright).
 Satellite imagery: Esri, Maxar, Earthstar Geographics.
 Model: OpenAI's [CLIP](https://github.com/openai/CLIP), in ONNX form from [Transformers.js](https://github.com/huggingface/transformers.js).
+
+## License
+
+Open source under the [MIT](LICENSE) license. Contact: info@blueguardianai.gr
