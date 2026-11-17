@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://gc.zgo.at; img-src 'self' data: https://blueguardianai.goatcounter.com; connect-src 'self' https://api.github.com https://blueguardianai.goatcounter.com">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://gc.zgo.at; img-src 'self' data: https://blueguardianai.goatcounter.com; connect-src 'self' https://api.github.com https://anrguxneshfmtueyhqgb.supabase.co https://blueguardianai.goatcounter.com">
   <title>BlueGuardian AI</title>
   <meta name="description" content="BlueGuardian AI: καταγράψτε μια παραλία με φωτογραφίες και μετρήσεις, αφήστε την AI να αναγνωρίσει τα απορρίμματα και μετρήστε το αποτέλεσμα της δράσης σας. Record a beach, let the AI recognise litter, measure the result of your action.">
   <meta name="theme-color" content="#0b5cad">
@@ -42,6 +42,7 @@
       <a href="#how"><span lang="el">Πώς λειτουργεί</span><span lang="en">How it works</span></a>
       <a href="#ai">BlueVision AI</a>
       <a href="#solutions"><span lang="el">Λύσεις</span><span lang="en">Solutions</span></a>
+      <a href="#about"><span lang="el">Η ομάδα</span><span lang="en">About</span></a>
       <a href="app/#community"><span lang="el">Κοινότητα</span><span lang="en">Community</span></a>
       <a href="#download"><span lang="el">Λήψη</span><span lang="en">Download</span></a>
       <a href="https://github.com/blueguardianai/blueguardian-ai">GitHub</a>
@@ -86,6 +87,14 @@
         <li><b><span lang="el">Δρούμε και ξαναμετράμε</span><span lang="en">Act and measure again</span></b>
           <p><span lang="el">Μετά τη δράση σας καταγράφετε ξανά. Η σύγκριση Πριν / Μετά δείχνει το αποτέλεσμα.</span><span lang="en">After your action you record again. The Before / After comparison shows the result.</span></p></li>
       </ol>
+    </section>
+
+    <section id="demo">
+      <h2><span lang="el">Δείτε το σε 40 δευτερόλεπτα</span><span lang="en">See it in 40 seconds</span></h2>
+      <figure class="shot video">
+        <video lang="el" src="video/demo-el.mp4" poster="video/demo-el.jpg" width="1280" height="800" controls muted playsinline preload="none" aria-label="Παρουσίαση της εφαρμογής: πίνακας ελέγχου, BlueVision AI, Πριν / Μετά, 3D Innovation Lab, Save Symphonia Bay και Κοινότητα"></video>
+        <video lang="en" src="video/demo-en.mp4" poster="video/demo-en.jpg" width="1280" height="800" controls muted playsinline preload="none" aria-label="A tour of the app: dashboard, BlueVision AI, Before / After, 3D Innovation Lab, Save Symphonia Bay and Community"></video>
+      </figure>
     </section>
 
     <section id="ai" class="feature">
@@ -140,6 +149,28 @@
       </figure>
     </section>
 
+    <section id="impact">
+      <h2><span lang="el">Τι έχουμε καταγράψει μαζί</span><span lang="en">What we have recorded together</span></h2>
+      <p><span lang="el">Ζωντανά από τον κοινό χάρτη, με ό,τι έχουν μοιραστεί τα σχολεία.</span><span lang="en">Live from the common map, counting what schools have shared.</span></p>
+      <dl class="stats">
+        <div><dt><span lang="el">Καταγραφές</span><span lang="en">Visits</span></dt><dd data-stat="visits">–</dd></div>
+        <div><dt><span lang="el">Σχολεία</span><span lang="en">Schools</span></dt><dd data-stat="schools">–</dd></div>
+        <div><dt><span lang="el">Παραλίες</span><span lang="en">Beaches</span></dt><dd data-stat="beaches">–</dd></div>
+        <div><dt><span lang="el">Απορρίμματα που μετρήθηκαν</span><span lang="en">Litter pieces counted</span></dt><dd data-stat="litter">–</dd></div>
+      </dl>
+      <p class="fine" id="stats-empty" hidden><span lang="el">Δεν έχει μοιραστεί ακόμη καμία καταγραφή. Γίνετε το πρώτο σχολείο στον <a class="link" href="app/#community">κοινό χάρτη</a>!</span><span lang="en">No visit has been shared yet. Be the first school on the <a class="link" href="app/#community">common map</a>!</span></p>
+    </section>
+
+    <section id="about" class="about">
+      <h2><span lang="el">Η ομάδα</span><span lang="en">About the project</span></h2>
+      <p><span lang="el">Είμαστε η μαθητική ομάδα BlueGuardian AI του 3ου Γυμνασίου Αργυρούπολης. Ξεκινήσαμε από ένα απλό ερώτημα: όταν καθαρίζουμε μια παραλία, πώς ξέρουμε ότι άλλαξε πραγματικά κάτι; Γι' αυτό φτιάξαμε ένα εργαλείο που μετατρέπει τις παρατηρήσεις μας σε δεδομένα, τα δεδομένα σε λύσεις και τις λύσεις σε αποφάσεις που παίρνουμε μαζί.</span><span lang="en">We are the BlueGuardian AI student team of the 3rd Junior High School of Argyroupoli. We started from a simple question: when we clean a beach, how do we know that something really changed? So we built a tool that turns our observations into data, the data into solutions, and the solutions into decisions we make together.</span></p>
+      <ul class="facts">
+        <li><b><span lang="el">Δωρεάν</span><span lang="en">Free</span></b><span lang="el">Χωρίς λογαριασμό και χωρίς διαφημίσεις, για κάθε σχολείο.</span><span lang="en">No account and no ads, for every school.</span></li>
+        <li><b><span lang="el">Ανοιχτός κώδικας</span><span lang="en">Open source</span></b><span lang="el">Όλος ο κώδικας είναι στο <a class="link" href="https://github.com/blueguardianai/blueguardian-ai">GitHub</a>.</span><span lang="en">All the code is on <a class="link" href="https://github.com/blueguardianai/blueguardian-ai">GitHub</a>.</span></li>
+        <li><b><span lang="el">Ιδιωτικότητα</span><span lang="en">Private</span></b><span lang="el">Η AI τρέχει στη συσκευή σας. Μοιράζεστε μόνο ό,τι επιλέξετε.</span><span lang="en">The AI runs on your device. You share only what you choose.</span></li>
+      </ul>
+    </section>
+
     <section id="download">
       <h2><span lang="el">Χρησιμοποιήστε το</span><span lang="en">Use it</span></h2>
       <div class="options">
@@ -172,11 +203,26 @@
       </div>
       <p class="fine"><span lang="el">Μεταφέρετε τα δεδομένα σας ανάμεσα στον browser και την εφαρμογή από τη σελίδα «Δεδομένα», με αντίγραφο ασφαλείας.</span><span lang="en">Move your data between the browser and the desktop app from the "Data" page, using a backup file.</span></p>
     </section>
+    <section id="credits">
+      <h2><span lang="el">Πηγές και ευχαριστίες</span><span lang="en">Sources and thanks</span></h2>
+      <p><span lang="el">Το BlueGuardian AI στηρίζεται σε ανοιχτά εργαλεία και δωρεάν υπηρεσίες. Τους ευχαριστούμε.</span><span lang="en">BlueGuardian AI is built on open tools and free services. Thank you to all of them.</span></p>
+      <ul class="credits">
+        <li><b>OpenAI CLIP</b><span lang="el">Το μοντέλο όρασης πίσω από τη BlueVision AI, μέσω <a class="link" href="https://huggingface.co/Xenova">Hugging Face</a>.</span><span lang="en">The vision model behind BlueVision AI, via <a class="link" href="https://huggingface.co/Xenova">Hugging Face</a>.</span></li>
+        <li><b>ONNX Runtime</b><span lang="el">Τρέχει την AI μέσα στον browser και στον υπολογιστή.</span><span lang="en">Runs the AI in the browser and on the desktop.</span></li>
+        <li><b>OpenStreetMap · Leaflet</b><span lang="el">Οι χάρτες της εφαρμογής.</span><span lang="en">The maps in the app.</span></li>
+        <li><b>Esri, Maxar, Earthstar Geographics</b><span lang="el">Οι δορυφορικές εικόνες.</span><span lang="en">The satellite imagery.</span></li>
+        <li><b>Chart.js</b><span lang="el">Τα γραφήματα.</span><span lang="en">The charts.</span></li>
+        <li><b>Tinkercad</b><span lang="el">Σχεδιασμός των πρωτοτύπων του 3D Innovation Lab.</span><span lang="en">Designing the 3D Innovation Lab prototypes.</span></li>
+        <li><b>Supabase</b><span lang="el">Η βάση δεδομένων του κοινού χάρτη.</span><span lang="en">The database behind the common map.</span></li>
+        <li><b>Electron</b><span lang="el">Η εφαρμογή για Windows, macOS και Linux.</span><span lang="en">The desktop app for Windows, macOS and Linux.</span></li>
+        <li><b>GitHub · Cloudflare · GoatCounter</b><span lang="el">Φιλοξενία, domain και μέτρηση επισκέψεων χωρίς cookies.</span><span lang="en">Hosting, the domain and cookie-free visit counts.</span></li>
+      </ul>
+    </section>
   </main>
 
   <footer>
     <p><b>BlueGuardian AI</b> · <span lang="el">Έργο της μαθητικής ομάδας BlueGuardian AI, 3ο Γυμνάσιο Αργυρούπολης.</span><span lang="en">A project by the BlueGuardian AI student team, 3rd Junior High School of Argyroupoli.</span></p>
-    <p><span lang="el">Χάρτες: OpenStreetMap. Δορυφορικές εικόνες: Esri, Maxar, Earthstar Geographics.</span><span lang="en">Maps: OpenStreetMap. Satellite imagery: Esri, Maxar, Earthstar Geographics.</span></p>
+    <p><span lang="el">Χάρτες: OpenStreetMap. Δορυφορικές εικόνες: Esri, Maxar, Earthstar Geographics.</span><span lang="en">Maps: OpenStreetMap. Satellite imagery: Esri, Maxar, Earthstar Geographics.</span> <a class="link" href="#credits"><span lang="el">Όλες οι πηγές</span><span lang="en">All sources</span></a></p>
     <p><a class="link" href="privacy.html"><span lang="el">Απόρρητο και κοινοποίηση</span><span lang="en">Privacy and sharing</span></a> · <a class="link" href="code-signing.html"><span lang="el">Υπογραφή κώδικα</span><span lang="en">Code signing</span></a> · <a class="link" href="https://github.com/blueguardianai/blueguardian-ai">GitHub</a> · <a class="link" href="mailto:BlueGuardianAI@gmail.com">BlueGuardianAI@gmail.com</a></p>
     <p id="views" hidden><span lang="el">Προβολές ιστότοπου</span><span lang="en">Website views</span>: <b></b></p>
   </footer>

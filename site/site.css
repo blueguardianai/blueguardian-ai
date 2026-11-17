@@ -180,3 +180,14 @@ footer { padding-bottom: max(48px, calc(24px + env(safe-area-inset-bottom))); }
 }
 /* Taps act at once: no double-tap-zoom wait on touch screens. */
 button, a, .btn { touch-action: manipulation; }
+
+/* Demo video, live totals, about and credits */
+.shot.video video { vertical-align: top; width: 100%; height: auto; border-radius: calc(var(--r) - var(--p)); background: var(--bg); }
+.stats:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 24px 0 0; }
+.stats div { padding: 20px 22px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--elev); }
+.stats dt { font-size: 14px; color: var(--muted); }
+.stats dd { margin: 4px 0 0; font-size: clamp(30px, 4vw, 42px); font-weight: 750; letter-spacing: -.02em; color: var(--accent); font-variant-numeric: tabular-nums; }
+.facts, .credits { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-top: 24px; }
+.facts li, .credits li { display: grid; gap: 4px; padding: 18px 20px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--elev); font-size: 15px; color: var(--muted); }
+.facts b, .credits b { font-size: 16.5px; font-weight: 650; color: var(--text); }
+.credits li { padding: 14px 18px; }
