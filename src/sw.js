@@ -19,11 +19,11 @@ self.addEventListener('fetch', e => {
   // Network first so updates arrive; cache as the offline fallback. The model never changes, so cache first.
   e.respondWith((async () => {
     const cache = await caches.open(SHELL);
-    const cached = await cache.match(e.request);
+    const cached = await cache.match(e.request, { ignoreSearch: true }); // ?v= changes every deploy
     if (cached && url.pathname.endsWith('.onnx')) return cached;
     try {
       const res = await fetch(e.request);
-      if (res.ok) cache.put(e.request, res.clone());
+      if (res.ok) cache.put(url.origin + url.pathname, res.clone());
       return res;
     } catch (err) {
       if (cached) return cached;

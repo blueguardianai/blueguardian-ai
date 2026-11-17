@@ -49,6 +49,12 @@ for (const f of ['index.html', 'privacy.html', 'code-signing.html', '404.html'])
   const file = path.join(out, f);
   fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace(/(site\.css|site\.js|app\/theme\.js)"/g, `$1?v=${version}"`));
 }
+// The app's files too: Cloudflare tells browsers to keep scripts and styles for 4 hours.
+fs.writeFileSync(page, fs.readFileSync(page, 'utf8').replace(/"(style\.css|app\.js|theme\.js|platform-web\.js)"/g, `"$1?v=${version}"`));
+for (const f of fs.readdirSync(path.join(out, 'app'), { recursive: true }).filter(f => f.endsWith('.js') && !f.startsWith('vendor'))) {
+  const file = path.join(out, 'app', f);
+  fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace(/(['"])(\.\.?\/[\w/.-]+\.js)\1/g, `$1$2?v=${version}$1`));
+}
 
 const size = dir => fs.readdirSync(dir, { recursive: true, withFileTypes: true })
   .reduce((n, e) => n + (e.isFile() ? fs.statSync(path.join(e.parentPath, e.name)).size : 0), 0);
