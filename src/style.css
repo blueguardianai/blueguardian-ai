@@ -379,6 +379,12 @@ dialog h2 { padding: var(--p) var(--p) 0; margin-bottom: 4px; font-size: 18px; }
   main { padding: 16px 12px 28px; }
   h1 { font-size: 22px; }
   .obs { flex-direction: column; }
+  input, select, textarea { font-size: 16px; } /* under 16px, iOS zooms the page on focus */
+  dialog { max-height: calc(100dvh - 16px - env(safe-area-inset-top)); }
+}
+/* Touch screens: every control at least 44px tall, so it is easy to hit with a finger. */
+@media (pointer: coarse) {
+  .btn, .tab, input, select, .seg button { min-height: 44px; }
 }
 .tile b small { font-size: 15px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
 .col .empty { padding: 20px 8px; }

@@ -1,20 +1,25 @@
+<a href="https://blueguardianai.gr/"><img src=".github/assets/banner-el.png" alt="BlueGuardian AI: από τη γνώση στη δράση, για πιο καθαρές θάλασσες"></a>
+
 <div align="center">
 
-<img src="build/icon.png" width="96" alt="">
+[![Τελευταία έκδοση](https://img.shields.io/github/v/release/blueguardianai/blueguardian-ai?style=flat-square&color=0b5cad&label=έκδοση)](https://github.com/blueguardianai/blueguardian-ai/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/blueguardianai/blueguardian-ai/total?style=flat-square&color=0b5cad&label=λήψεις)](https://github.com/blueguardianai/blueguardian-ai/releases)
+[![Build](https://img.shields.io/github/actions/workflow/status/blueguardianai/blueguardian-ai/release.yml?style=flat-square&label=build)](https://github.com/blueguardianai/blueguardian-ai/actions/workflows/release.yml)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fblueguardianai.gr&style=flat-square&label=blueguardianai.gr)](https://blueguardianai.gr/)
 
-# BlueGuardian AI
+### [Άνοιγμα στον browser →](https://blueguardianai.gr/app/)
 
-**Από τη γνώση στη δράση, για πιο καθαρές θάλασσες.**
+Δουλεύει σε κάθε υπολογιστή, tablet και κινητό. Δωρεάν, χωρίς λογαριασμό, χωρίς εγκατάσταση.
 
-Καταγράψτε μια παραλία με φωτογραφίες και μετρήσεις, αφήστε την AI να αναγνωρίσει τα απορρίμματα,
-και δείτε με αριθμούς αν η δράση σας είχε αποτέλεσμα.
+[![Windows](https://img.shields.io/badge/Windows-.exe-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-Setup.exe)
+[![macOS](https://img.shields.io/badge/macOS-Apple%20Silicon-111111?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-mac-arm64.dmg)
+[![Linux .deb](https://img.shields.io/badge/Linux-.deb-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.deb)
+[![Linux AppImage](https://img.shields.io/badge/Linux-AppImage-333333?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.AppImage)
 
-[**Άνοιγμα στον browser**](https://blueguardianai.gr/app/) ·
 [Ιστότοπος](https://blueguardianai.gr/) ·
-[Λήψη](#λήψη) ·
+[Οδηγίες λήψης](#λήψη) ·
+[Απόρρητο](https://blueguardianai.gr/privacy.html) ·
 [English](README.en.md)
-
-<img src="site/img/dash-el.jpg" width="820" alt="Ο πίνακας ελέγχου: σύνοψη, ευρήματα, χάρτης και μετρήσεις">
 
 </div>
 
@@ -29,6 +34,14 @@
 | **Πίνακας ελέγχου** | Δορυφορικός χάρτης υψηλής ανάλυσης, γραφήματα ανά παραλία και ευρήματα σε απλά λόγια. |
 | **Κοινότητα** | Αν θέλετε, μοιράζεστε μια καταγραφή με το όνομα του σχολείου σας. Όλες οι κοινόχρηστες καταγραφές φαίνονται σε έναν κοινό χάρτη. |
 | **Ανοιχτά δεδομένα** | Εξαγωγή όλων των καταγραφών σε CSV και αντίγραφο ασφαλείας σε ένα αρχείο. |
+
+### Στο κινητό
+
+<table align="center"><tr><td align="center"><img src="site/img/m-dash-el.jpg" width="190" alt="Πίνακας Ελέγχου"><br><sub><b>Πίνακας Ελέγχου</b></sub></td><td align="center"><img src="site/img/m-ai-el.jpg" width="190" alt="BlueVision AI"><br><sub><b>BlueVision AI</b></sub></td><td align="center"><img src="site/img/m-compare-el.jpg" width="190" alt="Πριν / Μετά"><br><sub><b>Πριν / Μετά</b></sub></td><td align="center"><img src="site/img/m-observations-el.jpg" width="190" alt="Καταγραφές"><br><sub><b>Καταγραφές</b></sub></td></tr></table>
+
+### Στον υπολογιστή
+
+<img src="site/img/dash-el.jpg" alt="">
 
 <p align="center">
   <img src="site/img/ai-el.jpg" width="49%" alt="BlueVision AI: φωτογραφίες με ποσοστό ανά κατηγορία">
@@ -63,7 +76,7 @@
 - Όλα μένουν στη συσκευή σας: στον υπολογιστή για την εφαρμογή, στον browser για τον ιστότοπο.
 - Δεν υπάρχουν λογαριασμοί. Η AI τρέχει τοπικά.
 - Κοινοποιείται μόνο ό,τι επιλέξετε, με το κουμπί «Κοινοποίηση». Δείτε [τι ακριβώς και πώς αφαιρείται](https://blueguardianai.gr/privacy.html).
-- Μόνο οι χάρτες φορτώνουν από το διαδίκτυο (OpenStreetMap και EOX).
+- Μόνο οι χάρτες φορτώνουν από το διαδίκτυο (OpenStreetMap και Esri).
 - Από τη σελίδα «Δεδομένα» κρατάτε αντίγραφο ασφαλείας και μεταφέρετε τα δεδομένα σε άλλη συσκευή.
 
 ## Η τεχνητή νοημοσύνη
@@ -82,6 +95,9 @@
 Η AI κάνει λάθη, ιδιαίτερα σε φωτογραφίες με πολλά αντικείμενα. Γι' αυτό ο έλεγχος από άνθρωπο είναι μέρος της εφαρμογής και όχι προαιρετικός.
 
 ## Για προγραμματιστές
+
+<details>
+<summary>Χτίσιμο, δομή και έκδοση</summary>
 
 Ένας κώδικας, δύο στόχοι: εφαρμογή Electron και στατικός ιστότοπος. Τα μυστικά κλειδιά μένουν στη Supabase, ποτέ στο αποθετήριο.
 
@@ -107,6 +123,8 @@ npm test
 ```sh
 git tag v1.0.1 && git push origin v1.0.1
 ```
+
+</details>
 
 ## Η ομάδα
 

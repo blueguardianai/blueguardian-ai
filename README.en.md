@@ -1,20 +1,25 @@
+<a href="https://blueguardianai.gr/"><img src=".github/assets/banner-en.png" alt="BlueGuardian AI: from knowledge to action, for cleaner seas"></a>
+
 <div align="center">
 
-<img src="build/icon.png" width="96" alt="">
+[![Latest release](https://img.shields.io/github/v/release/blueguardianai/blueguardian-ai?style=flat-square&color=0b5cad&label=release)](https://github.com/blueguardianai/blueguardian-ai/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/blueguardianai/blueguardian-ai/total?style=flat-square&color=0b5cad&label=downloads)](https://github.com/blueguardianai/blueguardian-ai/releases)
+[![Build](https://img.shields.io/github/actions/workflow/status/blueguardianai/blueguardian-ai/release.yml?style=flat-square&label=build)](https://github.com/blueguardianai/blueguardian-ai/actions/workflows/release.yml)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fblueguardianai.gr&style=flat-square&label=blueguardianai.gr)](https://blueguardianai.gr/)
 
-# BlueGuardian AI
+### [Open in the browser →](https://blueguardianai.gr/app/)
 
-**From knowledge to action, for cleaner seas.**
+Works on any computer, tablet or phone. Free, no account, nothing to install.
 
-Record a beach with photos and measurements, let the AI recognise the litter,
-and see in numbers whether your action made a difference.
+[![Windows](https://img.shields.io/badge/Windows-.exe-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-Setup.exe)
+[![macOS](https://img.shields.io/badge/macOS-Apple%20Silicon-111111?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-mac-arm64.dmg)
+[![Linux .deb](https://img.shields.io/badge/Linux-.deb-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.deb)
+[![Linux AppImage](https://img.shields.io/badge/Linux-AppImage-333333?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.AppImage)
 
-[**Open in the browser**](https://blueguardianai.gr/app/) ·
 [Website](https://blueguardianai.gr/) ·
-[Download](#download) ·
+[Download notes](#download) ·
+[Privacy](https://blueguardianai.gr/privacy.html) ·
 [Ελληνικά](README.md)
-
-<img src="site/img/dash-en.jpg" width="820" alt="The dashboard: summary, findings, map and readings">
 
 </div>
 
@@ -29,6 +34,14 @@ and see in numbers whether your action made a difference.
 | **Dashboard** | A high-resolution satellite map, charts per beach, and findings in plain language. |
 | **Community** | If you want, you share a visit under your school's name. Every shared visit appears on one common map. |
 | **Open data** | Export every visit to CSV, and back everything up to one file. |
+
+### On your phone
+
+<table align="center"><tr><td align="center"><img src="site/img/m-dash-en.jpg" width="190" alt="Dashboard"><br><sub><b>Dashboard</b></sub></td><td align="center"><img src="site/img/m-ai-en.jpg" width="190" alt="BlueVision AI"><br><sub><b>BlueVision AI</b></sub></td><td align="center"><img src="site/img/m-compare-en.jpg" width="190" alt="Before / After"><br><sub><b>Before / After</b></sub></td><td align="center"><img src="site/img/m-observations-en.jpg" width="190" alt="Visits"><br><sub><b>Visits</b></sub></td></tr></table>
+
+### On your computer
+
+<img src="site/img/dash-en.jpg" alt="">
 
 <p align="center">
   <img src="site/img/ai-en.jpg" width="49%" alt="BlueVision AI: photos with a confidence per category">
@@ -63,7 +76,7 @@ On first launch the app offers an example beach and a four-step guide.
 - Everything stays on your device: on the computer for the desktop app, in the browser for the website.
 - There are no accounts. The AI runs locally.
 - Only what you choose is shared, with the "Share" button. See [exactly what, and how to remove it](https://blueguardianai.gr/privacy.html).
-- Only the maps load from the internet (OpenStreetMap and EOX).
+- Only the maps load from the internet (OpenStreetMap and Esri).
 - The "Data" page makes a backup file and moves your data to another device.
 
 ## The AI
@@ -82,6 +95,9 @@ In later predictions, photos that look like the example lean towards its categor
 The AI makes mistakes, especially on photos with many objects. That is why human checking is part of the app and not optional.
 
 ## For developers
+
+<details>
+<summary>Build, layout and releasing</summary>
 
 One codebase, two targets: an Electron app and a static website. Secret keys live in Supabase, never in the repository.
 
@@ -107,6 +123,8 @@ npm test
 ```sh
 git tag v1.0.1 && git push origin v1.0.1
 ```
+
+</details>
 
 ## The team
 

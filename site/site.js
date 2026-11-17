@@ -30,6 +30,10 @@ addEventListener('DOMContentLoaded', () => {
   });
   syncTheme();
 
+  // Phone menu: close it once a link is followed (anchor links stay on the page).
+  const menu = document.querySelector('#menu');
+  menu.onclick = e => e.target.closest('a') && menu.matches(':popover-open') && menu.hidePopover();
+
   const buttons = [...document.querySelectorAll('[data-dl]')];
   for (const a of buttons) a.href = DOWNLOADS[a.dataset.dl];
   // Ask GitHub which installers the latest release really has, and mark the missing ones instead of

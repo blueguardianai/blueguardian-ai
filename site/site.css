@@ -106,14 +106,46 @@ footer { max-width: 1180px; margin: 0 auto; padding: 28px var(--gutter) 48px; bo
 footer p { font-size: 13.5px; max-width: none; margin-top: 4px; }
 footer b { color: var(--text); }
 
+picture { display: block; }
+.menu-btn, .menu-app, .phone-tip { display: none; }
+/* Wide screens: the menu is a plain row of links. The popover attribute only matters on phones. */
+@media (min-width: 821px) {
+  .nav nav { display: flex; position: static; inset: auto; margin: 0 8px 0 0; padding: 0; border: 0; background: none; overflow: visible; color: inherit; }
+}
 @media (max-width: 820px) {
   .feature { grid-template-columns: 1fr; }
   .feature.flip > div { order: 0; }
-  .nav nav { display: none; }
+  .menu-btn { display: inline-flex; }
+  /* Phone menu: a sheet under the nav bar; tap outside or Esc closes it (native popover). */
+  .nav nav {
+    position: fixed; inset: calc(64px + env(safe-area-inset-top)) var(--gutter) auto auto; width: min(280px, 100vw - 2 * var(--gutter)); margin: 0;
+    flex-direction: column; gap: 2px; padding: 8px; border-radius: 18px; color: var(--text);
+    background: color-mix(in oklch, var(--raised) 92%, transparent); backdrop-filter: blur(20px) saturate(1.4);
+    border: 1px solid var(--line-strong); box-shadow: 0 24px 64px -16px oklch(0 0 0 / .35);
+    transform-origin: top right; transition: opacity .16s var(--ease), scale .16s var(--ease), display .16s allow-discrete, overlay .16s allow-discrete;
+  }
+  .nav nav:popover-open { display: flex; transition-duration: .2s; @starting-style { opacity: 0; scale: .95; } }
+  .nav nav:not(:popover-open) { opacity: 0; scale: .95; }
+  .nav nav a { padding: 12px 14px; font-size: 16.5px; color: var(--text); border-radius: 12px; }
+  .nav nav .menu-app { display: flex; margin-top: 6px; color: var(--on-accent); }
+  .phone-tip { display: block; font-size: 14px; padding: 10px 12px; border-radius: 12px; background: color-mix(in oklch, var(--accent) 9%, transparent); color: var(--text); }
 }
-@media (max-width: 480px) {
-  .nav .btn.primary { display: none; }
+@media (max-width: 600px) {
+  /* Phone screenshots instead of tiny desktop ones, standing in a narrow frame. */
+  .shot { --r: 30px; width: min(100%, 300px); margin-inline: auto; }
+  .hero-shot { width: min(100%, 320px); }
+  .hero-shot img { aspect-ratio: 780 / 1300; }
   .cta .btn { flex: 1 1 100%; }
+  .nav .nav-app { display: none; }
+  .steps li { padding: 18px; }
+}
+/* Safe areas: nothing hides under a notch or the home indicator. */
+.nav { padding-top: max(10px, env(safe-area-inset-top)); padding-inline: max(var(--gutter), env(safe-area-inset-left)) max(var(--gutter), env(safe-area-inset-right)); }
+footer { padding-bottom: max(48px, calc(24px + env(safe-area-inset-bottom))); }
+/* Touch screens: every control at least 44px tall. */
+@media (pointer: coarse) {
+  .btn { min-height: 44px; }
+  .btn.icon { min-width: 44px; }
 }
 /* Entrances: the hero settles line by line, 30ms apart; the screenshot is unmasked from the top down. */
 .hero > * { animation: rise .4s var(--ease) both; animation-delay: calc((sibling-index() - 1) * 30ms); }

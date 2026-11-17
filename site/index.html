@@ -2,12 +2,13 @@
 <html lang="el">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.github.com">
   <title>BlueGuardian AI</title>
   <meta name="description" content="BlueGuardian AI: καταγράψτε μια παραλία με φωτογραφίες και μετρήσεις, αφήστε την AI να αναγνωρίσει τα απορρίμματα και μετρήστε το αποτέλεσμα της δράσης σας. Record a beach, let the AI recognise litter, measure the result of your action.">
   <meta name="theme-color" content="#0b5cad">
   <link rel="icon" href="build/favicon.png">
+  <link rel="apple-touch-icon" href="build/icon.png">
   <script src="app/theme.js"></script>
   <script src="site.js"></script>
   <link rel="stylesheet" href="site.css">
@@ -18,23 +19,26 @@
     <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
     <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></symbol>
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
   </svg>
 
   <header class="nav">
     <a class="brand" href="./"><img src="build/favicon.png" alt=""><b>BlueGuardian AI</b></a>
-    <nav>
+    <nav id="menu" popover>
       <a href="#how"><span lang="el">Πώς λειτουργεί</span><span lang="en">How it works</span></a>
       <a href="#ai">BlueVision AI</a>
       <a href="app/#community"><span lang="el">Κοινότητα</span><span lang="en">Community</span></a>
       <a href="#download"><span lang="el">Λήψη</span><span lang="en">Download</span></a>
       <a href="https://github.com/blueguardianai">GitHub</a>
+      <a class="btn primary menu-app" href="app/"><span lang="el">Άνοιγμα εφαρμογής</span><span lang="en">Open the app</span></a>
     </nav>
     <button class="btn icon" id="lang" aria-label="English / Ελληνικά" title="English / Ελληνικά"><svg class="i"><use href="#i-globe"/></svg><span lang="el">EN</span><span lang="en">ΕΛ</span></button>
     <button class="btn icon" id="theme" aria-label="Light / dark" title="Light / dark">
       <span class="swap"><svg class="i"><use href="#i-moon"/></svg><svg class="i"><use href="#i-sun"/></svg></span>
     </button>
-    <a class="btn primary" href="app/"><span lang="el">Άνοιγμα εφαρμογής</span><span lang="en">Open the app</span></a>
+    <a class="btn primary nav-app" href="app/"><span lang="el">Άνοιγμα εφαρμογής</span><span lang="en">Open the app</span></a>
+    <button class="btn icon menu-btn" popovertarget="menu" aria-label="Menu"><svg class="i"><use href="#i-menu"/></svg></button>
   </header>
 
   <main>
@@ -51,8 +55,8 @@
       </div>
       <p class="fine"><span lang="el">Για Windows, macOS, Linux και κάθε browser. Δωρεάν, χωρίς λογαριασμό. Τα δεδομένα σας μένουν στη συσκευή σας, εκτός αν επιλέξετε να τα μοιραστείτε.</span><span lang="en">For Windows, macOS, Linux and any browser. Free, no account. Your data stays on your device unless you choose to share it.</span></p>
       <figure class="shot hero-shot">
-        <img lang="el" src="img/dash-el.jpg" width="1280" height="800" alt="Ο πίνακας ελέγχου του BlueGuardian AI με χάρτη, μετρήσεις και ευρήματα">
-        <img lang="en" src="img/dash-en.jpg" width="1280" height="800" alt="The BlueGuardian AI dashboard with a map, readings and findings">
+        <picture lang="el"><source media="(max-width: 600px)" srcset="img/m-dash-el.jpg" width="780" height="1688"><img src="img/dash-el.jpg" width="1280" height="800" alt="Ο πίνακας ελέγχου του BlueGuardian AI με χάρτη, μετρήσεις και ευρήματα"></picture>
+        <picture lang="en"><source media="(max-width: 600px)" srcset="img/m-dash-en.jpg" width="780" height="1688"><img src="img/dash-en.jpg" width="1280" height="800" alt="The BlueGuardian AI dashboard with a map, readings and findings"></picture>
       </figure>
     </section>
 
@@ -86,8 +90,8 @@
         <p><span lang="el">Η ανάλυση γίνεται στη συσκευή σας: οι φωτογραφίες δεν ανεβαίνουν πουθενά για να αναλυθούν. Μετά την πρώτη φόρτωση, η εφαρμογή δουλεύει και χωρίς σύνδεση.</span><span lang="en">The analysis happens on your device: photos are not uploaded anywhere to be analysed. After the first load, the app also works offline.</span></p>
       </div>
       <figure class="shot">
-        <img lang="el" src="img/ai-el.jpg" width="1280" height="800" loading="lazy" alt="Η σελίδα BlueVision AI με φωτογραφίες και ποσοστά ανά κατηγορία">
-        <img lang="en" src="img/ai-en.jpg" width="1280" height="800" loading="lazy" alt="The BlueVision AI page with photos and a confidence per category">
+        <picture lang="el"><source media="(max-width: 600px)" srcset="img/m-ai-el.jpg" width="780" height="1688"><img src="img/ai-el.jpg" width="1280" height="800" loading="lazy" alt="Η σελίδα BlueVision AI με φωτογραφίες και ποσοστά ανά κατηγορία"></picture>
+        <picture lang="en"><source media="(max-width: 600px)" srcset="img/m-ai-en.jpg" width="780" height="1688"><img src="img/ai-en.jpg" width="1280" height="800" loading="lazy" alt="The BlueVision AI page with photos and a confidence per category"></picture>
       </figure>
     </section>
 
@@ -103,8 +107,8 @@
         <p><span lang="el">Οι παραλίες σας εμφανίζονται σε χάρτη, με δορυφορική εικόνα υψηλής ανάλυσης.</span><span lang="en">Your beaches appear on a map, with high-resolution satellite imagery.</span></p>
       </div>
       <figure class="shot">
-        <img lang="el" src="img/compare-el.jpg" width="1280" height="800" loading="lazy" alt="Σύγκριση Πριν, Δράση, Μετά για μια παραλία">
-        <img lang="en" src="img/compare-en.jpg" width="1280" height="800" loading="lazy" alt="Before, Action, After comparison for one beach">
+        <picture lang="el"><source media="(max-width: 600px)" srcset="img/m-compare-el.jpg" width="780" height="1688"><img src="img/compare-el.jpg" width="1280" height="800" loading="lazy" alt="Σύγκριση Πριν, Δράση, Μετά για μια παραλία"></picture>
+        <picture lang="en"><source media="(max-width: 600px)" srcset="img/m-compare-en.jpg" width="780" height="1688"><img src="img/compare-en.jpg" width="1280" height="800" loading="lazy" alt="Before, Action, After comparison for one beach"></picture>
       </figure>
     </section>
 
@@ -114,6 +118,7 @@
         <div class="card">
           <h3><span lang="el">Στον browser</span><span lang="en">In the browser</span></h3>
           <p><span lang="el">Σε υπολογιστή, tablet ή κινητό, χωρίς εγκατάσταση. Την πρώτη φορά κατεβαίνει το μοντέλο AI (περίπου 90 MB).</span><span lang="en">On a computer, tablet or phone, with nothing to install. The first time, the AI model downloads (about 90 MB).</span></p>
+          <p class="phone-tip"><span lang="el">Στο κινητό: ανοίξτε την εφαρμογή και πατήστε «Προσθήκη στην οθόνη Αφετηρίας» (iPhone, κουμπί Κοινοποίηση) ή «Εγκατάσταση εφαρμογής» (Android, μενού ⋮). Ανοίγει σαν κανονική εφαρμογή.</span><span lang="en">On a phone: open the app and tap "Add to Home Screen" (iPhone, Share button) or "Install app" (Android, ⋮ menu). It then opens like a normal app.</span></p>
           <a class="btn primary" href="app/"><span lang="el">Άνοιγμα εφαρμογής</span><span lang="en">Open the app</span></a>
         </div>
         <div class="card">
