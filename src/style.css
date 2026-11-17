@@ -402,7 +402,7 @@ dialog h2 { padding: var(--p) var(--p) 0; margin-bottom: 4px; font-size: 18px; }
 .obs.static { cursor: default; }
 .obs.static:hover { translate: none; border-color: var(--line); }
 .com-map { margin-bottom: 16px; }
-.com-map .map { height: clamp(240px, 40dvh, 420px); }
+.com-map .map { height: clamp(320px, 52dvh, 540px); }
 #share-dialog { width: min(560px, 100dvw - 32px); }
 .check { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-weight: 550; }
 .check input { width: 18px; height: 18px; accent-color: var(--accent); }
@@ -615,3 +615,56 @@ button, a, .btn { touch-action: manipulation; }
   #report footer { margin-top: 18px; padding-top: 8px; border-top: 1px solid #ccc; }
   #report * { animation: none !important; }
 }
+
+/* Map pins: colour and size by litter; a thicker ring on hover. */
+.pin { cursor: pointer; transition: stroke-width .15s var(--ease); }
+.pin:hover { stroke-width: 5; }
+.pin.good { fill: var(--good); }
+.pin.warm { fill: var(--warm); }
+.pin.bad { fill: var(--bad); }
+.me { fill: oklch(0.62 0.2 255); fill-opacity: 1; stroke: #fff; stroke-width: 3; }
+.map:fullscreen { border-radius: 0; height: 100%; }
+.map-tools a { display: grid !important; place-items: center; }
+.map-tools .i { width: 16px; height: 16px; }
+.map-legend {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 3px 10px; max-width: 200px; padding: 7px 11px; border-radius: 12px;
+  background: color-mix(in oklch, var(--overlay) 86%, transparent); backdrop-filter: blur(10px); border: 1px solid var(--line);
+  box-shadow: var(--elev); font-size: 12px; color: var(--muted);
+}
+.map-legend b { width: 100%; color: var(--text); font-size: 12px; }
+.map-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.leaflet-tooltip.map-tip {
+  background: var(--overlay); color: var(--text); border: 1px solid var(--line-strong); border-radius: 8px;
+  box-shadow: var(--elev); font: inherit; font-size: 12.5px; font-weight: 600; padding: 4px 9px;
+}
+.leaflet-tooltip-top.map-tip::before { border-top-color: var(--line-strong); }
+
+/* Pin popup: photos first, a big one then small ones; a click opens the viewer. */
+.pop { display: grid; gap: 3px; width: 250px; }
+.leaflet-popup-content .pop p { margin: 0; }
+.pop h3 { font-size: 14.5px; flex-wrap: wrap; gap: 6px; }
+.pop .sub { color: var(--muted); font-size: 12.5px; }
+.leaflet-popup-content .pop .metrics { margin: 2px 0 6px; }
+.pop .btn { justify-self: start; }
+.pop-photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 6px; }
+.pop-photos button { position: relative; padding: 0; border: 0; background: var(--sunken); border-radius: 8px; overflow: hidden; cursor: zoom-in; aspect-ratio: 1; }
+.pop-photos button:first-child { grid-column: 1 / -1; aspect-ratio: 2; }
+.pop-photos img { width: 100%; height: 100%; object-fit: cover; display: block; transition: scale .3s var(--ease); }
+.pop-photos button:hover img { scale: 1.05; }
+.pop-photos span { position: absolute; inset: 0; display: grid; place-items: center; background: oklch(0 0 0 / .5); color: #fff; font-weight: 650; }
+.thumbs[data-photos] img { cursor: zoom-in; }
+.obs.on-map { cursor: pointer; }
+.obs.flash { animation: flash 1.4s var(--ease); }
+@keyframes flash { 20%, 60% { border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in oklch, var(--accent) 25%, transparent); } }
+
+/* Photo viewer */
+#viewer { width: min(1100px, 100dvw - 32px); background: oklch(0.13 0.01 250); border-color: oklch(1 0 0 / .12); color: #fff; touch-action: pan-y; }
+#viewer figure { display: grid; }
+#viewer img { width: 100%; max-height: calc(100dvh - 90px); object-fit: contain; display: block; user-select: none; -webkit-user-drag: none; }
+#viewer figcaption { padding: 10px 16px; font-size: 13px; color: oklch(1 0 0 / .75); }
+#viewer .btn { position: absolute; top: 50%; translate: 0 -50%; border-radius: 99px; color: #fff; background: oklch(0 0 0 / .45); border-color: oklch(1 0 0 / .2); box-shadow: none; backdrop-filter: blur(6px); }
+#viewer-prev { left: 12px; }
+#viewer-next { right: 12px; }
+#viewer #viewer-close { top: 12px; right: 12px; translate: none; }
+.map-legend { transition: opacity .2s var(--ease); }
+.leaflet-container:has(.leaflet-popup) .map-legend { opacity: 0; pointer-events: none; }

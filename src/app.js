@@ -325,12 +325,12 @@ $('#demo-toggle').onclick = () => (hasDemo() ? clearDemo() : loadDemo());
 
 // ---------- dashboard ----------
 
-let map, markers, charts = {};
+let map, charts = {};
 const OSM = () => L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 19, className: 'osm', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  maxZoom: 19, keepBuffer: 6, className: 'osm', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 });
 const ESRI = () => L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-  maxZoom: 19, attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics',
+  maxZoom: 19, keepBuffer: 6, attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics',
 });
 // Satellite photo by default. A two-part switch on the map shows which view is on (highlighted) and which one
 // a click picks. The choice is remembered.
@@ -369,6 +369,146 @@ function baseMap(m) {
 }
 const DEFAULT_VIEW = [[37.9, 23.73], 10];
 const PIN = { radius: 8, className: 'pin' }; // colors come from CSS
+
+// Smooth maps: quarter-step zoom on the wheel and trackpad, a long soft glide after a drag.
+const MAP_OPTS = { zoomSnap: 0.25, zoomDelta: 0.5, wheelPxPerZoomLevel: 110, wheelDebounceTime: 20, inertiaDeceleration: 2400, easeLinearity: 0.15 };
+function newMap(id, tools = true) {
+  const m = L.map(id, MAP_OPTS).setView(...DEFAULT_VIEW);
+  baseMap(m);
+  if (!tools) return m;
+  m.pins = L.layerGroup().addTo(m);
+  m.pts = [];
+  // Under the zoom buttons: all beaches, my location, full screen.
+  const Tools = L.Control.extend({
+    onAdd() {
+      const bar = L.DomUtil.create('div', 'leaflet-bar map-tools');
+      const btn = (name, title, fn) => {
+        const a = L.DomUtil.create('a', '', bar);
+        a.href = '#';
+        a.role = 'button';
+        a.title = title;
+        a.setAttribute('aria-label', title);
+        a.innerHTML = icon(name);
+        L.DomEvent.on(a, 'click', e => { L.DomEvent.preventDefault(e); fn(); });
+      };
+      btn('fit', t('mapFit'), () => fitTo(m, m.pts));
+      if (api.platform === 'web' && navigator.geolocation) btn('locate', t('mapMe'), () => m.locate({ enableHighAccuracy: true }));
+      if (document.fullscreenEnabled) btn('expand', t('mapFull'), () =>
+        (document.fullscreenElement ? document.exitFullscreen() : m.getContainer().requestFullscreen()));
+      L.DomEvent.disableClickPropagation(bar);
+      return bar;
+    },
+  });
+  new Tools({ position: 'topleft' }).addTo(m);
+  let me;
+  m.on('locationfound', e => {
+    (me ??= L.circleMarker(e.latlng, { radius: 7, className: 'me', interactive: false }).addTo(m)).setLatLng(e.latlng);
+    m.flyTo(e.latlng, 12, { duration: 1.2 });
+  });
+  m.on('locationerror', () => alert(t('locateFail')));
+  m.getContainer().addEventListener('fullscreenchange', () => m.invalidateSize());
+  m.on('popupopen', e => {
+    const el = e.popup.getElement();
+    wirePhotos(el);
+    const cmp = el.querySelector('[data-cmp]'), card = el.querySelector('[data-card]');
+    if (cmp) cmp.onclick = () => { fillSiteSelect($('#cmp-site')); $('#cmp-site').value = cmp.dataset.cmp; show('compare'); };
+    if (card) card.onclick = () => {
+      const c = $(`#com-list [data-vid="${CSS.escape(card.dataset.card)}"]`);
+      if (!c) return;
+      c.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      c.classList.remove('flash');
+      requestAnimationFrame(() => c.classList.add('flash'));
+    };
+  });
+
+  // Pin colour and size follow the litter count. Legend in the corner.
+  const Legend = L.Control.extend({
+    onAdd() {
+      const d = L.DomUtil.create('div', 'map-legend');
+      d.innerHTML = `<b>${t('litterItems')}</b>` +
+        ['< 100', '100–300', '> 300'].map((r, i) => `<span><i class="dot" style="--c:var(--${LITTER[i][1]})"></i>${r}</span>`).join('') +
+        `<span><i class="dot" style="--c:var(--accent)"></i>${t('mapNoCount')}</span>`;
+      return d;
+    },
+  });
+  new Legend({ position: 'bottomleft' }).addTo(m);
+  return m;
+}
+
+const LITTER = [[100, 'good'], [300, 'warm'], [Infinity, 'bad']];
+const pinStyle = litter => litter == null ? PIN
+  : { className: 'pin ' + LITTER.find(([max]) => litter < max)[1], radius: Math.min(7 + Math.sqrt(litter) / 3, 16) };
+
+// The first fit flies in from the default view; later ones glide.
+function fitTo(m, pts) {
+  m.pts = pts;
+  if (!pts.length) return;
+  m.invalidateSize();
+  const opts = { maxZoom: 13, padding: [40, 40] };
+  if (!m.getSize().x) return m.fitBounds(pts, opts); // hidden page: no size to animate in
+  m.flyToBounds(pts, { ...opts, duration: m.fitted ? 0.6 : 1.2 });
+  m.fitted = true;
+}
+
+// A beach pin: name on hover; a click flies in, then opens the popup with its photos.
+function addPin(m, ll, litter, name, html) {
+  const pin = L.circleMarker(ll, pinStyle(litter)).addTo(m.pins)
+    .bindTooltip(esc(name), { direction: 'top', offset: [0, -10], className: 'map-tip' });
+  pin.on('click', () => {
+    m.closePopup();
+    pin.closeTooltip();
+    m.once('moveend', () => L.popup({ maxWidth: 300, minWidth: 250, offset: [0, -4], autoPanPaddingTopLeft: [56, 64], autoPanPaddingBottomRight: [20, 20] }).setLatLng(ll).setContent(html).openOn(m));
+    m.flyTo(ll, Math.max(m.getZoom(), 12), { duration: 0.8 });
+  });
+  return pin;
+}
+
+// Popup body: photos (a click opens them full size), when, what was measured, and one action.
+function popupHtml({ name, sub, o, photos, action }) {
+  const shown = photos.slice(0, 4);
+  return `<div class="pop">
+    ${photos.length ? `<div class="pop-photos" data-photos="${esc(JSON.stringify(photos))}" data-cap="${esc(name)}">${shown.map((u, i) => `
+      <button data-i="${i}" aria-label="${t('mapPhotos', { n: photos.length })}"><img src="${u}" alt="" loading="lazy">${i === shown.length - 1 && photos.length > shown.length ? `<span>+${photos.length - shown.length}</span>` : ''}</button>`).join('')}
+    </div>` : ''}
+    <h3>${esc(name)} <span class="stage ${o.stage}">${stage(o.stage)}</span></h3>
+    <p class="sub">${sub}</p>
+    <p class="metrics">${metrics(o)}</p>
+    ${action}
+  </div>`;
+}
+
+// ---------- photo viewer ----------
+
+const viewer = $('#viewer');
+let gallery = [], gi = 0, gcap = '';
+function showPhoto(i) {
+  gi = (i + gallery.length) % gallery.length;
+  $('#viewer-img').src = gallery[gi];
+  $('#viewer-cap').textContent = gallery.length > 1 ? `${gcap} · ${gi + 1} / ${gallery.length}` : gcap;
+  $('#viewer-prev').hidden = $('#viewer-next').hidden = gallery.length < 2;
+}
+// Any element with data-photos (a JSON list of URLs): its buttons or images open the viewer at their index.
+function wirePhotos(root) {
+  root?.querySelectorAll('[data-photos] :is(button, img)').forEach((el, _, all) => el.onclick = e => {
+    e.stopPropagation();
+    const box = el.closest('[data-photos]');
+    gallery = JSON.parse(box.dataset.photos);
+    gcap = box.dataset.cap;
+    showPhoto(+(el.dataset.i ?? [...box.querySelectorAll('img')].indexOf(el)));
+    viewer.showModal();
+  });
+}
+$('#viewer-prev').onclick = () => showPhoto(gi - 1);
+$('#viewer-next').onclick = () => showPhoto(gi + 1);
+$('#viewer-close').onclick = () => viewer.close();
+viewer.onclick = e => e.target === viewer && viewer.close(); // backdrop
+viewer.onkeydown = e => {
+  if (e.key === 'ArrowLeft') showPhoto(gi - 1);
+  if (e.key === 'ArrowRight') showPhoto(gi + 1);
+};
+let swipeX; // phones: swipe left or right
+viewer.onpointerdown = e => { swipeX = e.clientX; };
+viewer.onpointerup = e => { const dx = e.clientX - swipeX; if (Math.abs(dx) > 50 && gallery.length > 1) showPhoto(gi + (dx < 0 ? 1 : -1)); };
 
 // Litter per 100 m on 8 Greek beaches, autumn-winter 2018 (MIO-ECSDE & HELMEPA, "Marine litter on Mediterranean beaches", 2019).
 // Same beaches as the Preset rows in Community.
@@ -424,22 +564,18 @@ function renderDashboard() {
       ${f.go ? `<button data-go="${f.go}">${t('tab' + { ai: 'Ai', compare: 'Compare' }[f.go])}${icon('arrow')}</button>` : ''}</li>`).join('')}</ul>`;
   document.querySelectorAll('#insights button').forEach(b => b.onclick = () => show(b.dataset.go));
 
-  if (!map) {
-    map = L.map('map').setView(...DEFAULT_VIEW);
-    baseMap(map);
-    markers = L.layerGroup().addTo(map);
-  }
-  markers.clearLayers();
+  map ??= newMap('map');
+  map.pins.clearLayers();
   const pts = [];
   for (const [name, o] of sites()) {
     if (o.lat == null) continue;
     pts.push([o.lat, o.lon]);
-    L.circleMarker([o.lat, o.lon], PIN).addTo(markers).bindPopup(
-      `<b>${esc(name)}</b><br>${fmtDate(o.date)}<br>` +
-      [o.temp != null && `${o.temp} °C`, o.ph != null && `pH ${o.ph}`, o.litter != null && `${o.litter} ${t('items')}`].filter(Boolean).join(' · '));
+    const photos = visitsAt(name).flatMap(v => v.photos.map(p => api.photoUrl(p.file)));
+    addPin(map, [o.lat, o.lon], o.litter, name, popupHtml({ name, o, photos,
+      sub: `${fmtDate(o.date)} · ${t('nPhotos', { n: photos.length })}`,
+      action: `<button class="btn" data-cmp="${esc(name)}">${t('tabCompare')}${icon('arrow')}</button>` }));
   }
-  if (pts.length) map.fitBounds(pts, { maxZoom: 14, padding: [30, 30] });
-  setTimeout(() => map.invalidateSize());
+  setTimeout(() => fitTo(map, pts));
 
   const sel = $('#dash-site');
   fillSiteSelect(sel);
@@ -526,7 +662,7 @@ function renderObservations() {
   }).join('') : emptyState(t('visitsEmpty'), icon('plus') + t('newVisit'), 'empty-new');
   $('#empty-new')?.addEventListener('click', () => openObs(null));
   const byId = id => db.observations.find(o => o.id === id);
-  document.querySelectorAll('.obs').forEach(el => {
+  document.querySelectorAll('#obs-list .obs').forEach(el => {
     el.onclick = () => openObs(byId(el.dataset.id));
     el.onkeydown = e => e.key === 'Enter' && e.target === el && el.click();
   });
@@ -556,8 +692,7 @@ function openObs(obs, preset = {}) {
   dlg.showModal();
 
   if (!obsMap) {
-    obsMap = L.map('obs-map').setView(...DEFAULT_VIEW);
-    baseMap(obsMap);
+    obsMap = newMap('obs-map', false);
     obsMap.on('click', e => setLoc(e.latlng.lat, e.latlng.lng));
   }
   obsMarker?.remove();
@@ -914,14 +1049,11 @@ const modButtons = v => `<div class="row">
   <button class="btn quiet" data-mod="delete" data-id="${v.id}">${t('modDelete')}</button>
 </div>`;
 
-let comMap, comMarkers;
+let comMap;
+const comPins = new Map(); // shared visit id -> its pin
 async function renderCommunity() {
   const list = $('#com-list');
-  if (!comMap) {
-    comMap = L.map('com-map').setView(...DEFAULT_VIEW);
-    baseMap(comMap);
-    comMarkers = L.layerGroup().addTo(comMap);
-  }
+  comMap ??= newMap('com-map');
   setTimeout(() => comMap.invalidateSize());
   if (!list.children.length) list.innerHTML = emptyState(t('comLoading'));
   let visits;
@@ -940,17 +1072,21 @@ async function renderCommunity() {
     tile(new Set(visits.map(v => v.school)).size, t('schools')) +
     tile(visits.length, t('sharedVisits')) +
     tile(visits.reduce((n, v) => n + (v.litter ?? 0), 0), t('litterCounted'));
-  comMarkers.clearLayers();
+  comMap.pins.clearLayers();
+  comPins.clear();
+  const photosOf = v => v.shared_photos.map(p => sharedPhotoUrl(p.path));
   const pts = visits.filter(v => v.lat != null).map(v => {
-    L.circleMarker([v.lat, v.lon], PIN).addTo(comMarkers).bindPopup(`<b>${esc(v.site)}</b><br>${esc(v.school)}<br>${fmtDate(v.visited_at)}`);
+    comPins.set(String(v.id), addPin(comMap, [v.lat, v.lon], v.litter, v.site, popupHtml({ name: v.site, o: v, photos: photosOf(v),
+      sub: `${esc(v.school)} · ${fmtDate(v.visited_at)}`,
+      action: `<button class="btn" data-card="${v.id}">${t('mapList')}${icon('arrow')}</button>` })));
     return [v.lat, v.lon];
   });
-  if (pts.length) comMap.fitBounds(pts, { maxZoom: 13, padding: [30, 30] });
+  fitTo(comMap, pts);
 
   const mine = new Set(db.observations.map(o => o.shared?.id));
   list.innerHTML = visits.length ? visits.map(v => `
-    <div class="obs card static">
-      <div class="thumbs">${v.shared_photos.slice(0, 4).map(p => `<img src="${sharedPhotoUrl(p.path)}" loading="lazy" alt="">`).join('')}</div>
+    <div class="obs card static${comPins.has(String(v.id)) ? ' on-map' : ''}" data-vid="${v.id}">
+      <div class="thumbs" data-photos="${esc(JSON.stringify(photosOf(v)))}" data-cap="${esc(v.site)}">${photosOf(v).slice(0, 4).map(u => `<img src="${u}" loading="lazy" alt="">`).join('')}</div>
       <div class="grow">
         <h3>${esc(v.site)} <span class="stage ${v.stage}">${stage(v.stage)}</span></h3>
         <p>${esc(v.school)} · ${fmtDate(v.visited_at)}</p>
@@ -963,6 +1099,13 @@ async function renderCommunity() {
       ${modKey ? modButtons(v) : mine.has(v.id) ? `<span class="example">${t('shared')}</span>`
         : `<button class="btn quiet" data-report="${v.id}" title="${t('report')}" aria-label="${t('report')}">${icon('flag')}</button>`}
     </div>`).join('') : emptyState(t('comEmpty'));
+  wirePhotos(list);
+  // A card shows its pin: the map scrolls into view and flies there.
+  list.querySelectorAll('.on-map').forEach(el => el.onclick = e => {
+    if (e.target.closest('button, a')) return;
+    $('#com-map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    comPins.get(el.dataset.vid).fire('click');
+  });
   document.querySelectorAll('[data-report]').forEach(b => b.onclick = async () => {
     if (!confirm(t('confirmReport'))) return;
     await reportVisit(b.dataset.report).catch(() => {});
