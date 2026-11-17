@@ -32,7 +32,7 @@ addEventListener('DOMContentLoaded', () => {
 
   // Phone menu: close it once a link is followed (anchor links stay on the page).
   const menu = document.querySelector('#menu');
-  menu.onclick = e => e.target.closest('a') && menu.matches(':popover-open') && menu.hidePopover();
+  menu.onclick = e => { if (e.target.closest('a') && menu.matches(':popover-open')) menu.hidePopover(); };
 
   const buttons = [...document.querySelectorAll('[data-dl]')];
   for (const a of buttons) a.href = DOWNLOADS[a.dataset.dl];
