@@ -94,13 +94,13 @@ export function renderLab() {
         <p class="hint">${L(p.make)}</p>
         <p class="hint">${L(p.test)}</p>
         <div class="progress" role="group" aria-label="${L(['Πρόοδος', 'Progress'])}">${CYCLE.map((c, i) =>
-          `<button class="${i < s.done ? 'done' : i === s.done ? 'next' : ''}" style="--c:var(--c-${c.c})" data-proto="${p.id}" data-step="${i}" aria-pressed="${i < s.done}" title="${L(c.name)}" aria-label="${L(c.name)}"><img src="img/cy-${c.id}.png" alt=""></button>`).join('')}</div>
+          `<button class="${i < s.done ? 'done' : i === s.done ? 'next' : ''}" style="--c:var(--c-${c.c})" data-proto="${p.id}" data-step="${i}" aria-pressed="${i < s.done}" title="${L(c.name)}" aria-label="${L(c.name)}"><img src="img/cy-${c.id}.svg" alt=""></button>`).join('')}</div>
         ${s.done === CYCLE.length ? `<button class="btn" data-again="${p.id}">${L(['Νέα έκδοση, νέος κύκλος', 'New version, new cycle'])}</button>` : ''}
       </article>`;
     }).join('')}</div>
     <div class="card cycle-card">
       <h3 class="pill">${L(['Ακολουθούμε έναν κύκλο:', 'We follow a cycle:'])}</h3>
-      <ol class="cycle">${CYCLE.map(c => `<li style="--c:var(--c-${c.c})"><img src="img/cy-${c.id}.png" alt="">${both(c.name)}</li>`).join('')}</ol>
+      <ol class="cycle">${CYCLE.map(c => `<li style="--c:var(--c-${c.c})"><img src="img/cy-${c.id}.svg" alt="">${both(c.name)}</li>`).join('')}</ol>
       <div class="cycle-foot">
         <p class="loop">${icon('refresh')}<span>${L(['Και αν η πρώτη μας ιδέα δεν λειτουργήσει; <b>Τη βελτιώνουμε και ξαναδοκιμάζουμε.</b>', 'And if our first idea doesn\'t work? <b>We improve it and test again.</b>'])}</span></p>
         <figure class="kid"><img src="img/lab-kid.jpg" alt=""><figcaption>${L(['Νέες ιδέες για πιο καθαρές θάλασσες!', 'New ideas for cleaner seas!'])}</figcaption></figure>
@@ -147,7 +147,7 @@ const sum = fx => Object.values(fx).reduce((a, b) => a + b, 0);
 const weakest = m => METERS.map(([k]) => k).reduce((a, b) => (m[b] < m[a] ? b : a));
 
 // The eight event cards of the board game. `hit` happens as the card is drawn; then the team picks one option.
-// A negative cost is income (tourism, tours). Balance: every deck order can be won, about 1 in 15 choice paths do.
+// A negative cost is income (tourism, tours). Balance (simulated on random decks): each mode can be won on 95%+ of decks; random choices save the bay about 1 in 10 games.
 const EVENTS = [
   { id: 'plastic', title: ['Έκτακτη Εμφάνιση Πλαστικών', 'Plastic Surge'], hit: { ocean: -1 },
     text: ['Μετά από δυνατό αέρα, η ακτή γέμισε πλαστικά μπουκάλια και σακούλες.', 'After a strong wind, the shore is covered in plastic bottles and bags.'],
@@ -189,9 +189,61 @@ const EVENTS = [
     options: [
       { text: ['Οι μαθητές ελέγχουν και διορθώνουν τις φωτογραφίες', 'Students check and correct the photos'], cost: 1, fx: { community: 1, ocean: 1 } },
       { text: ['Εμπιστευόμαστε την AI', 'Trust the AI'], cost: 0, fx: { ocean: -2, community: -1 } }] },
+  { id: 'heatwave', title: ['Θαλάσσιος Καύσωνας', 'Marine Heatwave'], hit: { bio: -1 },
+    text: ['Το νερό ζεσταίνεται πολύ και τα ψάρια και η Ποσειδωνία υποφέρουν.', 'The water gets very warm, and the fish and seagrass suffer.'],
+    options: [
+      { text: ['Παύση αλιείας για έναν μήνα και παρακολούθηση με την Έξυπνη Σημαδούρα', 'Pause fishing for a month and watch the water with the Smart Buoy'], cost: 2, fx: { bio: 2, ocean: 1, economy: -1 } },
+      { text: ['Συνεχίζουμε κανονικά', 'Carry on as usual'], cost: 0, fx: { bio: -1, economy: 1 } }] },
+  { id: 'nets', title: ['Χαμένα Δίχτυα', 'Ghost Nets'], hit: { bio: -1 },
+    text: ['Παλιά δίχτυα έχουν πιαστεί στα βράχια και παγιδεύουν ψάρια και χελώνες.', 'Old fishing nets are caught on the rocks, trapping fish and turtles.'],
+    options: [
+      { text: ['Δύτες τα βγάζουν και τα δίχτυα ανακυκλώνονται', 'Divers remove them and the nets are recycled'], cost: 2, fx: { bio: 2, community: 1 } },
+      { text: ['Τα αφήνουμε εκεί', 'Leave them there'], cost: 0, fx: { bio: -1, ocean: -1 } }] },
+  { id: 'sewage', title: ['Διαρροή Λυμάτων', 'Sewage Overflow'], hit: { ocean: -1 },
+    text: ['Μετά τη βροχή, ο παλιός αγωγός ξεχείλισε στη θάλασσα.', 'After the rain, the old pipe overflowed into the sea.'],
+    options: [
+      { text: ['Φίλτρα Φρεατίων και επισκευή του αγωγού', 'Drain Filters and a pipe repair'], cost: 3, fx: { ocean: 2, community: 1 } },
+      { text: ['Κλείνουμε την παραλία για μια εβδομάδα', 'Close the beach for a week'], cost: 0, fx: { ocean: 1, economy: -1, community: -1 } }] },
+  { id: 'festival', title: ['Γιορτή της Θάλασσας', 'Sea Festival'], hit: {},
+    text: ['Ο δήμος οργανώνει μεγάλη γιορτή στην παραλία.', 'The town is holding a big festival on the beach.'],
+    options: [
+      { text: ['Γιορτή χωρίς σκουπίδια, με κάδους ανακύκλωσης', 'A zero-waste festival with recycling bins'], cost: 1, fx: { community: 2, ocean: 1 } },
+      { text: ['Μεγάλη γιορτή με χορηγούς', 'A big festival with sponsors'], cost: -2, fx: { economy: 2, community: 1, ocean: -1 } }] },
+  { id: 'grant', title: ['Ευρωπαϊκή Χρηματοδότηση', 'EU Grant'], hit: {},
+    text: ['Ανοίγει πρόγραμμα της ΕΕ για έργα στις ακτές.', 'An EU programme opens for coastal projects.'],
+    options: [
+      { text: ['Γράφουμε πρόταση με τα δεδομένα του BlueGuardian', 'Write a proposal using BlueGuardian data'], cost: -3, fx: { community: 1 } },
+      { text: ['Ζητάμε χρήματα για νέα μαρίνα', 'Ask for money for a new marina'], cost: -4, fx: { economy: 2, bio: -1, ocean: -1 } }] },
+  { id: 'jellyfish', title: ['Έξαρση Μεδουσών', 'Jellyfish Bloom'], hit: { economy: -1 },
+    text: ['Εκατοντάδες μέδουσες έφτασαν στις παραλίες και οι λουόμενοι φεύγουν.', 'Hundreds of jellyfish have reached the beaches and swimmers are leaving.'],
+    options: [
+      { text: ['Δίχτυα στις ζώνες κολύμβησης και ενημέρωση των επισκεπτών', 'Nets around swimming areas and signs for visitors'], cost: 1, fx: { economy: 1, community: 1 } },
+      { text: ['Δεν κάνουμε τίποτα', 'Do nothing'], cost: 0, fx: { economy: -1, community: -1 } }] },
+  { id: 'invasive', title: ['Εισβολή Λαγοκέφαλου', 'Invasive Pufferfish'], hit: { bio: -1 },
+    text: ['Ο τοξικός λαγοκέφαλος ήρθε από την Ερυθρά Θάλασσα και τρώει τα ντόπια ψάρια.', 'The toxic silver-cheeked toadfish came from the Red Sea and eats the local fish.'],
+    options: [
+      { text: ['Οι ψαράδες τον αλιεύουν και οι πολίτες τον καταγράφουν στην εφαρμογή', 'Fishers catch it and citizens log sightings in the app'], cost: 1, fx: { bio: 1, community: 1 } },
+      { text: ['Περιμένουμε να φύγει μόνος του', 'Wait for it to leave on its own'], cost: 0, fx: { bio: -1, economy: -1 } }] },
+  { id: 'cleanup', title: ['Ημέρα Καθαρισμού', 'Clean-up Day'], hit: {},
+    text: ['Όλο το σχολείο θέλει να βοηθήσει στον καθαρισμό της ακτής.', 'The whole school wants to help clean the shore.'],
+    options: [
+      { text: ['Καθαρισμός και καταγραφή των απορριμμάτων στο BlueGuardian', 'Clean up and log the litter in BlueGuardian'], cost: 1, fx: { ocean: 2, community: 1 } },
+      { text: ['Μόνο αφίσες ενημέρωσης', 'Awareness posters only'], cost: 0, fx: { community: 1 } }] },
 ];
 
-const START_COINS = 4, INCOME = 1;
+const INCOME = 1;
+const MODES = {
+  mini: { name: ['Μικρό', 'Mini'], rounds: 5, coins: 3, start: 6 },
+  classic: { name: ['Κλασικό', 'Classic'], rounds: 8, coins: 4, start: 5 },
+  big: { name: ['Μεγάλο', 'Big'], rounds: 12, coins: 5, start: 5 },
+};
+const LEVELS = {
+  easy: { name: ['Εύκολο', 'Easy'], coins: 2, start: 1 },
+  normal: { name: ['Κανονικό', 'Normal'], coins: 0, start: 0 },
+  hard: { name: ['Δύσκολο', 'Hard'], coins: -2, start: 0 },
+};
+let mode = 'classic', level = 'normal';
+const setup = () => ({ rounds: MODES[mode].rounds, coins: MODES[mode].coins + LEVELS[level].coins, start: MODES[mode].start + LEVELS[level].start });
 let game = null; // null: start screen
 
 const clamp = v => Math.max(0, Math.min(10, v));
@@ -205,7 +257,8 @@ const fxChips = (fx, cost) => [
 ].join('');
 
 function startGame() {
-  game = { deck: shuffle([...EVENTS]), round: 0, coins: START_COINS, m: { ocean: 5, bio: 5, community: 5, economy: 5 }, log: [] };
+  const { rounds, coins, start } = setup();
+  game = { deck: shuffle([...EVENTS]).slice(0, rounds), round: 0, coins, m: { ocean: start, bio: start, community: start, economy: start }, log: [] };
   drawCard();
 }
 function drawCard() {
@@ -227,7 +280,7 @@ function choose(i) {
 }
 
 const meters = () => `<div class="meters">${METERS.map(([k, name, c]) =>
-  `<div class="meter${game.m[k] <= 2 ? ' low' : ''}" style="--c:var(--c-${c})"><span><img src="img/ind-${k}.png" alt="">${L(name)}</span><b>${game.m[k]}<small>/10</small></b><i style="--w:${game.m[k] * 10}%"></i></div>`).join('')}
+  `<div class="meter${game.m[k] <= 2 ? ' low' : ''}" style="--c:var(--c-${c})"><span><img src="img/ind-${k}.svg" alt="">${L(name)}</span><b>${game.m[k]}<small>/10</small></b><i style="--w:${game.m[k] * 10}%"></i></div>`).join('')}
   <div class="meter coins"><span><b class="euro">€</b>${L(['Πόροι', 'Resources'])}</span><b>${game.coins}<small> ${L(game.coins === 1 ? ['νόμισμα', 'coin'] : ['νομίσματα', 'coins'])}</small></b></div></div>`;
 
 // The closing message of the slide, with the students around the board.
@@ -239,9 +292,11 @@ const agree = () => `<div class="callout agree" style="--c:var(--c-pink)"><span 
 export function renderGame() {
   const box = $('#game-view');
   if (!game) {
+    const { rounds, coins, start } = setup();
+    const seg = (id, list, cur) => `<div class="seg" id="${id}">${Object.entries(list).map(([k, v]) => `<button data-k="${k}" class="${k === cur ? 'active' : ''}">${L(v.name)}${v.rounds ? ` · ${v.rounds}` : ''}</button>`).join('')}</div>`;
     box.innerHTML = `
       <div class="card game-hero">
-        <img class="banner-art" src="img/game-banner.jpg" alt="Save Symphonia Bay">
+        <div class="game-title"><img class="banner-art" src="img/game-banner.jpg" alt=""><h2>Save<br>Symphonia<br><b>Bay</b></h2></div>
         <p class="tagline">${L(['Ένα παιχνίδι στρατηγικής για καθαρότερες θάλασσες και πιο υγιείς κοινωνίες', 'A strategy game for cleaner seas and healthier communities'])}</p>
       </div>
       <p class="callout" style="--c:var(--c-blue)"><span class="badge">?</span><span>${L(['Όμως υπάρχει και ένα ακόμη ερώτημα. Ακόμη κι αν έχουμε όλα τα δεδομένα, <b>ποιος αποφασίζει τι πρέπει να κάνουμε;</b>', 'But there is one more question. Even when we have all the data, <b>who decides what we should do?</b>'])}</span></p>
@@ -251,19 +306,25 @@ export function renderGame() {
           <h3>${L(['Πώς παίζεται', 'How to play'])}</h3>
           <ul class="rules">
             <li>${L(['Παίζεται σε ομάδα, γύρω από μία οθόνη. Κάθε παίκτης παίρνει έναν ρόλο.', 'Play as a team around one screen. Each player takes a role.'])}</li>
-            <li>${L(['8 γύροι. Σε κάθε γύρο τραβάτε μια κάρτα γεγονότος και διαλέγετε μία από δύο αποφάσεις.', '8 rounds. Each round you draw an event card and pick one of two decisions.'])}</li>
-            <li>${L([`Οι πόροι είναι λίγοι: ξεκινάτε με ${START_COINS} νομίσματα και παίρνετε ${INCOME} σε κάθε γύρο.`, `Resources are scarce: you start with ${START_COINS} coins and get ${INCOME} each round.`])}</li>
+            <li>${L([`${rounds} γύροι. Σε κάθε γύρο τραβάτε μία από τις ${EVENTS.length} κάρτες γεγονότων και διαλέγετε μία από δύο αποφάσεις.`, `${rounds} rounds. Each round you draw one of the ${EVENTS.length} event cards and pick one of two decisions.`])}</li>
+            <li>${L([`Οι πόροι είναι λίγοι: ξεκινάτε με ${coins} νομίσματα και παίρνετε ${INCOME} σε κάθε γύρο. Οι δείκτες ξεκινούν από το ${start}.`, `Resources are scarce: you start with ${coins} coins and get ${INCOME} each round. The indicators start at ${start}.`])}</li>
             <li>${L(['Αν κάποιος δείκτης φτάσει στο 0, ο κόλπος χάνεται. Για να σωθεί, όλοι οι δείκτες πρέπει να τελειώσουν στο 5 ή πάνω.', 'If any indicator reaches 0, the bay is lost. To save it, every indicator must end at 5 or higher.'])}</li>
           </ul>
+          <div class="game-modes">
+            <span>${L(['Μέγεθος', 'Size'])}</span>${seg('game-mode', MODES, mode)}
+            <span>${L(['Δυσκολία', 'Difficulty'])}</span>${seg('game-level', LEVELS, level)}
+          </div>
         </div>
       </div>
       <h3 class="sub">${L(['Σε αυτό αναλαμβάνουμε διαφορετικούς ρόλους:', 'In it we take on different roles:'])}</h3>
       <div class="roles">${ROLES.map(r => `<div class="role" style="--c:var(--c-${r.c})"><img src="img/role-${r.n}.jpg" alt=""><b>${L(r.name)}</b><small>${L(r.why)}</small></div>`).join('')}</div>
       <h3 class="sub">${L(['Έχουμε περιορισμένους πόρους και πρέπει να πάρουμε αποφάσεις που επηρεάζουν:', 'We have limited resources and must make decisions that affect:'])}</h3>
-      <div class="inds">${METERS.map(([k, name, c]) => `<span style="--c:var(--c-${c})"><img src="img/ind-${k}.png" alt="">${L(name)}</span>`).join('')}</div>
+      <div class="inds">${METERS.map(([k, name, c]) => `<span style="--c:var(--c-${c})"><img src="img/ind-${k}.svg" alt="">${L(name)}</span>`).join('')}</div>
       ${agree()}
       <div class="row"><button class="btn primary big" id="game-start">${L(['Έναρξη παιχνιδιού', 'Start the game'])}${icon('arrow')}</button></div>`;
     $('#game-start').onclick = startGame;
+    box.querySelectorAll('#game-mode button').forEach(b => b.onclick = () => { mode = b.dataset.k; renderGame(); });
+    box.querySelectorAll('#game-level button').forEach(b => b.onclick = () => { level = b.dataset.k; renderGame(); });
     return;
   }
 

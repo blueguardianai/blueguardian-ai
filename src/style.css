@@ -486,6 +486,9 @@ button, a, .btn { touch-action: manipulation; }
 
 .game-hero { padding: 10px 10px 14px; text-align: center; margin-bottom: 14px; background: #fff; }
 .banner-art { width: 100%; max-width: 900px; display: block; margin-inline: auto; border-radius: 14px; }
+.game-title { position: relative; max-width: 900px; margin-inline: auto; container-type: inline-size; }
+.game-title h2 { display: block; position: absolute; left: 6%; top: 50%; translate: 0 -50%; margin: 0; text-align: left; font-size: 7cqi; font-weight: 900; line-height: 1; letter-spacing: -.02em; color: oklch(0.4 0.18 258); }
+.game-title h2 b { color: oklch(0.58 0.17 145); }
 .tagline { display: inline-block; margin-top: 6px; padding: 6px 18px; border-radius: 99px; font-weight: 700; color: oklch(0.32 0.1 258); background: oklch(0.93 0.04 240); text-wrap: balance; }
 .callout { display: flex; align-items: center; gap: 14px; padding: 14px 16px; margin: 0 0 16px; border-radius: 18px; border: 2px solid color-mix(in srgb, var(--c) 40%, transparent); background: var(--tint); }
 .callout > span:last-child, .callout > div { flex: 1; text-wrap: pretty; }
@@ -497,10 +500,12 @@ button, a, .btn { touch-action: manipulation; }
 .agree > div > b { font-size: 19px; }
 .agree p { margin-top: 4px; }
 .agree img { width: 220px; flex: none; border-radius: 14px; }
-.game-how { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 6fr); gap: 16px; align-items: center; }
-.deck { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.game-how { display: grid; gap: 16px; }
+.deck { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 10px; }
 .deck li { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; hyphens: auto; font-size: 12px; font-weight: 600; text-align: center; line-height: 1.2; color: var(--muted); }
 .deck img { width: 100%; aspect-ratio: 1; border-radius: 12px; }
+.game-modes { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0 12px; margin-top: 14px; font-size: 14px; font-weight: 600; color: var(--muted); }
+.game-modes .seg { justify-self: start; flex-wrap: wrap; margin-bottom: 8px; }
 .game-how h3 { margin: 0 0 6px; }
 .roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 10px; }
 .role { display: grid; justify-items: center; align-content: start; gap: 4px; padding: 0 0 12px; border-radius: 18px; overflow: hidden; text-align: center; background: var(--tint); border: 2px solid color-mix(in srgb, var(--c) 40%, transparent); }
@@ -565,7 +570,9 @@ button, a, .btn { touch-action: manipulation; }
   .side { overflow-x: auto; scrollbar-width: none; }
   .tab { flex: 1 0 44px; }
   .event img { width: 76px; height: 76px; }
-  .deck { grid-template-columns: 1fr 1fr; }
+  .deck { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; font-size: 11px; }
+  .game-modes { grid-template-columns: 1fr; }
+  .game-modes .seg button { padding-inline: 10px; }
   .cycle li { width: 96px; }
   .cycle li img { width: 58px; height: 58px; }
   .cycle li:not(:last-child)::after { display: none; }

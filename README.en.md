@@ -33,8 +33,8 @@ Works on any computer, tablet or phone. Free, no account, nothing to install.
 | **People decide** | Students check the predictions. Every correction becomes an example, and similar photos update straight away. |
 | **Before / After** | Puts the state before, the day of the action and the state after side by side, and works out the difference. |
 | **Dashboard** | A high-resolution satellite map, charts per beach, and findings in plain language. |
-| **3D Innovation Lab** | Design prototypes in Tinkercad for a 3D printer (Smart River Gate, Floating Waste Collector, Smart Coastal Station) and track the cycle: design, build, test, measure, improve. |
-| **Save Symphonia Bay** | A strategy game for the classroom: four roles, few resources and event cards. Data helps, but people decide. |
+| **3D Innovation Lab** | Design prototypes in Tinkercad for a 3D printer (12 projects, such as the Smart River Gate, Floating Waste Collector and Smart Coastal Station) and track the cycle: design, build, test, measure, improve. |
+| **Save Symphonia Bay** | A strategy game for the classroom: four roles, few resources and 16 event cards. Three sizes (Mini 5, Classic 8, Big 12 rounds) and three difficulty levels. Data helps, but people decide. |
 | **Community** | If you want, you share a visit under your school's name. Every shared visit appears on one common map. |
 | **Open data** | Export every visit to CSV, and back everything up to one file. |
 

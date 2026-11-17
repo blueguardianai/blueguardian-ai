@@ -1,0 +1,9 @@
+Example photos, all from Wikimedia Commons (CC0 or public domain):
+clean_1    Greece Crete Elafonisi Beach The Sun Holidays.jpg (CC0)
+clean_2    Matala beach cliff Crete Greece.jpg (CC0)
+natural_1  Beached Seaweed on Coogee Beach.jpg (CC0)
+natural_2  Driftwood, Ocean Beach, January 2023.jpg (CC0)
+other_1    LITTERED BEACH AT ISLE OF PALMS - NARA - 546965.jpg (public domain)
+plastic_1  Marine debris and plastic waste on beach.jpg (CC0)
+plastic_2  BCA Beach waste 3.jpg (public domain)
+plastic_3  BCA Beach waste 6.jpg (public domain)
