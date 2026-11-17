@@ -137,4 +137,4 @@ git tag v1.0.1 && git push origin v1.0.1
 
 ## Άδεια
 
-Ανοιχτός κώδικας με άδεια [MIT](LICENSE). Επικοινωνία: info@blueguardianai.gr
+Ανοιχτός κώδικας με άδεια [MIT](LICENSE). Επικοινωνία: BlueGuardianAI@gmail.com

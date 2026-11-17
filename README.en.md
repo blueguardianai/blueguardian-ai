@@ -137,4 +137,4 @@ Model: OpenAI's [CLIP](https://github.com/openai/CLIP), in ONNX form from [Trans
 
 ## License
 
-Open source under the [MIT](LICENSE) license. Contact: info@blueguardianai.gr
+Open source under the [MIT](LICENSE) license. Contact: BlueGuardianAI@gmail.com
