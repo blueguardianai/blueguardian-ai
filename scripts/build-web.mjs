@@ -41,8 +41,8 @@ fs.writeFileSync(path.join(out, '404.html'), privacy
   </main>`)
   .replace(/(href|src)="(?!https?:|#|mailto:|\/)(\.\/)?/g, '$1="/'));
 
-// Browsers keep site files for up to 10 minutes; a version in the URL makes each release load fresh.
-const { version } = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+// Browsers keep site files for up to 10 minutes; a build stamp in the URL makes every deploy load fresh.
+const version = Date.now().toString(36);
 for (const f of ['index.html', 'privacy.html', '404.html']) {
   const file = path.join(out, f);
   fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace(/(site\.css|site\.js|app\/theme\.js)"/g, `$1?v=${version}"`));
