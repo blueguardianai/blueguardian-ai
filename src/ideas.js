@@ -29,6 +29,42 @@ const PROTOTYPES = [
     does: ['Κάνει περιβαλλοντικές μετρήσεις στην ακτή.', 'Takes environmental measurements on the shore.'],
     make: ['Στο Tinkercad: ένα αδιάβροχο κουτί για micro:bit ή Arduino, με στήριγμα για ηλιακό πάνελ και αισθητήρες.', 'In Tinkercad: a waterproof box for a micro:bit or Arduino, with a mount for a solar panel and sensors.'],
     test: ['Δοκιμή: συγκρίνετε τις μετρήσεις του με ένα θερμόμετρο και καταγράψτε τες στην εφαρμογή.', 'Test: compare its readings with a thermometer and record them in the app.'] },
+  { id: 'sand-sieve', c: 'purple', name: ['Κόσκινο Μικροπλαστικών', 'Microplastic Sand Sieve'],
+    does: ['Ξεχωρίζει τα μικροπλαστικά από την άμμο της παραλίας.', 'Separates microplastics from beach sand.'],
+    make: ['Στο Tinkercad: ένα τετράγωνο πλαίσιο με λαβές και πάτο από πλέγμα με τρύπες 1 έως 5 mm.', 'In Tinkercad: a square frame with handles and a mesh bottom with 1 to 5 mm holes.'],
+    test: ['Δοκιμή: κοσκινίστε ένα κουβαδάκι άμμο και μετρήστε τα κομμάτια που μένουν πάνω στο πλέγμα.', 'Test: sieve one small bucket of sand and count the pieces left on the mesh.'] },
+  { id: 'reef-module', c: 'pink', name: ['Τεχνητός Ύφαλος', 'Artificial Reef Module'],
+    does: ['Δίνει καταφύγιο στα ψάρια και επιφάνεια για να μεγαλώσει θαλάσσια ζωή.', 'Gives fish shelter and a surface for sea life to grow on.'],
+    make: ['Στο Tinkercad: εξάγωνα κομμάτια με στρογγυλές τρύπες που στοιβάζονται. Το τελικό φτιάχνεται από πηλό ή τσιμέντο, όχι από πλαστικό.', 'In Tinkercad: hexagonal pieces with round holes that stack. The final one is made of clay or concrete, not plastic.'],
+    test: ['Δοκιμή: σε ένα ενυδρείο, ελέγξτε ότι στέκεται σταθερά και ότι το νερό περνά από όλες τις τρύπες.', 'Test: in an aquarium, check that it stands steady and that water flows through every hole.'] },
+  { id: 'turtle-guard', c: 'green', name: ['Προστατευτικό Φωλιάς Χελώνας', 'Turtle Nest Guard'],
+    does: ['Προστατεύει τα αυγά της Caretta caretta από ποδοπάτημα και ζώα.', 'Protects loggerhead turtle eggs from trampling and animals.'],
+    make: ['Στο Tinkercad: ένας θόλος από πλέγμα, με ανοίγματα αρκετά μεγάλα για να βγουν τα χελωνάκια, και μια πινακίδα.', 'In Tinkercad: a mesh dome with gaps big enough for the hatchlings to get out, and a sign.'],
+    test: ['Δοκιμή: ελέγξτε ότι ένα αντικείμενο 5 cm, όσο ένα χελωνάκι, περνά από τα ανοίγματα. Τις πραγματικές φωλιές τις προστατεύουν μόνο εθελοντές με άδεια.', 'Test: check that a 5 cm object, the size of a hatchling, passes through the gaps. Real nests are protected only by licensed volunteers.'] },
+  { id: 'recycling-bin', c: 'blue', name: ['Έξυπνος Κάδος Ανακύκλωσης', 'Smart Recycling Bin'],
+    does: ['Μετρά τι ανακυκλώνει το σχολείο και το δείχνει σε οθόνη LED.', 'Counts what the school recycles and shows it on an LED display.'],
+    make: ['Στο Tinkercad: τρεις θήκες με χρωματιστά καπάκια και μια βάση για micro:bit στο μπροστινό μέρος.', 'In Tinkercad: three compartments with coloured lids and a micro:bit holder on the front.'],
+    test: ['Δοκιμή: για μία εβδομάδα, συγκρίνετε τον μετρητή του micro:bit με μέτρημα στο χέρι.', 'Test: for one week, compare the micro:bit count with a count by hand.'] },
+  { id: 'oil-boom', c: 'orange', name: ['Πλωτό Φράγμα Πετρελαίου', 'Oil Containment Boom'],
+    does: ['Περικλείει μια πετρελαιοκηλίδα ώστε να μην απλωθεί.', 'Surrounds an oil spill so it cannot spread.'],
+    make: ['Στο Tinkercad: πλωτήρες στη σειρά, ενωμένοι με αρθρώσεις ώστε να σχηματίζουν κύκλο.', 'In Tinkercad: a row of floats joined with hinges so they can form a ring.'],
+    test: ['Δοκιμή: σε μια λεκάνη, ρίξτε λίγο μαγειρικό λάδι μέσα στον κύκλο, κάντε κύματα και δείτε αν μένει μέσα.', 'Test: in a basin, pour a little cooking oil inside the ring, make waves and see if it stays inside.'] },
+  { id: 'drain-filter', c: 'purple', name: ['Φίλτρο Φρεατίου', 'Storm Drain Filter'],
+    does: ['Πιάνει τα σκουπίδια του δρόμου πριν η βροχή τα πάει στη θάλασσα.', 'Catches street litter before the rain carries it to the sea.'],
+    make: ['Στο Tinkercad: ένα καλάθι από πλέγμα που χωρά κάτω από τη σχάρα του φρεατίου και βγαίνει για άδειασμα.', 'In Tinkercad: a mesh basket that fits under the drain grate and lifts out for emptying.'],
+    test: ['Δοκιμή: ρίξτε νερό με φύλλα και καπάκια στη σχάρα και μετρήστε πόσα κράτησε το καλάθι.', 'Test: pour water with leaves and bottle caps through the grate and count how many the basket kept.'] },
+  { id: 'smart-buoy', c: 'red', name: ['Έξυπνη Σημαδούρα', 'Smart Buoy'],
+    does: ['Μετρά τη θερμοκρασία και τη θολότητα του νερού στη θάλασσα και στέλνει τα δεδομένα.', 'Measures water temperature and cloudiness at sea and sends the data.'],
+    make: ['Στο Tinkercad: ένα αδιάβροχο σώμα σημαδούρας με θήκη για micro:bit, μικρό ηλιακό πάνελ και κεραία.', 'In Tinkercad: a waterproof buoy body with a micro:bit holder, a small solar panel and an antenna.'],
+    test: ['Δοκιμή: αφήστε τη να επιπλέει μία ώρα σε μια λεκάνη. Μένει όρθια; Μπαίνει νερό μέσα;', 'Test: leave it floating for an hour in a basin. Does it stay upright? Does water get in?'] },
+  { id: 'fish-camera', c: 'blue', name: ['Υποβρύχια Κάμερα Ψαριών', 'Underwater Fish Camera'],
+    does: ['Τραβά φωτογραφίες ψαριών για να τις αναγνωρίσει η BlueVision AI.', 'Takes photos of fish for BlueVision AI to identify.'],
+    make: ['Στο Tinkercad: ένα αδιάβροχο κουτί με διάφανο παράθυρο για την κάμερα, πάνω σε τρίποδο που βαραίνει με πέτρες.', 'In Tinkercad: a waterproof box with a clear window for the camera, on a tripod weighed down with stones.'],
+    test: ['Δοκιμή: σε ένα ενυδρείο, μετρήστε πόσες από 10 φωτογραφίες είναι αρκετά καθαρές για την AI.', 'Test: in an aquarium, count how many of 10 photos are clear enough for the AI.'] },
+  { id: 'eco-mooring', c: 'green', name: ['Οικολογική Αγκυροβόληση', 'Eco Mooring'],
+    does: ['Δένει τα σκάφη χωρίς οι άγκυρες να ξεριζώνουν την Ποσειδωνία.', 'Moors boats without anchors tearing up the seagrass.'],
+    make: ['Στο Tinkercad: μια βίδα με έλικα που μπαίνει στην άμμο, με κρίκο για το σχοινί της σημαδούρας.', 'In Tinkercad: a helical screw that twists into the sand, with a ring for the buoy rope.'],
+    test: ['Δοκιμή: βιδώστε τη σε ένα κουτί με άμμο και μετρήστε με δυναμόμετρο πόση δύναμη χρειάζεται για να βγει.', 'Test: screw it into a box of sand and measure with a spring scale how much force it takes to pull out.'] },
 ];
 
 // Progress per prototype: how many cycle steps are done, and which version this is. Kept in this browser only.
@@ -162,8 +198,9 @@ const clamp = v => Math.max(0, Math.min(10, v));
 const apply = fx => { for (const k in fx) game.m[k] = clamp(game.m[k] + fx[k]); };
 const lost = () => METERS.some(([k]) => game.m[k] <= 0);
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const coins = n => `${n} ${L(n === 1 ? ['νόμισμα', 'coin'] : ['νομίσματα', 'coins'])}`;
 const fxChips = (fx, cost) => [
-  cost ? `<span class="fx ${cost < 0 ? 'up' : 'coin'}">${cost < 0 ? '+' : '−'}${Math.abs(cost)} ${L(['νομίσματα', 'coins'])}</span>` : `<span class="fx">${L(['Δωρεάν', 'Free'])}</span>`,
+  cost ? `<span class="fx ${cost < 0 ? 'up' : 'coin'}">${cost < 0 ? '+' : '−'}${coins(Math.abs(cost))}</span>` : `<span class="fx">${L(['Δωρεάν', 'Free'])}</span>`,
   ...METERS.filter(([k]) => fx[k]).map(([k, name]) => `<span class="fx ${fx[k] > 0 ? 'up' : 'down'}">${fx[k] > 0 ? '+' : '−'}${Math.abs(fx[k])} ${L(name)}</span>`),
 ].join('');
 
@@ -191,7 +228,7 @@ function choose(i) {
 
 const meters = () => `<div class="meters">${METERS.map(([k, name, c]) =>
   `<div class="meter${game.m[k] <= 2 ? ' low' : ''}" style="--c:var(--c-${c})"><span><img src="img/ind-${k}.png" alt="">${L(name)}</span><b>${game.m[k]}<small>/10</small></b><i style="--w:${game.m[k] * 10}%"></i></div>`).join('')}
-  <div class="meter coins"><span><b class="euro">€</b>${L(['Πόροι', 'Resources'])}</span><b>${game.coins}<small> ${L(['νομ.', 'coins'])}</small></b></div></div>`;
+  <div class="meter coins"><span><b class="euro">€</b>${L(['Πόροι', 'Resources'])}</span><b>${game.coins}<small> ${L(game.coins === 1 ? ['νόμισμα', 'coin'] : ['νομίσματα', 'coins'])}</small></b></div></div>`;
 
 // The closing message of the slide, with the students around the board.
 const agree = () => `<div class="callout agree" style="--c:var(--c-pink)"><span class="badge">!</span>
@@ -209,7 +246,7 @@ export function renderGame() {
       </div>
       <p class="callout" style="--c:var(--c-blue)"><span class="badge">?</span><span>${L(['Όμως υπάρχει και ένα ακόμη ερώτημα. Ακόμη κι αν έχουμε όλα τα δεδομένα, <b>ποιος αποφασίζει τι πρέπει να κάνουμε;</b>', 'But there is one more question. Even when we have all the data, <b>who decides what we should do?</b>'])}</span></p>
       <div class="game-how">
-        <img src="img/game-board.jpg" alt="${L(['Το επιτραπέζιο Save Symphonia Bay', 'The Save Symphonia Bay board game'])}">
+        <ul class="deck" aria-label="${L(['Οι κάρτες γεγονότων', 'The event cards'])}">${EVENTS.map(e => `<li><img src="img/ev-${e.id}.jpg" alt="" loading="lazy">${L(e.title)}</li>`).join('')}</ul>
         <div class="card">
           <h3>${L(['Πώς παίζεται', 'How to play'])}</h3>
           <ul class="rules">
@@ -234,9 +271,9 @@ export function renderGame() {
 
   const c = game.card, done = game.picked != null;
   const next = c.peek && game.deck[game.round + 1];
-  const coins = done ? game.coins + c.options[game.picked].cost : game.coins; // advice as it stood before the pick
+  const budget = done ? game.coins + c.options[game.picked].cost : game.coins; // advice as it stood before the pick
   const advice = ROLES.map(r => {
-    const ok = c.options.map(o => o.cost <= coins);
+    const ok = c.options.map(o => o.cost <= budget);
     const s = c.options.map((o, i) => (ok[i] ? r.score(o.fx, o.cost, game.m) : -Infinity));
     return { r, i: s[1] > s[0] ? 1 : 0 };
   });
