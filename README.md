@@ -9,8 +9,8 @@
 Καταγράψτε μια παραλία με φωτογραφίες και μετρήσεις, αφήστε την AI να αναγνωρίσει τα απορρίμματα,
 και δείτε με αριθμούς αν η δράση σας είχε αποτέλεσμα.
 
-[**Άνοιγμα στον browser**](https://blueguardianai.github.io/blueguardian-ai/app/) ·
-[Ιστότοπος](https://blueguardianai.github.io/blueguardian-ai/) ·
+[**Άνοιγμα στον browser**](https://blueguardianai.gr/app/) ·
+[Ιστότοπος](https://blueguardianai.gr/) ·
 [Λήψη](#λήψη) ·
 [English](README.en.md)
 
@@ -39,10 +39,10 @@
 
 | Σύστημα | Αρχείο | Σημείωση |
 |---|---|---|
-| **Browser** | [Άνοιγμα εφαρμογής](https://blueguardianai.github.io/blueguardian-ai/app/) | Υπολογιστής, tablet ή κινητό. Χωρίς εγκατάσταση. |
+| **Browser** | [Άνοιγμα εφαρμογής](https://blueguardianai.gr/app/) | Υπολογιστής, tablet ή κινητό. Χωρίς εγκατάσταση. |
 | **Windows** 10 / 11 | [BlueGuardian-AI-Setup.exe](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-Setup.exe) | Στην προειδοποίηση SmartScreen: «Περισσότερες πληροφορίες» → «Εκτέλεση». |
 | **macOS** Apple Silicon | [BlueGuardian-AI-mac-arm64.dmg](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-mac-arm64.dmg) | Την πρώτη φορά: δεξί κλικ στην εφαρμογή → «Άνοιγμα». |
-| **macOS** Intel | [Εφαρμογή στον browser](https://blueguardianai.github.io/blueguardian-ai/app/) | Το AI της εφαρμογής υπολογιστή δεν υπάρχει για Intel Mac. |
+| **macOS** Intel | [Εφαρμογή στον browser](https://blueguardianai.gr/app/) | Το AI της εφαρμογής υπολογιστή δεν υπάρχει για Intel Mac. |
 | **Linux** Debian / Ubuntu / Mint | [BlueGuardian-AI.deb](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.deb) | `sudo apt install ./BlueGuardian-AI.deb` |
 | **Linux** κάθε διανομή | [BlueGuardian-AI.AppImage](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.AppImage) | `chmod +x BlueGuardian-AI.AppImage` και εκτέλεση. |
 
@@ -62,7 +62,7 @@
 
 - Όλα μένουν στη συσκευή σας: στον υπολογιστή για την εφαρμογή, στον browser για τον ιστότοπο.
 - Δεν υπάρχουν λογαριασμοί. Η AI τρέχει τοπικά.
-- Κοινοποιείται μόνο ό,τι επιλέξετε, με το κουμπί «Κοινοποίηση». Δείτε [τι ακριβώς και πώς αφαιρείται](https://blueguardianai.github.io/blueguardian-ai/privacy.html).
+- Κοινοποιείται μόνο ό,τι επιλέξετε, με το κουμπί «Κοινοποίηση». Δείτε [τι ακριβώς και πώς αφαιρείται](https://blueguardianai.gr/privacy.html).
 - Μόνο οι χάρτες φορτώνουν από το διαδίκτυο (OpenStreetMap και EOX).
 - Από τη σελίδα «Δεδομένα» κρατάτε αντίγραφο ασφαλείας και μεταφέρετε τα δεδομένα σε άλλη συσκευή.
 

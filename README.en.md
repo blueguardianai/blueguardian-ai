@@ -9,8 +9,8 @@
 Record a beach with photos and measurements, let the AI recognise the litter,
 and see in numbers whether your action made a difference.
 
-[**Open in the browser**](https://blueguardianai.github.io/blueguardian-ai/app/) ·
-[Website](https://blueguardianai.github.io/blueguardian-ai/) ·
+[**Open in the browser**](https://blueguardianai.gr/app/) ·
+[Website](https://blueguardianai.gr/) ·
 [Download](#download) ·
 [Ελληνικά](README.md)
 
@@ -39,10 +39,10 @@ and see in numbers whether your action made a difference.
 
 | System | File | Note |
 |---|---|---|
-| **Browser** | [Open the app](https://blueguardianai.github.io/blueguardian-ai/app/) | Computer, tablet or phone. Nothing to install. |
+| **Browser** | [Open the app](https://blueguardianai.gr/app/) | Computer, tablet or phone. Nothing to install. |
 | **Windows** 10 / 11 | [BlueGuardian-AI-Setup.exe](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-Setup.exe) | At the SmartScreen warning: "More info" → "Run anyway". |
 | **macOS** Apple Silicon | [BlueGuardian-AI-mac-arm64.dmg](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI-mac-arm64.dmg) | The first time: right-click the app → "Open". |
-| **macOS** Intel | [Browser app](https://blueguardianai.github.io/blueguardian-ai/app/) | The desktop AI engine has no Intel Mac build. |
+| **macOS** Intel | [Browser app](https://blueguardianai.gr/app/) | The desktop AI engine has no Intel Mac build. |
 | **Linux** Debian / Ubuntu / Mint | [BlueGuardian-AI.deb](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.deb) | `sudo apt install ./BlueGuardian-AI.deb` |
 | **Linux** any distribution | [BlueGuardian-AI.AppImage](https://github.com/blueguardianai/blueguardian-ai/releases/latest/download/BlueGuardian-AI.AppImage) | `chmod +x BlueGuardian-AI.AppImage`, then run it. |
 
@@ -62,7 +62,7 @@ On first launch the app offers an example beach and a four-step guide.
 
 - Everything stays on your device: on the computer for the desktop app, in the browser for the website.
 - There are no accounts. The AI runs locally.
-- Only what you choose is shared, with the "Share" button. See [exactly what, and how to remove it](https://blueguardianai.github.io/blueguardian-ai/privacy.html).
+- Only what you choose is shared, with the "Share" button. See [exactly what, and how to remove it](https://blueguardianai.gr/privacy.html).
 - Only the maps load from the internet (OpenStreetMap and EOX).
 - The "Data" page makes a backup file and moves your data to another device.
 
