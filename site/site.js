@@ -22,12 +22,21 @@ addEventListener('DOMContentLoaded', () => {
     setLang();
   };
   const swap = document.querySelector('#theme .swap');
-  const syncTheme = () => swap.classList.toggle('on', document.documentElement.dataset.theme === 'dark');
+  const syncTheme = () => {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    swap.classList.toggle('on', dark);
+    // Every screenshot has a -dark.jpg twin that follows the theme.
+    for (const el of document.querySelectorAll('.shot img, .shot source')) {
+      const attr = el.tagName === 'IMG' ? 'src' : 'srcset';
+      el.setAttribute(attr, el.getAttribute(attr).replace(/(-dark)?\.jpg$/, dark ? '-dark.jpg' : '.jpg'));
+    }
+  };
   document.querySelector('#theme').onclick = e => revealTheme(e.currentTarget, () => {
     localStorage.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     applyTheme();
     syncTheme();
   });
+  systemDark.addEventListener('change', syncTheme); // theme.js follows the system; keep the icon and shots in step
   syncTheme();
 
   // Phone menu: close it once a link is followed (anchor links stay on the page).

@@ -3,6 +3,17 @@ import { t, lang, translate } from './i18n.js';
 import { renderLab, renderGame } from './ideas.js';
 import { listShared, shareVisit, unshareVisit, reportVisit, moderate, sharedPhotoUrl } from './cloud.js';
 
+// Install as an app (Chrome, Edge, Android): keep the browser's install prompt and offer it on the dashboard.
+// Registered before the first await so an early event is not missed. Safari and the desktop app never send it.
+let installPrompt;
+addEventListener('beforeinstallprompt', e => {
+  if (localStorage.installLater) return; // dismissed: leave it to the browser's own menu
+  e.preventDefault();
+  installPrompt = e;
+  document.querySelector('#install-banner').hidden = false;
+});
+addEventListener('appinstalled', () => { document.querySelector('#install-banner').hidden = true; });
+
 await api.ready; // website: wait for the service worker that serves the photos
 translate();
 
@@ -26,6 +37,7 @@ const stage = s => t('stage_' + s);
 
 // Chart.js can't read CSS variables or oklch(): resolve any CSS color to rgba() through a 1px canvas.
 const probe = document.body.appendChild(document.createElement('i'));
+probe.style.setProperty('transition', 'none', 'important'); // the reduced-motion rule would make it report the previous color
 const px = new OffscreenCanvas(1, 1).getContext('2d', { willReadFrequently: true });
 function css(color) {
   probe.style.color = color;
@@ -303,6 +315,12 @@ function clearDemo() {
   refresh();
 }
 $('#demo-remove').onclick = clearDemo;
+$('#install').onclick = async () => {
+  installPrompt.prompt();
+  await installPrompt.userChoice;
+  $('#install-banner').hidden = true;
+};
+$('#install-later').onclick = () => { localStorage.installLater = 1; $('#install-banner').hidden = true; };
 $('#demo-toggle').onclick = () => (hasDemo() ? clearDemo() : loadDemo());
 
 // ---------- dashboard ----------
