@@ -122,9 +122,13 @@
     <section id="compare" class="page">
       <header class="head">
         <div><h1 data-t="tabCompare"></h1><p class="hint" data-t="compareHint"></p></div>
-        <select id="cmp-site"></select>
+        <div class="row">
+          <select id="cmp-site"></select>
+          <button class="btn" id="cmp-report" hidden><svg class="i"><use href="#i-share"/></svg><span data-t="reportBtn"></span></button>
+        </div>
       </header>
       <div id="cmp"></div>
+      <article id="report"></article>
     </section>
 
     <section id="ideas" class="page">
@@ -254,6 +258,7 @@
 
   <script src="../node_modules/leaflet/dist/leaflet.js"></script>
   <script src="../node_modules/chart.js/dist/chart.umd.min.js"></script>
+  <script src="../node_modules/qrcode-generator/qrcode.js"></script>
   <script type="module" src="app.js"></script>
 </body>
 </html>

@@ -120,6 +120,8 @@ const T = {
   insStale: ['{site}: η τελευταία επίσκεψη ήταν πριν από {n} ημέρες.', '{site}: the last visit was {n} days ago.'],
   insTop: ['Το πιο συχνό εύρημα στις φωτογραφίες: {cls} ({pct}%).', 'Most common finding in the photos: {cls} ({pct}%).'],
   insNeedAfter: ['{site}: υπάρχει καταγραφή «Πριν». Προσθέστε μία «Μετά» για να μετρήσετε το αποτέλεσμα.', '{site}: there is a "Before" visit. Add an "After" visit to measure the result.'],
+  insSurvey: ['{site}: {n} τεμάχια στην τελευταία μέτρηση, πιο καθαρή από {k} από τις {of} ελληνικές παραλίες της έρευνας MIO-ECSDE & HELMEPA (2018, ανά 100 m).',
+    '{site}: {n} items at the last count, cleaner than {k} of the {of} Greek beaches in the MIO-ECSDE & HELMEPA survey (2018, per 100 m).'],
   noData: ['Δεν υπάρχουν δεδομένα ακόμα.', 'No data yet.'],
 
   // visits
@@ -149,7 +151,7 @@ const T = {
   fLitter: ['Απορρίμματα (τεμάχια)', 'Litter (items)'],
   tempHelp: ['Με το θερμόμετρο του kit, λίγο κάτω από την επιφάνεια. Συνήθως 15–27 °C.', "With the kit's thermometer, just below the surface. Usually 15–27 °C."],
   phHelp: ['Πόσο όξινο ή αλκαλικό είναι το νερό. Η θάλασσα έχει συνήθως 7,9–8,3.', 'How acidic or alkaline the water is. Seawater is usually 7.9–8.3.'],
-  litterHelp: ['Μετρήστε τα κομμάτια στο ίδιο τμήμα της παραλίας κάθε φορά, για να συγκρίνονται οι επισκέψεις.', 'Count the pieces on the same stretch of beach each time, so visits can be compared.'],
+  litterHelp: ['Μετρήστε τα κομμάτια σε 100 m παραλίας, στο ίδιο σημείο κάθε φορά. Έτσι συγκρίνονται οι επισκέψεις μεταξύ τους και με την ελληνική έρευνα.', 'Count the pieces along 100 m of beach, on the same stretch each time. Then visits compare with each other and with the Greek survey.'],
   fNotes: ['Σημειώσεις', 'Notes'],
   optional: ['προαιρετικό', 'optional'],
   location: ['Τοποθεσία', 'Location'],
@@ -192,6 +194,13 @@ const T = {
   result: ['Αποτέλεσμα', 'Result'],
   pctWaste: ['{n}% φωτογραφίες με απορρίμματα', '{n}% of photos show litter'],
   waterTemp: ['Θερμοκρασία νερού', 'Water temperature'],
+  reportBtn: ['Αναφορά PDF', 'PDF report'],
+  beachReport: ['Αναφορά παραλίας', 'Beach report'],
+  reportMade: ['Δημιουργήθηκε στις {date}', 'Made on {date}'],
+  reportQr: ['Σκανάρετε για νέα καταγραφή σε αυτή την παραλία', 'Scan to record a new visit at this beach'],
+  reportPhotos: ['Φωτογραφίες πριν και μετά', 'Photos before and after'],
+  reportVisits: ['Όλες οι καταγραφές', 'Every visit'],
+  reportSource: ['Δεδομένα αναφοράς: MIO-ECSDE & HELMEPA, Marine litter on Mediterranean beaches (2019)', 'Reference data: MIO-ECSDE & HELMEPA, Marine litter on Mediterranean beaches (2019)'],
 
   // data
   dataHint: ['Εξαγωγή, αντίγραφα ασφαλείας και ρυθμίσεις.', 'Export, backups and settings.'],

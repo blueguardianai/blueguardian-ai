@@ -16,6 +16,7 @@ cp('build/icon.png', 'build/icon.png');
 cp('build/favicon.png', 'build/favicon.png'); // transparent, cropped tab icon
 for (const f of ['leaflet.js', 'leaflet.css', 'images']) cp(`node_modules/leaflet/dist/${f}`, `app/vendor/leaflet/${f}`);
 cp('node_modules/chart.js/dist/chart.umd.min.js', 'app/vendor/chart.umd.min.js');
+cp('node_modules/qrcode-generator/qrcode.js', 'app/vendor/qrcode.js');
 for (const f of ['ort.wasm.min.js', 'ort-wasm-simd-threaded.mjs', 'ort-wasm-simd-threaded.wasm'])
   cp(`node_modules/onnxruntime-web/dist/${f}`, `app/vendor/ort/${f}`);
 cp('models/vision-web.onnx', 'app/models/vision-web.onnx');
@@ -25,7 +26,8 @@ fs.rmSync(path.join(out, 'app/ai/text-embeds.json')); // desktop model only
 const page = path.join(out, 'app/index.html');
 fs.writeFileSync(page, fs.readFileSync(page, 'utf8')
   .replaceAll('../node_modules/leaflet/dist/', 'vendor/leaflet/')
-  .replaceAll('../node_modules/chart.js/dist/', 'vendor/'));
+  .replaceAll('../node_modules/chart.js/dist/', 'vendor/')
+  .replaceAll('../node_modules/qrcode-generator/', 'vendor/'));
 
 // Not-found page: the privacy page's frame with a short message. GitHub Pages serves it at any
 // depth, so every local link is made absolute.

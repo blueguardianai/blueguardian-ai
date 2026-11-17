@@ -36,6 +36,7 @@ Works on any computer, tablet or phone. Free, no account, nothing to install.
 | **3D Innovation Lab** | Design prototypes in Tinkercad for a 3D printer (12 projects, such as the Smart River Gate, Floating Waste Collector and Smart Coastal Station) and track the cycle: design, build, test, measure, improve. |
 | **Save Symphonia Bay** | A strategy game for the classroom: four roles, few resources and 16 event cards. Three sizes (Mini 5, Classic 8, Big 12 rounds) and three difficulty levels. Data helps, but people decide. |
 | **Community** | If you want, you share a visit under your school's name. Every shared visit appears on one common map. |
+| **PDF report** | A printable report per beach, with charts, findings, before/after and a QR code that opens a new visit there. Litter counts are compared with 8 Greek beaches from the MIO-ECSDE & HELMEPA survey (2018). |
 | **Open data** | Export every visit to CSV, and back everything up to one file. |
 
 ### On your phone

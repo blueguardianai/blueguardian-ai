@@ -4,7 +4,8 @@
 const URL_ = 'https://anrguxneshfmtueyhqgb.supabase.co';
 const KEY = 'sb_publishable_FbjzC1UmCZttwFs2uW6yxQ_sCQb4nRE';
 
-export const sharedPhotoUrl = path => `${URL_}/storage/v1/object/public/shared/${path}`;
+// Photos of the preset beaches ship with the app (preset/); the rest are in Supabase storage.
+export const sharedPhotoUrl = path => (path.startsWith('preset/') ? path : `${URL_}/storage/v1/object/public/shared/${path}`);
 
 export async function listShared() {
   const cols = 'id,school,site,lat,lon,visited_at,stage,temp,ph,litter,notes,counts,shared_photos(path,class)';

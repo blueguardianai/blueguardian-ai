@@ -56,6 +56,7 @@ addEventListener('DOMContentLoaded', () => {
     { headers: { apikey: 'sb_publishable_FbjzC1UmCZttwFs2uW6yxQ_sCQb4nRE' } })
     .then(r => (r.ok ? r.json() : Promise.reject()))
     .then(rows => {
+      rows = rows.filter(r => r.school !== 'Preset'); // reference beaches from a published survey, not school visits
       const key = s => s.trim().toLowerCase();
       const stats = {
         visits: rows.length,

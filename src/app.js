@@ -370,10 +370,15 @@ function baseMap(m) {
 const DEFAULT_VIEW = [[37.9, 23.73], 10];
 const PIN = { radius: 8, className: 'pin' }; // colors come from CSS
 
+// Litter per 100 m on 8 Greek beaches, autumn-winter 2018 (MIO-ECSDE & HELMEPA, "Marine litter on Mediterranean beaches", 2019).
+// Same beaches as the Preset rows in Community.
+const SURVEY = [989, 840, 539, 267, 230, 210, 151, 108];
+
 // Plain-language findings computed from the data. Each may carry a link to where the student can act on it.
-function insights() {
+// `only` limits them to one beach (the printed report).
+function insights(only) {
   const out = [];
-  for (const site of sites().keys()) {
+  for (const site of only ? [only] : sites().keys()) {
     const v = visitsAt(site);
     const before = v.findLast(o => o.stage === 'before'), after = v.findLast(o => o.stage === 'after');
     if (before?.litter != null && after?.litter != null) {
@@ -385,7 +390,13 @@ function insights() {
     } else if (before && !after) out.push({ tone: 'todo', text: t('insNeedAfter', { site: esc(site) }) });
     const days = Math.floor((Date.now() - new Date(v.at(-1).date)) / DAY);
     if (days >= 30 && !v.at(-1).demo) out.push({ text: t('insStale', { site: esc(site), n: days }) });
+    const n = v.findLast(o => o.litter != null)?.litter;
+    if (n != null) {
+      const k = SURVEY.filter(x => x > n).length;
+      out.push({ tone: k >= SURVEY.length / 2 ? 'good' : 'bad', text: t('insSurvey', { site: esc(site), n, k, of: SURVEY.length }) });
+    }
   }
+  if (only) return out;
   const todo = allPhotos().filter(p => !p.label && p.emb).length;
   if (todo) out.push({ tone: 'todo', text: t('insTodo', { n: todo }), go: 'ai' });
   const share = classShare(db.observations);
@@ -714,6 +725,7 @@ function renderCompare() {
   fillSiteSelect(sel);
   sel.onchange = renderCompare;
   const site = sel.value;
+  $('#cmp-report').hidden = true;
   if (!site) {
     $('#cmp').innerHTML = emptyState(t('visitsEmpty'), icon('plus') + t('newVisit'), 'cmp-new');
     $('#cmp-new').onclick = () => openObs(null);
@@ -722,13 +734,8 @@ function renderCompare() {
   const obs = visitsAt(site);
   const last = s => obs.findLast(o => o.stage === s);
   const before = last('before'), after = last('after');
-  const delta = (label, a, b, unit = '', lowerIsBetter = true) => {
-    if (a == null || b == null) return '';
-    const d = Math.round((b - a) * 100) / 100;
-    const tone = !lowerIsBetter || d === 0 ? '' : d < 0 ? 'good' : 'bad';
-    const rel = a ? ` (${d > 0 ? '+' : ''}${Math.round((d / a) * 100)}%)` : '';
-    return `<div class="delta ${tone}"><span>${label}</span><b>${a}${unit} → ${b}${unit}</b><small>${rel}</small></div>`;
-  };
+  $('#cmp-report').hidden = false;
+  $('#cmp-report').onclick = () => printReport(site);
 
   $('#cmp').innerHTML = `
     <div class="cmp">${['before', 'action', 'after'].map(s => {
@@ -746,16 +753,80 @@ function renderCompare() {
       </div>`;
     }).join('')}
     </div>
-    ${before && after ? `
-      <div class="card result">
-        <h2>${t('result')}</h2>
-        ${delta(t('litterItems'), before.litter, after.litter)}
-        ${delta(t('wastePhotos'), wastePct([before]), wastePct([after]), '%')}
-        ${delta(t('waterTemp'), before.temp, after.temp, ' °C', false)}
-        ${delta('pH', before.ph, after.ph, '', false)}
-      </div>` : ''}`;
+    ${before && after ? `<div class="card result"><h2>${t('result')}</h2>${deltas(before, after)}</div>` : ''}`;
   document.querySelectorAll('#cmp [data-add]').forEach(b => b.onclick = () => openObs(null, { site, stage: b.dataset.add }));
 }
+
+function delta(label, a, b, unit = '', lowerIsBetter = true) {
+  if (a == null || b == null) return '';
+  const d = Math.round((b - a) * 100) / 100;
+  const tone = !lowerIsBetter || d === 0 ? '' : d < 0 ? 'good' : 'bad';
+  const rel = a ? ` (${d > 0 ? '+' : ''}${Math.round((d / a) * 100)}%)` : '';
+  return `<div class="delta ${tone}"><span>${label}</span><b>${a}${unit} → ${b}${unit}</b><small>${rel}</small></div>`;
+}
+const deltas = (before, after) =>
+  delta(t('litterItems'), before.litter, after.litter) +
+  delta(t('wastePhotos'), wastePct([before]), wastePct([after]), '%') +
+  delta(t('waterTemp'), before.temp, after.temp, ' °C', false) +
+  delta('pH', before.ph, after.ph, '', false);
+
+// ---------- printable report ----------
+
+// A link that opens a new visit at this beach: printed as a QR code on the report and on a sign at the beach.
+const visitLink = o => 'https://blueguardianai.gr/app/#visit?' + new URLSearchParams({ site: o.site, ...(o.lat != null && { lat: o.lat, lon: o.lon }) });
+function qrSvg(text) {
+  const q = qrcode(0, 'M'); // global from vendor/qrcode.js
+  q.addData(text, 'Byte'); // UTF-8 for Greek beach names
+  q.make();
+  return q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+}
+
+// Chart.js draws on a canvas, which doesn't print reliably: draw each chart offscreen in print colours and keep a picture.
+function chartImage(config) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 760; canvas.height = 260;
+  const c = new Chart(canvas, { ...config, options: { ...config.options, responsive: false, animation: false, devicePixelRatio: 2,
+    color: '#444', borderColor: '#ddd', scales: Object.fromEntries(Object.entries(config.options.scales ?? {}).map(([k, v]) => [k, { ...v, ticks: { color: '#444' }, grid: { ...v.grid, color: '#e4e4e4' } }])) } });
+  const url = c.toBase64Image();
+  c.destroy();
+  return `<img src="${url}" alt="">`;
+}
+
+function printReport(site) {
+  const obs = visitsAt(site), last = obs.at(-1);
+  const before = obs.findLast(o => o.stage === 'before'), after = obs.findLast(o => o.stage === 'after');
+  const labels = obs.map(o => new Date(o.date).toLocaleDateString(LOCALE) + (o.stage !== 'monitor' ? ` (${stage(o.stage)})` : ''));
+  const blue = '#2563eb', warm = '#ea580c';
+  const withData = k => obs.some(o => o[k] != null);
+  const photos = ['before', 'after'].map(s => obs.findLast(o => o.stage === s && o.photos.length)).filter(Boolean);
+  $('#report').innerHTML = `
+    <header>
+      <img class="logo" src="${$('.brand img').src}" alt="">
+      <div class="grow"><small>BlueGuardian AI · ${t('beachReport')}</small><h1>${esc(site)}</h1>
+        <p>${t('reportMade', { date: new Date().toLocaleDateString(LOCALE, { dateStyle: 'long' }) })}</p></div>
+      <figure>${qrSvg(visitLink(last))}<figcaption>${t('reportQr')}</figcaption></figure>
+    </header>
+    <div class="tiles">${tile(obs.length, t('visits'))}${tile(obs.reduce((n, o) => n + o.photos.length, 0), t('photos'))}${tile(last.litter ?? '—', t('litterItems'))}${tile(wastePct(obs) == null ? '—' : wastePct(obs) + '%', t('wastePhotos'))}</div>
+    <h2>${t('insights')}</h2>
+    <ul>${insights(site).map(f => `<li>${f.text}</li>`).join('')}</ul>
+    ${before && after ? `<h2>${t('result')}</h2><div class="result">${deltas(before, after)}</div>` : ''}
+    ${withData('litter') ? `<h2>${t('chartLitter')}</h2>${chartImage({ type: 'bar',
+      data: { labels, datasets: [{ data: obs.map(o => o.litter), backgroundColor: blue, borderRadius: 4, maxBarThickness: 36 }] },
+      options: { plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: {} } } })}` : ''}
+    ${withData('temp') || withData('ph') ? `<h2>${t('chartSensors')}</h2>${chartImage({ type: 'line',
+      data: { labels, datasets: [
+        { label: t('temp'), data: obs.map(o => o.temp), borderColor: warm, backgroundColor: warm, yAxisID: 'y', spanGaps: true },
+        { label: 'pH', data: obs.map(o => o.ph), borderColor: blue, backgroundColor: blue, yAxisID: 'y1', spanGaps: true }] },
+      options: { plugins: { legend: { labels: { color: '#444' } } }, scales: { x: { grid: { display: false } }, y: { position: 'left' }, y1: { position: 'right', grid: { drawOnChartArea: false } } } } })}` : ''}
+    ${photos.length ? `<h2>${t('reportPhotos')}</h2>${photos.map(o => `<p><b>${stage(o.stage)}</b> · ${fmtDate(o.date)}</p>${thumbs(o)}`).join('')}` : ''}
+    <h2>${t('reportVisits')}</h2>
+    <table><thead><tr><th>${t('fDate')}</th><th>${t('fStage')}</th><th>°C</th><th>pH</th><th>${t('fLitter')}</th><th>${t('photos')}</th></tr></thead>
+      <tbody>${obs.map(o => `<tr><td>${fmtDate(o.date)}</td><td>${stage(o.stage)}</td><td>${o.temp ?? ''}</td><td>${o.ph ?? ''}</td><td>${o.litter ?? ''}</td><td>${o.photos.length}</td></tr>`).join('')}</tbody></table>
+    <footer>${t('reportSource')} · blueguardianai.gr</footer>`;
+  // Wait for the photos, or the print preview shows empty boxes.
+  Promise.all([...$('#report').querySelectorAll('img')].map(i => i.decode().catch(() => {}))).then(() => print());
+}
+addEventListener('afterprint', () => { $('#report').innerHTML = ''; });
 
 // ---------- community: share, browse, report ----------
 
@@ -1008,14 +1079,22 @@ $('#lang').onclick = () => {
 // ---------- start ----------
 
 const hash = location.hash.slice(1);
-if (hash === 'lab' || hash === 'game') { setSub(hash); show('ideas'); } // links from the website
+// QR code from a beach report: start a new visit at that beach.
+const link = hash.startsWith('visit?') && Object.fromEntries(new URLSearchParams(hash.slice(6)));
+if (link) {
+  history.replaceState(null, '', location.pathname);
+  const lat = Number(link.lat), lon = Number(link.lon), ok = link.lat && link.lon && Number.isFinite(lat) && Number.isFinite(lon);
+  render();
+  openObs(null, { site: String(link.site ?? '').slice(0, 120), ...(ok && { lat, lon }) });
+} else if (hash === 'lab' || hash === 'game') { setSub(hash); show('ideas'); } // links from the website
 else if (hash in pages) show(hash); // e.g. app/#community from the website
 else render();
 // Photos whose analysis never finished (app closed, model error) get analysed now.
 analyzeAll(allPhotos().map(p => p.ref), render);
 
-// First launch: offer the example beach.
-if (!stored) {
+// First launch: offer the example beach (not when a QR code already opened a visit).
+if (link && !stored) save();
+else if (!stored) {
   const welcome = $('#welcome');
   welcome.showModal();
   welcome.addEventListener('close', save);
