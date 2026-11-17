@@ -1,5 +1,6 @@
 import { predict } from './ai/predict.js';
 import { t, lang, translate } from './i18n.js';
+import { renderLab, renderGame } from './ideas.js';
 import { listShared, shareVisit, unshareVisit, reportVisit, moderate, sharedPhotoUrl } from './cloud.js';
 
 await api.ready; // website: wait for the service worker that serves the photos
@@ -153,7 +154,7 @@ async function storePhoto(blob) {
 
 // ---------- tabs ----------
 
-const pages = { dashboard: renderDashboard, observations: renderObservations, ai: renderAi, compare: renderCompare, community: renderCommunity, data: renderData };
+const pages = { dashboard: renderDashboard, observations: renderObservations, ai: renderAi, compare: renderCompare, ideas: renderIdeas, community: renderCommunity, data: renderData };
 let current = 'dashboard';
 function show(tab) {
   const swap = () => {
@@ -669,6 +670,25 @@ function renderAi() {
   analyzeAll(photos.map(p => p.ref), renderAi);
 }
 
+// ---------- solutions: 3D lab + game (ideas.js) ----------
+
+let sub = 'lab';
+function setSub(name) {
+  sub = name;
+  document.querySelectorAll('#ideas-seg button').forEach(x => x.classList.toggle('active', x.dataset.sub === name));
+}
+document.querySelectorAll('#ideas-seg button').forEach(b => b.onclick = () => {
+  setSub(b.dataset.sub);
+  placeKnob(b.parentElement, true);
+  renderIdeas();
+});
+function renderIdeas() {
+  placeKnob($('#ideas-seg'));
+  $('#lab-view').hidden = sub !== 'lab';
+  $('#game-view').hidden = sub !== 'game';
+  (sub === 'lab' ? renderLab : renderGame)();
+}
+
 // ---------- before / after ----------
 
 function renderCompare() {
@@ -969,7 +989,9 @@ $('#lang').onclick = () => {
 
 // ---------- start ----------
 
-if (location.hash.slice(1) in pages) show(location.hash.slice(1)); // e.g. app/#community from the website
+const hash = location.hash.slice(1);
+if (hash === 'lab' || hash === 'game') { setSub(hash); show('ideas'); } // links from the website
+else if (hash in pages) show(hash); // e.g. app/#community from the website
 else render();
 // Photos whose analysis never finished (app closed, model error) get analysed now.
 analyzeAll(allPhotos().map(p => p.ref), render);

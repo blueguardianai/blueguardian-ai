@@ -11,6 +11,8 @@ const T = {
   tabCompare: ['Πριν / Μετά', 'Before / After'],
   tabData: ['Δεδομένα', 'Data'],
   tabCommunity: ['Κοινότητα', 'Community'],
+  tabIdeas: ['Λύσεις', 'Solutions'],
+  ideasHint: ['Σχεδιάζουμε λύσεις στο 3D Innovation Lab και αποφασίζουμε μαζί στο παιχνίδι Save Symphonia Bay.', 'Design solutions in the 3D Innovation Lab and decide together in the Save Symphonia Bay game.'],
 
   // community + sharing
   communityHint: ['Ό,τι επέλεξαν να μοιραστούν τα σχολεία, σε έναν κοινό χάρτη.', 'What schools chose to share, on one common map.'],
@@ -208,8 +210,8 @@ const T = {
   demoText: ['Μια φανταστική παραλία με τρεις καταγραφές, για να δείτε πώς λειτουργεί η εφαρμογή.', 'A fictional beach with three visits, to see how the app works.'],
   langTitle: ['Γλώσσα', 'Language'],
   aboutTitle: ['Σχετικά', 'About'],
-  aboutText: ['Το BlueGuardian AI είναι έργο της μαθητικής ομάδας Sea Symphony του 3ου Γυμνασίου Αργυρούπολης. Χάρτες: OpenStreetMap. Δορυφορικές εικόνες: Esri, Maxar, Earthstar Geographics.',
-    'BlueGuardian AI is a project by Sea Symphony, the student team of the 3rd Junior High School of Argyroupoli. Maps: OpenStreetMap. Satellite imagery: Esri, Maxar, Earthstar Geographics.'],
+  aboutText: ['Το BlueGuardian AI είναι έργο της μαθητικής ομάδας BlueGuardian AI του 3ου Γυμνασίου Αργυρούπολης. Χάρτες: OpenStreetMap. Δορυφορικές εικόνες: Esri, Maxar, Earthstar Geographics.',
+    'BlueGuardian AI is a project by the BlueGuardian AI student team of the 3rd Junior High School of Argyroupoli. Maps: OpenStreetMap. Satellite imagery: Esri, Maxar, Earthstar Geographics.'],
 };
 
 export const t = (key, vars = {}) =>
