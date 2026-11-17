@@ -7,17 +7,25 @@ const icon = name => `<svg class="i" aria-hidden="true"><use href="#i-${name}"/>
 
 // ---------- 3D Innovation Lab ----------
 
-const CYCLE = [['Σχεδιάζουμε', 'Design'], ['Κατασκευάζουμε', 'Build'], ['Δοκιμάζουμε', 'Test'], ['Μετράμε', 'Measure'], ['Βελτιώνουμε', 'Improve']];
+// Colours follow the presentation slides: each step, prototype, role and indicator keeps its slide colour.
+const CYCLE = [
+  { id: 'design', name: ['Σχεδιάζουμε', 'Design'], c: 'blue' },
+  { id: 'build', name: ['Κατασκευάζουμε', 'Build'], c: 'green' },
+  { id: 'test', name: ['Δοκιμάζουμε', 'Test'], c: 'orange' },
+  { id: 'measure', name: ['Μετράμε', 'Measure'], c: 'red' },
+  { id: 'improve', name: ['Βελτιώνουμε', 'Improve'], c: 'purple' },
+];
+const both = pair => lang === 'el' ? `<b>${pair[1]}</b><span>${pair[0]}</span>` : `<b>${pair[1]}</b>`; // slide style: English name, Greek under it
 const PROTOTYPES = [
-  { id: 'river-gate', name: ['Έξυπνο Φράγμα Ποταμού', 'Smart River Gate'],
+  { id: 'river-gate', c: 'blue', name: ['Έξυπνο Φράγμα Ποταμού', 'Smart River Gate'],
     does: ['Συγκρατεί τα απορρίμματα πριν φτάσουν στη θάλασσα.', 'Holds back litter before it reaches the sea.'],
     make: ['Στο Tinkercad: ένα πλαίσιο από κύβους και μια σχάρα με κάθετες ράβδους. Το νερό περνά, τα πλαστικά μένουν πίσω.', 'In Tinkercad: a frame of boxes and a grille of upright bars. Water flows through, plastics stay behind.'],
     test: ['Δοκιμή: σε ένα κανάλι με νερό, μετρήστε πόσα από 20 κομματάκια συγκρατεί.', 'Test: in a channel of water, count how many of 20 small pieces it holds back.'] },
-  { id: 'waste-collector', name: ['Πλωτός Συλλέκτης Απορριμμάτων', 'Floating Waste Collector'],
+  { id: 'waste-collector', c: 'green', name: ['Πλωτός Συλλέκτης Απορριμμάτων', 'Floating Waste Collector'],
     does: ['Συλλέγει απορρίμματα από την επιφάνεια της θάλασσας.', 'Collects litter from the surface of the sea.'],
     make: ['Στο Tinkercad: δύο κύλινδροι για πλωτήρες και ανάμεσά τους ένα καλάθι με τρύπες.', 'In Tinkercad: two cylinders as floats, with a basket full of holes between them.'],
     test: ['Δοκιμή: σε μια λεκάνη με νερό, μετρήστε πόσα κομματάκια μαζεύει σε ένα λεπτό.', 'Test: in a basin of water, count how many pieces it collects in one minute.'] },
-  { id: 'coastal-station', name: ['Έξυπνος Παράκτιος Σταθμός', 'Smart Coastal Station'],
+  { id: 'coastal-station', c: 'orange', name: ['Έξυπνος Παράκτιος Σταθμός', 'Smart Coastal Station'],
     does: ['Κάνει περιβαλλοντικές μετρήσεις στην ακτή.', 'Takes environmental measurements on the shore.'],
     make: ['Στο Tinkercad: ένα αδιάβροχο κουτί για micro:bit ή Arduino, με στήριγμα για ηλιακό πάνελ και αισθητήρες.', 'In Tinkercad: a waterproof box for a micro:bit or Arduino, with a mount for a solar panel and sensors.'],
     test: ['Δοκιμή: συγκρίνετε τις μετρήσεις του με ένα θερμόμετρο και καταγράψτε τες στην εφαρμογή.', 'Test: compare its readings with a thermometer and record them in the app.'] },
@@ -31,26 +39,37 @@ const saveLab = () => { try { localStorage.lab = JSON.stringify(lab); } catch {}
 export function renderLab() {
   const box = $('#lab-view');
   box.innerHTML = `
-    <div class="card lab-intro">
-      <p>${L(['Δεν θέλουμε το BlueGuardian AI απλώς να δείχνει ότι υπάρχει πρόβλημα. Θέλουμε τα δεδομένα να μας οδηγούν σε λύσεις. Στο 3D Innovation Lab σχεδιάζουμε πρωτότυπες κατασκευές με το Tinkercad και τις φτιάχνουμε σε 3D εκτυπωτή.',
-        'We don\'t want BlueGuardian AI to only show that there is a problem. We want the data to lead us to solutions. In the 3D Innovation Lab we design prototypes in Tinkercad and make them on a 3D printer.'])}</p>
-      <a class="btn primary" href="https://www.tinkercad.com/" target="_blank" rel="noopener">${L(['Άνοιγμα Tinkercad', 'Open Tinkercad'])}${icon('arrow')}</a>
+    <div class="card lab-hero">
+      <img src="img/lab-team.jpg" alt="">
+      <div>
+        <h2>3D Innovation Lab${L(['<small>Εργαστήριο Τρισδιάστατης Καινοτομίας</small>', ''])}</h2>
+        <p>${L(['Δεν θέλουμε το BlueGuardian AI απλώς να μας δείχνει ότι υπάρχει ένα πρόβλημα. Θέλουμε τα δεδομένα να μας οδηγούν και σε πιθανές λύσεις. Γι’ αυτό στο <b>3D Innovation Lab</b> σχεδιάζουμε <b>prototypes</b>, δηλαδή πρωτότυπες κατασκευές.',
+          'We don\'t want BlueGuardian AI to only show us that there is a problem. We want the data to lead us to possible solutions too. That is why in the <b>3D Innovation Lab</b> we design <b>prototypes</b>.'])}</p>
+        <p class="hint">${L(['Χρησιμοποιούμε εργαλεία όπως το Tinkercad και 3D εκτυπωτές για να σχεδιάσουμε και να κατασκευάσουμε τις ιδέες μας.', 'We use tools like Tinkercad and 3D printers to design and build our ideas.'])}</p>
+        <a class="btn primary" href="https://www.tinkercad.com/" target="_blank" rel="noopener">${L(['Άνοιγμα Tinkercad', 'Open Tinkercad'])}${icon('arrow')}</a>
+      </div>
     </div>
-    <ol class="cycle">${CYCLE.map(c => `<li>${L(c)}</li>`).join('')}</ol>
-    <p class="hint cycle-note">${L(['Και αν η πρώτη ιδέα δεν λειτουργήσει; Τη βελτιώνουμε και ξαναδοκιμάζουμε.', 'And if the first idea doesn\'t work? We improve it and test again.'])}</p>
     <div class="protos">${PROTOTYPES.map(p => {
       const s = lab[p.id] ?? { done: 0, version: 1 };
-      return `<article class="card proto">
+      return `<article class="card proto" style="--c:var(--c-${p.c})">
+        <header>${both(p.name)}${s.version > 1 ? `<small>v${s.version}</small>` : ''}</header>
         <img src="img/lab-${p.id}.jpg" alt="" loading="lazy">
-        <h2>${L(p.name)}${s.version > 1 ? `<small>v${s.version}</small>` : ''}</h2>
-        <p>${L(p.does)}</p>
+        <p class="does">${L(p.does)}</p>
         <p class="hint">${L(p.make)}</p>
         <p class="hint">${L(p.test)}</p>
         <div class="progress" role="group" aria-label="${L(['Πρόοδος', 'Progress'])}">${CYCLE.map((c, i) =>
-          `<button class="${i < s.done ? 'done' : i === s.done ? 'next' : ''}" data-proto="${p.id}" data-step="${i}" aria-pressed="${i < s.done}">${L(c)}</button>`).join('')}</div>
+          `<button class="${i < s.done ? 'done' : i === s.done ? 'next' : ''}" style="--c:var(--c-${c.c})" data-proto="${p.id}" data-step="${i}" aria-pressed="${i < s.done}" title="${L(c.name)}" aria-label="${L(c.name)}"><img src="img/cy-${c.id}.png" alt=""></button>`).join('')}</div>
         ${s.done === CYCLE.length ? `<button class="btn" data-again="${p.id}">${L(['Νέα έκδοση, νέος κύκλος', 'New version, new cycle'])}</button>` : ''}
       </article>`;
-    }).join('')}</div>`;
+    }).join('')}</div>
+    <div class="card cycle-card">
+      <h3 class="pill">${L(['Ακολουθούμε έναν κύκλο:', 'We follow a cycle:'])}</h3>
+      <ol class="cycle">${CYCLE.map(c => `<li style="--c:var(--c-${c.c})"><img src="img/cy-${c.id}.png" alt="">${both(c.name)}</li>`).join('')}</ol>
+      <div class="cycle-foot">
+        <p class="loop">${icon('refresh')}<span>${L(['Και αν η πρώτη μας ιδέα δεν λειτουργήσει; <b>Τη βελτιώνουμε και ξαναδοκιμάζουμε.</b>', 'And if our first idea doesn\'t work? <b>We improve it and test again.</b>'])}</span></p>
+        <figure class="kid"><img src="img/lab-kid.jpg" alt=""><figcaption>${L(['Νέες ιδέες για πιο καθαρές θάλασσες!', 'New ideas for cleaner seas!'])}</figcaption></figure>
+      </div>
+    </div>`;
   // Clicking a step marks everything up to it done; clicking the last done step undoes it.
   box.querySelectorAll('[data-step]').forEach(b => b.onclick = () => {
     const s = lab[b.dataset.proto] ??= { done: 0, version: 1 };
@@ -71,20 +90,20 @@ export function renderLab() {
 // ---------- Save Symphonia Bay ----------
 
 const METERS = [
-  ['ocean', ['Υγεία Θάλασσας', 'Ocean Health'], 'droplet'],
-  ['bio', ['Βιοποικιλότητα', 'Biodiversity'], 'pin'],
-  ['community', ['Κοινότητα', 'Community'], 'users'],
-  ['economy', ['Γαλάζια Οικονομία', 'Blue Economy'], 'sun'],
+  ['ocean', ['Υγεία Θάλασσας', 'Ocean Health'], 'blue'],
+  ['bio', ['Βιοποικιλότητα', 'Biodiversity'], 'green'],
+  ['community', ['Κοινότητα', 'Community'], 'pink'],
+  ['economy', ['Γαλάζια Οικονομία', 'Blue Economy'], 'orange'],
 ];
 // Each role argues for the option that scores best by its own priorities, so the team doesn't always agree.
 const ROLES = [
-  { name: ['Θαλάσσιος Επιστήμονας', 'Marine Scientist'], icon: 'droplet', why: ['Προστατεύει τη θάλασσα και τη ζωή της.', 'Protects the sea and its life.'],
+  { name: ['Θαλάσσιος Επιστήμονας', 'Marine Scientist'], n: 1, c: 'blue', why: ['Προστατεύει τη θάλασσα και τη ζωή της.', 'Protects the sea and its life.'],
     score: (fx, cost) => 2 * (fx.ocean ?? 0) + 2 * (fx.bio ?? 0) - cost * .2 },
-  { name: ['Ειδικός AI και Δεδομένων', 'AI & Data Specialist'], icon: 'scan', why: ['Κοιτάζει το συνολικό αποτέλεσμα στα δεδομένα.', 'Looks at the overall result in the data.'],
+  { name: ['Ειδικός AI και Δεδομένων', 'AI & Data Specialist'], n: 2, c: 'purple', why: ['Κοιτάζει το συνολικό αποτέλεσμα στα δεδομένα.', 'Looks at the overall result in the data.'],
     score: (fx, cost) => sum(fx) - cost * .3 },
-  { name: ['Υπεύθυνος Λήψης Αποφάσεων', 'Decision Maker'], icon: 'flag', why: ['Προσέχει τον προϋπολογισμό και τον πιο αδύναμο δείκτη.', 'Watches the budget and the weakest indicator.'],
+  { name: ['Υπεύθυνος Λήψης Αποφάσεων', 'Decision Maker'], n: 3, c: 'green', why: ['Προσέχει τον προϋπολογισμό και τον πιο αδύναμο δείκτη.', 'Watches the budget and the weakest indicator.'],
     score: (fx, cost, m) => 3 * (fx[weakest(m)] ?? 0) + sum(fx) - cost * .8 },
-  { name: ['Εκπρόσωπος των Πολιτών', 'Citizens\' Representative'], icon: 'users', why: ['Μιλά για τους κατοίκους και τις δουλειές τους.', 'Speaks for the residents and their jobs.'],
+  { name: ['Εκπρόσωπος των Πολιτών', 'Citizens\' Representative'], n: 4, c: 'orange', why: ['Μιλά για τους κατοίκους και τις δουλειές τους.', 'Speaks for the residents and their jobs.'],
     score: (fx, cost) => 2 * (fx.community ?? 0) + 2 * (fx.economy ?? 0) - cost * .3 },
 ];
 const letter = i => L([['Α', 'Β'][i], ['A', 'B'][i]]);
@@ -170,27 +189,43 @@ function choose(i) {
   renderGame();
 }
 
-const meters = () => `<div class="meters">${METERS.map(([k, name, ic]) =>
-  `<div class="meter${game.m[k] <= 2 ? ' low' : ''}"><span>${icon(ic)}${L(name)}</span><b>${game.m[k]}<small>/10</small></b><i style="--w:${game.m[k] * 10}%"></i></div>`).join('')}
-  <div class="meter coins"><span>${L(['Πόροι', 'Resources'])}</span><b>${game.coins}<small> ${L(['νομ.', 'coins'])}</small></b></div></div>`;
+const meters = () => `<div class="meters">${METERS.map(([k, name, c]) =>
+  `<div class="meter${game.m[k] <= 2 ? ' low' : ''}" style="--c:var(--c-${c})"><span><img src="img/ind-${k}.png" alt="">${L(name)}</span><b>${game.m[k]}<small>/10</small></b><i style="--w:${game.m[k] * 10}%"></i></div>`).join('')}
+  <div class="meter coins"><span><b class="euro">€</b>${L(['Πόροι', 'Resources'])}</span><b>${game.coins}<small> ${L(['νομ.', 'coins'])}</small></b></div></div>`;
+
+// The closing message of the slide, with the students around the board.
+const agree = () => `<div class="callout agree" style="--c:var(--c-pink)"><span class="badge">!</span>
+  <div><b>${L(['Και δεν συμφωνούμε πάντα!', 'And we don\'t always agree!'])}</b>
+  <p>${L(['Έτσι καταλαβαίνουμε ότι <b>τα δεδομένα</b> μάς βοηθούν να αποφασίσουμε, αλλά <b>οι άνθρωποι</b> είναι αυτοί που τελικά παίρνουν τις αποφάσεις.', 'That is how we learn that <b>data</b> helps us decide, but in the end it is <b>people</b> who make the decisions.'])}</p></div>
+  <img src="img/game-talk.jpg" alt=""></div>`;
 
 export function renderGame() {
   const box = $('#game-view');
   if (!game) {
     box.innerHTML = `
-      <div class="card game-intro">
-        <h2>Save Symphonia Bay${L([' · Σώστε τον Κόλπο της Symphonia', ''])}</h2>
-        <p>${L(['Ένα παιχνίδι στρατηγικής για καθαρότερες θάλασσες και πιο υγιείς κοινωνίες. Ακόμη κι αν έχουμε όλα τα δεδομένα, ποιος αποφασίζει τι πρέπει να κάνουμε;',
-          'A strategy game for cleaner seas and healthier communities. Even when we have all the data, who decides what we should do?'])}</p>
-        <ul class="rules">
-          <li>${L(['Παίζεται σε ομάδα, γύρω από μία οθόνη. Κάθε παίκτης παίρνει έναν ρόλο.', 'Play as a team around one screen. Each player takes a role.'])}</li>
-          <li>${L(['8 γύροι. Σε κάθε γύρο τραβάτε μια κάρτα γεγονότος και διαλέγετε μία από δύο αποφάσεις.', '8 rounds. Each round you draw an event card and pick one of two decisions.'])}</li>
-          <li>${L([`Οι πόροι είναι λίγοι: ξεκινάτε με ${START_COINS} νομίσματα και παίρνετε ${INCOME} σε κάθε γύρο.`, `Resources are scarce: you start with ${START_COINS} coins and get ${INCOME} each round.`])}</li>
-          <li>${L(['Αν κάποιος δείκτης φτάσει στο 0, ο κόλπος χάνεται. Για να σωθεί, όλοι οι δείκτες πρέπει να τελειώσουν στο 5 ή πάνω.', 'If any indicator reaches 0, the bay is lost. To save it, every indicator must end at 5 or higher.'])}</li>
-        </ul>
-        <div class="roles">${ROLES.map(r => `<div class="role">${icon(r.icon)}<b>${L(r.name)}</b><small>${L(r.why)}</small></div>`).join('')}</div>
-        <div class="row"><button class="btn primary" id="game-start">${L(['Έναρξη παιχνιδιού', 'Start the game'])}${icon('arrow')}</button></div>
-      </div>`;
+      <div class="card game-hero">
+        <img class="banner-art" src="img/game-banner.jpg" alt="Save Symphonia Bay">
+        <p class="tagline">${L(['Ένα παιχνίδι στρατηγικής για καθαρότερες θάλασσες και πιο υγιείς κοινωνίες', 'A strategy game for cleaner seas and healthier communities'])}</p>
+      </div>
+      <p class="callout" style="--c:var(--c-blue)"><span class="badge">?</span><span>${L(['Όμως υπάρχει και ένα ακόμη ερώτημα. Ακόμη κι αν έχουμε όλα τα δεδομένα, <b>ποιος αποφασίζει τι πρέπει να κάνουμε;</b>', 'But there is one more question. Even when we have all the data, <b>who decides what we should do?</b>'])}</span></p>
+      <div class="game-how">
+        <img src="img/game-board.jpg" alt="${L(['Το επιτραπέζιο Save Symphonia Bay', 'The Save Symphonia Bay board game'])}">
+        <div class="card">
+          <h3>${L(['Πώς παίζεται', 'How to play'])}</h3>
+          <ul class="rules">
+            <li>${L(['Παίζεται σε ομάδα, γύρω από μία οθόνη. Κάθε παίκτης παίρνει έναν ρόλο.', 'Play as a team around one screen. Each player takes a role.'])}</li>
+            <li>${L(['8 γύροι. Σε κάθε γύρο τραβάτε μια κάρτα γεγονότος και διαλέγετε μία από δύο αποφάσεις.', '8 rounds. Each round you draw an event card and pick one of two decisions.'])}</li>
+            <li>${L([`Οι πόροι είναι λίγοι: ξεκινάτε με ${START_COINS} νομίσματα και παίρνετε ${INCOME} σε κάθε γύρο.`, `Resources are scarce: you start with ${START_COINS} coins and get ${INCOME} each round.`])}</li>
+            <li>${L(['Αν κάποιος δείκτης φτάσει στο 0, ο κόλπος χάνεται. Για να σωθεί, όλοι οι δείκτες πρέπει να τελειώσουν στο 5 ή πάνω.', 'If any indicator reaches 0, the bay is lost. To save it, every indicator must end at 5 or higher.'])}</li>
+          </ul>
+        </div>
+      </div>
+      <h3 class="sub">${L(['Σε αυτό αναλαμβάνουμε διαφορετικούς ρόλους:', 'In it we take on different roles:'])}</h3>
+      <div class="roles">${ROLES.map(r => `<div class="role" style="--c:var(--c-${r.c})"><img src="img/role-${r.n}.jpg" alt=""><b>${L(r.name)}</b><small>${L(r.why)}</small></div>`).join('')}</div>
+      <h3 class="sub">${L(['Έχουμε περιορισμένους πόρους και πρέπει να πάρουμε αποφάσεις που επηρεάζουν:', 'We have limited resources and must make decisions that affect:'])}</h3>
+      <div class="inds">${METERS.map(([k, name, c]) => `<span style="--c:var(--c-${c})"><img src="img/ind-${k}.png" alt="">${L(name)}</span>`).join('')}</div>
+      ${agree()}
+      <div class="row"><button class="btn primary big" id="game-start">${L(['Έναρξη παιχνιδιού', 'Start the game'])}${icon('arrow')}</button></div>`;
     $('#game-start').onclick = startGame;
     return;
   }
@@ -210,12 +245,13 @@ export function renderGame() {
     ${meters()}
     <div class="card event">
       <img src="img/ev-${c.id}.jpg" alt="">
-      <div><small>${L(['Κάρτα γεγονότος', 'Event card'])}</small><h2>${L(c.title)}</h2><p>${L(c.text)}</p>
+      <div><small class="pill">Event Card${L([' · Κάρτα γεγονότος', ''])}</small><h2>${L(c.title)}</h2><p>${L(c.text)}</p>
         ${Object.keys(c.hit).length ? `<div class="fxs">${METERS.filter(([k]) => c.hit[k]).map(([k, n]) => `<span class="fx down">−${-c.hit[k]} ${L(n)}</span>`).join('')}</div>` : ''}
         ${next ? `<p class="peek">${icon('globe')}${L(['Τα δεδομένα Copernicus δείχνουν και την επόμενη κάρτα:', 'Copernicus data also reveals the next card:'])} <b>${L(next.title)}</b></p>` : ''}</div>
     </div>
     <h3 class="sub">${L(['Τι προτείνει κάθε ρόλος', 'What each role suggests'])}</h3>
-    <div class="roles">${advice.map(a => `<div class="role pick-${a.i}">${icon(a.r.icon)}<b>${L(a.r.name)}</b><small>${L(['Προτείνει', 'Suggests'])} ${letter(a.i)}</small></div>`).join('')}</div>
+    <div class="roles compact">${advice.map(({ r, i }) => `<div class="role" style="--c:var(--c-${r.c})"><img src="img/role-${r.n}.jpg" alt=""><b>${L(r.name)}</b><small>${L(['Προτείνει', 'Suggests'])} <em class="opt">${letter(i)}</em></small></div>`).join('')}</div>
+    ${new Set(advice.map(a => a.i)).size > 1 ? `<p class="callout small" style="--c:var(--c-pink)"><span class="badge">!</span><span>${L(['<b>Και δεν συμφωνούμε πάντα!</b> Συζητήστε και αποφασίστε μαζί.', '<b>And we don\'t always agree!</b> Talk it over and decide together.'])}</span></p>` : ''}
     <h3 class="sub">${L(['Η απόφασή σας', 'Your decision'])}</h3>
     <div class="choices">${c.options.map((o, i) => `
       <button class="choice${done && game.picked === i ? ' picked' : ''}" data-choice="${i}" ${done || o.cost > game.coins ? 'disabled' : ''}>
@@ -245,8 +281,8 @@ function renderEnd(box) {
     <div class="card">
       <h2>${L(['Οι αποφάσεις σας', 'Your decisions'])}</h2>
       <ol class="log">${game.log.map(e => `<li><b>${L(e.card.title)}</b> · ${L(e.card.options[e.i].text)}</li>`).join('')}</ol>
-      <p class="hint">${L(['Τα δεδομένα μάς βοηθούν να αποφασίσουμε, αλλά οι άνθρωποι είναι αυτοί που τελικά παίρνουν τις αποφάσεις.', 'Data helps us decide, but in the end it is people who make the decisions.'])}</p>
-      <div class="row"><button class="btn primary" id="game-again">${L(['Νέο παιχνίδι', 'Play again'])}</button></div>
-    </div>`;
+    </div>
+    ${agree()}
+    <div class="row"><button class="btn primary big" id="game-again">${L(['Νέο παιχνίδι', 'Play again'])}</button></div>`;
   $('#game-again').onclick = startGame;
 }
