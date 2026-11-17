@@ -34,6 +34,13 @@ addEventListener('DOMContentLoaded', () => {
   const menu = document.querySelector('#menu');
   menu.onclick = e => { if (e.target.closest('a') && menu.matches(':popover-open')) menu.hidePopover(); };
 
+  // Total views from GoatCounter's public counter; stays hidden if it is blocked or unavailable.
+  const views = document.querySelector('#views');
+  if (views) fetch('https://blueguardianai.goatcounter.com/counter/TOTAL.json')
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(d => { views.querySelector('b').textContent = d.count; views.hidden = false; })
+    .catch(() => {});
+
   const buttons = [...document.querySelectorAll('[data-dl]')];
   for (const a of buttons) a.href = DOWNLOADS[a.dataset.dl];
   // Ask GitHub which installers the latest release really has, and mark the missing ones instead of
