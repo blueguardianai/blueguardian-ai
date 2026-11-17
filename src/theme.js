@@ -19,6 +19,6 @@ const revealTheme = (btn, change) => {
   root.classList.add('theme-vt');
   const vt = document.startViewTransition(change);
   vt.ready.then(() => root.animate({ clipPath: [`circle(0 at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
-    { duration: 450, easing: 'cubic-bezier(.65, 0, .35, 1)', pseudoElement: '::view-transition-new(root)' }));
+    { duration: 650, easing: 'cubic-bezier(.65, 0, .35, 1)', pseudoElement: '::view-transition-new(root)' }));
   vt.finished.finally(() => root.classList.remove('theme-vt'));
 };
